@@ -79,6 +79,9 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "bmh_lims.users.apps.UsersConfig",
     # Your stuff: custom apps go here
+    "bmh_lims.database",
+    "bmh_lims.frontend",
+    "bmh_lims.landing",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -243,7 +246,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -255,7 +258,6 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
-
 
 # django-allauth
 # ------------------------------------------------------------------------------
