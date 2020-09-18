@@ -1,5 +1,5 @@
 # BMH LIMS
-Welcome to the LIMS for BMH.
+Welcome to the LIMS for BMH. Built with [Cookiecutter Django](https://github.com/pydanny/cookiecutter-django/).
 
 ## Getting Started
 **Reminder to set up a virtual environment**
