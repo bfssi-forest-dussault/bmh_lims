@@ -6,7 +6,7 @@ Welcome to the LIMS for BMH. Built with [Cookiecutter Django](https://github.com
 ### Step 1: Install Dependencies
 To install all dependencies, run the following from the root directory:
 ```
-for FILE in $(ls requirements); do pip install -r requirements/$(FILE); done
+pip install -r requirements/base.txt -r requirements/local.txt
 cd bmh_lims/frontend && npm i
 cd ../..
 ```
