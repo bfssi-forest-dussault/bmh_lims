@@ -19,6 +19,22 @@ class SampleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class LabSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = models.Lab
+        fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = models.Project
+        fields = '__all__'
+
+
 class WorkflowDefinitionSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
 
