@@ -22,7 +22,6 @@ export const IconButton = ({text, IconSVG, animation, height, width, iconProps, 
             <SVGContainer height={height} width={width}>
                 <IconSVG {...iconProps} />
             </SVGContainer>
-            {/* <StyledIcon src={iconSrc} alt={iconAlt} /> */}
             {text}
         </StyledButton>
     )

@@ -42,9 +42,25 @@ const HomePage = () => {
             <h1>BMH LIMS</h1>
             <p>What would you like to do?</p>
             <ButtonBar>
-                <IconButton animation={css`animation: ${appear} 0.5s linear 1;`} text='Submit Samples' height='10em' width='10em' IconSVG={SampleIcon} onClickHandler={(e) => e.preventDefault() || console.log('redirect to submit samples page')} />
-                <IconButton animation={css`animation: ${appear} 0.5s linear 1;`} text='View Status' height='10em' width='10em' IconSVG={StatusIcon} onClickHandler={(e) => e.preventDefault() || console.log('redirect to view status page')} />
-                <IconButton animation={css`animation: ${appear} 0.5s linear 1;`} text='Workflows' height='10em' width='10em' IconSVG={WorkflowsIcon} onClickHandler={(e) => e.preventDefault() || console.log('redirect to workflows page')} />
+                <IconButton
+                    animation={css`animation: ${appear} 0.5s linear 1;`}
+                    text='Submit Samples' height='10em' width='10em'
+                    IconSVG={SampleIcon}
+                    onClickHandler={(e) => e.preventDefault() || console.log('redirect to submit samples page')} />
+                <IconButton
+                    animation={css`animation: ${appear} 0.5s linear 1;`}
+                    text='View Status'
+                    height='10em'
+                    width='10em'
+                    IconSVG={StatusIcon}
+                    onClickHandler={(e) => e.preventDefault() || console.log('redirect to view status page')} />
+                <IconButton
+                    animation={css`animation: ${appear} 0.5s linear 1;`}
+                    text='Workflows'
+                    height='10em'
+                    width='10em'
+                    IconSVG={WorkflowsIcon}
+                    onClickHandler={(e) => e.preventDefault() || console.log('redirect to workflows page')} />
             </ButtonBar>
         </Page>
     )
