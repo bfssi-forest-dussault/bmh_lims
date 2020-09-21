@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 
-import './App.css'
-import Button from "./Button";
-
+import { HomePage } from '../pages'
 
 const App = () => {
     return (
-        <Button/>
+        <Switch>
+            <Route path='/lims' component={ HomePage } />
+        </Switch>
     )
 }
 
