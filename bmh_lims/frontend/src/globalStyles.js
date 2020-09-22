@@ -1,9 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-/* 
-Styles for the entire app. This is injected in the App component.
-
-*/
+// Styles for the entire app. This is injected in the App component.
 
 export const GlobalStyle = createGlobalStyle`
     body {
