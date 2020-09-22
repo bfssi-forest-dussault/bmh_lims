@@ -11,18 +11,20 @@ const StyledButton = styled.button`
     ${props => props.animation}
 `
 
-const SVGContainer = styled.div`
+const IconContainer = styled.div`
     width: ${props => props.width || '50px'};
     height: ${props => props.height || '50px'};
 `
 
-export const IconButton = ({text, IconSVG, animation, height, width, iconProps, onClickHandler}) => {
+const IconButton = ({text, IconSVG, animation, iconProps, onClickHandler}) => {
     return (
         <StyledButton onClick={onClickHandler} animation={animation} >
-            <SVGContainer height={height} width={width}>
+            <IconContainer height={iconProps.height} width={iconProps.width}>
                 <IconSVG {...iconProps} />
-            </SVGContainer>
+            </IconContainer>
             {text}
         </StyledButton>
     )
 }
+
+export default IconButton

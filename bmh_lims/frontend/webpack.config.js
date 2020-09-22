@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
     module: {
         rules: [
@@ -24,5 +26,12 @@ module.exports = {
                 use: ['@svgr/webpack'],
               }
         ]
+    },
+    resolve: {
+      alias: {
+        icons: path.resolve(__dirname, 'src/assets'),
+        pages: path.resolve(__dirname, 'src/pages'),
+        components: path.resolve(__dirname, 'src/components')
+      }
     }
 };

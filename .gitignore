@@ -325,3 +325,7 @@ bmh_lims/media/
 .pytest_cache/
 
 
+dist/
+
+# specifically ignore webpack-compiled files
+bmh_lims/frontend/static/frontend/
