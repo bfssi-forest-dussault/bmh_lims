@@ -7,7 +7,22 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
-            }
+            },
+            {
+                test: /\.(png|jp(e*)g|gif)$/,
+                use: [
+                  {
+                    loader: 'file-loader',
+                    options: {
+                      name: 'images/[hash]-[name].[ext]',
+                    },
+                  },
+                ],
+              },
+              {
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
+              }
         ]
     }
 };
