@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes, css } from 'styled-components'
-import { IconButton } from '../components'
-import { Logo, SampleIcon, StatusIcon, WorkflowsIcon } from '../assets'
+import { IconButton } from 'components'
+import { Logo, SampleIcon, StatusIcon, WorkflowsIcon } from 'icons'
 
 const ButtonBar = styled.div`
     display: flex;
@@ -23,6 +23,7 @@ const Page = styled.div`
     flex-direction: column;
 `
 
+// keeping this here for now since it's just one animation
 const appear = keyframes`
     from{
         transform: translate(0px, 5px);
@@ -44,21 +45,31 @@ const HomePage = () => {
             <ButtonBar>
                 <IconButton
                     animation={css`animation: ${appear} 0.5s linear 1;`}
-                    text='Submit Samples' height='10em' width='10em'
+                    text='Submit Samples'
+                    height='10em'
+                    width='10em'
                     IconSVG={SampleIcon}
+                    iconProps={{
+                        height: '10em',
+                        width: '10em'
+                    }}
                     onClickHandler={(e) => e.preventDefault() || console.log('redirect to submit samples page')} />
                 <IconButton
                     animation={css`animation: ${appear} 0.5s linear 1;`}
                     text='View Status'
-                    height='10em'
-                    width='10em'
+                    iconProps={{
+                        height: '10em',
+                        width: '10em'
+                    }}
                     IconSVG={StatusIcon}
                     onClickHandler={(e) => e.preventDefault() || console.log('redirect to view status page')} />
                 <IconButton
                     animation={css`animation: ${appear} 0.5s linear 1;`}
                     text='Workflows'
-                    height='10em'
-                    width='10em'
+                    iconProps={{
+                        height: '10em',
+                        width: '10em'
+                    }}
                     IconSVG={WorkflowsIcon}
                     onClickHandler={(e) => e.preventDefault() || console.log('redirect to workflows page')} />
             </ButtonBar>
