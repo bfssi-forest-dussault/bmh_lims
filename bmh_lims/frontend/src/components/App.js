@@ -1,12 +1,17 @@
-import React from "react";
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import { GlobalStyle } from '../globalStyles'
 
-import './App.css'
-import Button from "./Button";
-
+import { HomePage } from '../pages'
 
 const App = () => {
     return (
-        <Button/>
+        <div>
+            <GlobalStyle />
+            <Switch>
+                <Route path='/lims' component={ HomePage } />
+            </Switch>
+        </div>
     )
 }
 
