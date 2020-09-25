@@ -59,7 +59,7 @@ class Sample(TimeStampedModel):
     well = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     submitting_lab = models.ForeignKey(Lab, on_delete=models.SET_NULL, null=True, blank=True),
 
-    submission_format = models.CharField(max_length=SM_CHAR, blank=True, null=True)
+    sample_type = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     sample_volume_in_ul = models.FloatField(null=True, blank=True)
     requested_services = models.TextField(null=True, blank=True)
     submitter_project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
@@ -93,13 +93,13 @@ class Sample(TimeStampedModel):
 
 class WorkflowDefinition(TimeStampedModel):
     """
-    Model to store workflows and their relevant data (e.g. DNA extraction)
+    Model to store workflows and their relevant data
     """
-    workflow_name = models.CharField(max_length=SM_CHAR)
-    workflow_description = models.TextField(null=True, blank=True)
+    name = models.CharField(max_length=SM_CHAR)  # e.g. "DNA extraction"
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.workflow_name}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = 'Workflow Definition'
@@ -111,7 +111,11 @@ class WorkflowBatch(TimeStampedModel):
     Model to represent individual workflow batches that a user has assigned samples to
     """
     workflow = models.ForeignKey(WorkflowDefinition, on_delete=models.CASCADE)
-    samples = models.ManyToManyField(Sample)
+    status = models.CharField(max_length=SM_CHAR, choices=(
+        ('IN_PROGRESS', 'In Progress'),
+        ('COMPLETE', 'Complete'),
+        ('FAIL', 'Fail'),
+    ), null=True, blank=True)
 
     def __str__(self):
         return f"{self.id}: {self.workflow}"
@@ -121,15 +125,31 @@ class WorkflowBatch(TimeStampedModel):
         verbose_name_plural = 'Workflow Batches'
 
 
+class WorkflowSample(TimeStampedModel):
+    """
+    Samples are sub-sampled when they enter a workflow. This table represents one of these subsamples
+    (aka "Workflow sample") where the sample is associated with a workflow and eventually associated with specific
+    workflow results (e.g. DNA extraction)
+    """
+    sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
+    workflow_batch = models.ForeignKey(WorkflowBatch, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.sample}"
+
+    class Meta:
+        verbose_name = 'Workflow Sample'
+        verbose_name_plural = 'Workflow Samples'
+
+
 class DNAExtractionResults(TimeStampedModel):
     """
     DNA extraction results for a single sample linked to a specific workflow are stored here
     """
-    workflow_batch = models.ForeignKey(WorkflowBatch, on_delete=models.CASCADE)
-    sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
+    workflow_sample = models.ForeignKey(WorkflowSample, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.sample} - DNA Extraction Results"
+        return f"{self.workflow_sample} - DNA Extraction Results"
 
     class Meta:
         verbose_name = 'DNA Extraction Result'
