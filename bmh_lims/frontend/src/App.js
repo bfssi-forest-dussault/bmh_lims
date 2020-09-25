@@ -1,8 +1,10 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { GlobalStyle } from './globalStyles'
+import "regenerator-runtime/runtime.js"
 
-import { HomePage } from 'pages'
+import { HomePage, UploadSamplesPage } from 'pages'
+
 
 const App = () => {
     return (
@@ -10,6 +12,7 @@ const App = () => {
             <GlobalStyle />
             <Switch>
                 <Route path='/lims' component={ HomePage } />
+                <Route path='/upload' component={ UploadSamplesPage } />
             </Switch>
         </div>
     )
