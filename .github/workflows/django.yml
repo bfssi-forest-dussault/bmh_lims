@@ -1,0 +1,63 @@
+name: BMH LIMS CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7.3]
+
+    services:
+      postgres:
+        image: postgres:12.4
+        env:
+          POSTGRES_USER: ${{ secrets.BMH_LIMS_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.BMH_LIMS_DB_PASSWORD }}
+          POSTGRES_DB: bmh_lims
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/local.txt
+      - name: Use Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install NodeJS dependencies
+        run: npm install
+      - name: Run Migrations
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          BMH_LIMS_DB_USER: ${{ secrets.BMH_LIMS_DB_USER }}
+          BMH_LIMS_DB_PASSWORD: ${{ secrets.BMH_LIMS_DB_PASSWORD }}
+          DJANGO_DEBUG: True
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+          python manage.py collectstatic
+      - name: Run Tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          BMH_LIMS_DB_USER: ${{ secrets.BMH_LIMS_DB_USER }}
+          BMH_LIMS_DB_PASSWORD: ${{ secrets.BMH_LIMS_DB_PASSWORD }}
+          POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
+        run: |
+          pytest
