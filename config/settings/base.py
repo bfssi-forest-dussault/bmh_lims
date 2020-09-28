@@ -45,13 +45,13 @@ DATABASES = {
     "default": env.db("DATABASE_URL", default="postgres:///bmh_lims")
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = False
-DATABASES["default"]['USER'] = env('BMH_LIMS_DB_USER')
-DATABASES["default"]['DATABASE_URL'] = env('POSTGRESQL_URL')
-DATABASES["default"]['NAME'] = 'bmh_lims'
-DATABASES["default"]['PASSWORD'] = env('BMH_LIMS_DB_PASSWORD')
-DATABASES["default"]['HOST'] = 'localhost'
-DATABASES["default"]['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-DATABASES["default"]['PORT'] = '5432'
+DATABASES["default"]["DATABASE_URL"] = env('POSTGRESQL_URL')
+DATABASES["default"]["NAME"] = 'bmh_lims'
+DATABASES["default"]["USER"] = env('BMH_LIMS_DB_USER')
+DATABASES["default"]["PASSWORD"] = env('BMH_LIMS_DB_PASSWORD')
+DATABASES["default"]["HOST"] = 'localhost'
+DATABASES["default"]["ENGINE"] = 'django.db.backends.postgresql_psycopg2'
+DATABASES["default"]["PORT"] = '5432'
 
 # URLS
 # ------------------------------------------------------------------------------
