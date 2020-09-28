@@ -17,10 +17,10 @@ jobs:
 
     services:
       postgres:
-        image: postgres:10.12
+        image: postgres
         env:
           POSTGRES_USER: ${{ secrets.BMH_LIMS_DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.BMH_LIMS_DB_PASSWORD }}
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: bmh_lims
         ports:
           - 5432:5432
