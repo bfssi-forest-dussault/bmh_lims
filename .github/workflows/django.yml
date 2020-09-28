@@ -49,6 +49,7 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           BMH_LIMS_DB_USER: ${{ secrets.BMH_LIMS_DB_USER }}
           BMH_LIMS_DB_PASSWORD: ${{ secrets.BMH_LIMS_DB_PASSWORD }}
+          POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
           DJANGO_DEBUG: True
         run: |
           python manage.py makemigrations
