@@ -1,21 +1,26 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Table, CombinedLogo, StyledButton, Button, LinkButton } from 'components'
 import styled, { css } from 'styled-components'
-import { csvReader } from 'icons'
+import { csvReader, xlsxReader } from 'icons'
+
+const csvToTable = (text, updateContent) => {
+    const lines = text.trim().split('\n').map(line => 
+        line.split(','))
+    updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
+}
 
 const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
     event.preventDefault()
-    console.log('uploaded CSV')
     if(RegExp('\.[csv|tsv|xls|xlsx]$').test(event.target.files[0].name)) {
         const submittedFile = event.target.files[0]
         updateSubmittedFile({name: submittedFile.name, file: submittedFile})
-        csvReader(event.target.files[0], (text) => {
-            const lines = text.trim().split('\n').map(line => 
-                line.split(','))
-            updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
-        })
+
+        if(RegExp('\.[csv]$').test(submittedFile.name)) {
+            csvReader(submittedFile, (text) => csvToTable(text, updateContent))
+        } else if (RegExp('\.[xlsx|xlsx]$').test(submittedFile.name)) {
+            xlsxReader(submittedFile, (text) => csvToTable(text, updateContent))
+        }
     } else {
         console.log('invalid file type')
     }
@@ -65,7 +70,7 @@ const FooterBar = styled.div`
 
 const UploadSamplesPage = () => {
     const [submittedFile, updateSubmittedFile] = useState({type: '', file: null})
-    const [content, updateContent] = useState({headers: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'], content: [['aaa', 'bbb', 'ccc', 'ddd', 'eee'], ['aaa', 'bbb', 'ccc', 'ddd', 'eee'], ['aaa', 'bbb', 'ccc', 'ddd', 'eee']]})
+    const [content, updateContent] = useState({headers: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'], content: [...Array(10).keys()].map((item, idx) => ['aaa', 'bbb', 'ccc', 'ddd', 'eee'])})
     return (
         <PageContainer>
             <HeaderBar>
