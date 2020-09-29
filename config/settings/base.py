@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "bmh_lims"
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR / ".env"))
@@ -44,7 +44,14 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 DATABASES = {
     "default": env.db("DATABASE_URL", default="postgres:///bmh_lims")
 }
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["ATOMIC_REQUESTS"] = False
+DATABASES["default"]["DATABASE_URL"] = env('POSTGRESQL_URL')
+DATABASES["default"]["NAME"] = 'bmh_lims'
+DATABASES["default"]["USER"] = env('BMH_LIMS_DB_USER')
+DATABASES["default"]["PASSWORD"] = env('BMH_LIMS_DB_PASSWORD')
+DATABASES["default"]["HOST"] = 'localhost'
+DATABASES["default"]["ENGINE"] = 'django.db.backends.postgresql_psycopg2'
+DATABASES["default"]["PORT"] = '5432'
 
 # URLS
 # ------------------------------------------------------------------------------
