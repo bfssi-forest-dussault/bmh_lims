@@ -5,6 +5,6 @@ from . import views
 app_name = "frontend"
 
 urlpatterns = [
-    re_path('^.*$', views.IndexView.as_view(), name="index")
+    re_path(r'^.*$', views.IndexView.as_view(), name="index")
     # allow any URL after frontend
 ]
