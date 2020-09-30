@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 export const StyledButton = styled.button`
@@ -9,13 +8,3 @@ export const StyledButton = styled.button`
     border-radius: 5px;
     border: none;
 `
-
-const Button = ({ text, onClickHandler }) => {
-    return (
-        <StyledButton onClick={onClickHandler}>
-            {text}
-        </StyledButton>
-    )
-}
-
-export default Button
