@@ -1,19 +1,6 @@
 import React, { useState } from 'react'
 import { Logo } from 'icons'
-import styled from 'styled-components'
-
-const LogoContainer = styled.div`
-    height: ${props => props.height};
-    width: ${props => props.width};
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
-
-// TODO: convert full logo into its own SVG.
-const NameText = styled.h1`
-    font-size: ${props => props.width}px;
-`
+import { LogoContainer, NameText } from './Styles'
 
 const CombinedLogo = ({height, width}) => {
     const [containerWidth, setWidth] = useState(0)
