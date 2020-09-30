@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes, css } from 'styled-components'
-import { IconButton } from 'components'
-import { Logo, SampleIcon, StatusIcon, WorkflowsIcon } from 'icons'
+import { IconButton, IconLink, CombinedLogo } from 'components'
+import { SampleIcon, StatusIcon, WorkflowsIcon } from 'icons'
 
 // will worry about more responsiveness another time
 
@@ -49,25 +49,25 @@ const HomePage = () => {
     return (
         <Page>
             <h2>Welcome to</h2>
-            <Logo fill='#00AAB2' height='15em' width='15em' />
-            <h1>BMH LIMS</h1>
+            <CombinedLogo height='20%' width='20%' />
             <p>What would you like to do?</p>
             <ButtonBar>
-                <IconButton
+                <IconLink
                     animation={buttonAnimation}
                     text='Submit Samples'
                     IconSVG={SampleIcon}
                     iconProps={{
-                        height: '10em',
-                        width: '10em'
+                        height: '10vw',
+                        width: '10vw'
                     }}
-                    onClickHandler={(e) => e.preventDefault() || console.log('redirect to submit samples page')} />
+                    path='/upload'
+                     />
                 <IconButton
                     animation={buttonAnimation}
                     text='View Status'
                     iconProps={{
-                        height: '10em',
-                        width: '10em'
+                        height: '10vw',
+                        width: '10vw'
                     }}
                     IconSVG={StatusIcon}
                     onClickHandler={(e) => e.preventDefault() || console.log('redirect to view status page')} />
@@ -75,8 +75,8 @@ const HomePage = () => {
                     animation={buttonAnimation}
                     text='Workflows'
                     iconProps={{
-                        height: '10em',
-                        width: '10em'
+                        height: '10vw',
+                        width: '10vw'
                     }}
                     IconSVG={WorkflowsIcon}
                     onClickHandler={(e) => e.preventDefault() || console.log('redirect to workflows page')} />

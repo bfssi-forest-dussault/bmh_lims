@@ -130,7 +130,10 @@ class WorkflowSample(TimeStampedModel):
     Samples are sub-sampled when they enter a workflow. This table represents one of these subsamples
     (aka "Workflow sample") where the sample is associated with a workflow and eventually associated with specific
     workflow results (e.g. DNA extraction)
+
+    'parents' is a ManyToManyField and supports one sample having many parents, or one parent having many children.
     """
+    parents = models.ManyToManyField("self", blank=True)
     sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
     workflow_batch = models.ForeignKey(WorkflowBatch, on_delete=models.CASCADE)
 

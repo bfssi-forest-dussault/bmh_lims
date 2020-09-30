@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const StyledButton = styled.button`
-    background: rgb(50, 100, 150);
-    color: rgb(255, 255, 255);
+export const StyledButton = styled.button`
+    background: rgb(0, 180, 200);
+    color: white;
     font-size: 1em;
     padding: 0.5em 1em;
     border-radius: 5px;
