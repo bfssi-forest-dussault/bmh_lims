@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconButton, IconLink, CombinedLogo } from 'components'
 import { SampleIcon, StatusIcon, WorkflowsIcon } from 'icons'
-import { ButtonBar, Page, appear, buttonAnimation } from './Styles'
+import { ButtonBar, Page, buttonAnimation } from './Styles'
 
 // style props are kept as strings to retain both unit measures and quantity
 const HomePage = () => {
