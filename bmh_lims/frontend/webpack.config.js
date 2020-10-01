@@ -32,7 +32,8 @@ module.exports = {
         utils: path.resolve(__dirname, 'src/assets/utils'),
         icons: path.resolve(__dirname, 'src/assets/icons'),
         pages: path.resolve(__dirname, 'src/pages'),
-        components: path.resolve(__dirname, 'src/components')
+        components: path.resolve(__dirname, 'src/components'),
+        styles: path.resolve(__dirname, 'src/globalStyles.js')
       }
     }
 };

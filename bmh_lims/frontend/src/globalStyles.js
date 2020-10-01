@@ -24,3 +24,9 @@ export const GlobalStyle = createGlobalStyle`
         color: black;
     }
 `
+
+export const theme = {
+    primarybg: 'rgb(0, 180, 200)',
+    primaryfg: 'white',
+    secondarybg: 'rgb(10, 60, 90)'
+}

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 
 export const TableContainer = styled.div`
     width: 100%;
@@ -26,9 +26,11 @@ export const StyledTh = styled.th`
     top: 0;
 `
 
-export const StyledTd = styled.td`
-    border-right: 1px solid rgb(100, 160, 190);
-    border-bottom: 1px solid rgb(100, 160, 190);
+const Styled = styled.td`
+    border-right: 1px solid ${props => props.theme.secondarybg};
+    border-bottom: 1px solid ${props => props.theme.secondarybg};
     padding: 10px;
     min-width: 200px;
 `
+
+export const StyledTd = withTheme(Styled)
