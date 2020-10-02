@@ -3,18 +3,8 @@ import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton } from 'components'
 import { HeaderBar, PageContainer, FooterBar } from './Styles'
-import { csvReader, xlsxReader } from 'utils'
+import { csvReader, xlsxReader, csvToJSON } from 'utils'
 import { theme } from 'styles'
-
-const displayInTable = (dataText, updateContent) => {
-    const lines = dataText.trim().split('\n').map(line => {
-        const replacedCommas = line.replace(/"([^,"]*,[^,"]*)+"/gm, quote => quote.replace(/,/gm, '%%%%'))
-        const replacedQuotes = replacedCommas.replace(/"[^"]*""[^"]*""[^"]*"/gm, quote => quote.replace(/""/gm, '&&&&').replace(/"/gm, ''))
-        const values = replacedQuotes.split(',')
-        return values.map(value => value.replace(/%%%%/gm, ',').replace(/&&&&/gm, '"'))
-    })
-    updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
-}
 
 const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
     event.preventDefault()
@@ -23,9 +13,12 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
         updateSubmittedFile({name: submittedFile.name, file: submittedFile})
 
         if(RegExp('\.[csv]$').test(submittedFile.name)) {
-            csvReader(submittedFile, (dataText) => displayInTable(dataText, updateContent))
+            csvReader(submittedFile, (dataText) => {
+                const lines = csvToJSON(dataText)
+                updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
+            })
         } else if (RegExp('\.[xlsx|xlsx]$').test(submittedFile.name)) {
-            xlsxReader(submittedFile, (dataText) => displayInTable(dataText, updateContent))
+            xlsxReader(submittedFile, (dataJSON) => updateContent({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
         }
     } else {
         console.log('invalid file type') // TODO: Toast
