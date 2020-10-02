@@ -33,6 +33,8 @@ const contentToJSON = (content) => {
     const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
         if (!!content.headers[idx]) {
             acc[content.headers[idx]] = item
+        } else {
+            return false // TODO: Toast
         }
         return acc
     }, {}))
@@ -65,7 +67,7 @@ const validateData = (sampleData) => {
         'dna_extraction_date',
         'dna_extraction_method',
         'qubit_dna_concentration_in_ng/uL'])
-    // ensure all headers are expected and that some value is given for required headers 
+    // ensure all headers are expected and that some value is given for required headers
     const sampleIsValid = (sample) => Object.keys(sample).reduce((isValid, header) => isValid && ((reqHeaders.has(header) && !!sample[header]) || optHeaders.has(header)), true)
     return sampleData.reduce((allIsValid, sample) => allIsValid && sampleIsValid(sample), true)
 }
