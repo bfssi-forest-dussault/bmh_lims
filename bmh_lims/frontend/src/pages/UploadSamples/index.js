@@ -9,6 +9,7 @@ import { theme } from 'styles'
 const displayInTable = (dataText, updateContent) => {
     const lines = dataText.trim().split('\n').map(line => 
         line.split(','))
+    console.log(lines)
     updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
 }
 
@@ -30,16 +31,17 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
 
 const contentToJSON = (content) => {
     const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
-        acc[content.headers[idx]] = item
+        if (!!content.headers[idx]) {
+            acc[content.headers[idx]] = item
+        }
         return acc
     }, {}))
-    console.log(sampleData)
     return sampleData
 }
 
 const validateData = (sampleData) => {
     // TODO: instantiate elsewhere
-    const reqHeaders = [
+    const reqHeaders = new Set([
         'sample_name',
         'tube/plate_label',
         'submitting_lab',
@@ -51,8 +53,8 @@ const validateData = (sampleData) => {
         'genus',
         'species',
         'culture_date',
-        'culture_conditions']
-    const optHeaders = Set([
+        'culture_conditions'])
+    const optHeaders = new Set([
         'well',
         'project_id',
         'strain',
@@ -63,16 +65,18 @@ const validateData = (sampleData) => {
         'dna_extraction_date',
         'dna_extraction_method',
         'qubit_dna_concentration_in_ng/uL'])
-    // check if header exists and that data for the header was actually given
-    reqHeaders.reduce((isValid, header) => isValid && header in sampleData && !!sampleData[header], true)
-    // ensure all headers are valid
-    Object.keys(sampleData).reduce((isValid, header) => isValid && (sampleData[header] in optHeaders || sampleData[header] in reqHeaders))
+    // ensure all headers are expected and that some value is given for required headers 
+    const sampleIsValid = (sample) => Object.keys(sample).reduce((isValid, header) => isValid && ((reqHeaders.has(header) && !!sample[header]) || optHeaders.has(header)), true)
+    return sampleData.reduce((allIsValid, sample) => allIsValid && sampleIsValid(sample), true)
 }
 
 const onClickSubmit = (event,content, submittedFile) => {
     event.preventDefault()
     if(submittedFile){
-        console.log(contentToJSON(content))
+        const sampleData = contentToJSON(content)
+        if (validateData(sampleData)) {
+            console.log('send data...')
+        }
     } else {
         console.log('no file submitted!!')
     }
@@ -91,7 +95,7 @@ const UploadSamplesPage = () => {
                 <Table headers={content.headers} content={content.content} />
                 <FooterBar>
                     <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                    <FilledButton onClick={(e) => onClickSubmit(e, submittedFile)}>submit</FilledButton>
+                    <FilledButton onClick={(e) => onClickSubmit(e, content, submittedFile)}>submit</FilledButton>
                 </FooterBar>
             </PageContainer>
         </ThemeProvider>
