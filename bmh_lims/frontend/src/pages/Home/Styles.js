@@ -9,7 +9,7 @@ export const ButtonBar = styled.div`
     margin-top: 25px; 
 `
 
-export const Page = styled.div`
+export const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
