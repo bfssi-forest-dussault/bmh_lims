@@ -9,8 +9,9 @@ import { theme } from 'styles'
 const displayInTable = (dataText, updateContent) => {
     const lines = dataText.trim().split('\n').map(line => {
         const replacedCommas = line.replace(/"([^,"]*,[^,"]*)+"/gm, quote => quote.replace(/,/gm, '%%%%'))
-        const values = replacedCommas.split(',')
-        return values.map(value => value.replace('%%%%', ','))
+        const replacedQuotes = replacedCommas.replace(/"[^"]*""[^"]*""[^"]*"/gm, quote => quote.replace(/""/gm, '&&&&').replace(/"/gm, ''))
+        const values = replacedQuotes.split(',')
+        return values.map(value => value.replace(/%%%%/gm, ',').replace(/&&&&/gm, '"'))
     })
     updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
 }
