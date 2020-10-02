@@ -13,7 +13,7 @@ const evenOutRows = ({headers, content}) => {
     const filler = [...Array(maxLength - headers.length).keys()].map(item => '')
     evenedHeaders.push(...filler)
     content.forEach((row, idx) => {
-        evenedContent.push(row)
+        evenedContent.push([...row])
         if (row.length !== maxLength) 
         {
             evenedContent[idx].push(...filler)

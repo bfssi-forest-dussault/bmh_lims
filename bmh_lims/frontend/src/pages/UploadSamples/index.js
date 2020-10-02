@@ -7,9 +7,11 @@ import { csvReader, xlsxReader } from 'utils'
 import { theme } from 'styles'
 
 const displayInTable = (dataText, updateContent) => {
-    const lines = dataText.trim().split('\n').map(line => 
-        line.split(','))
-    console.log(lines)
+    const lines = dataText.trim().split('\n').map(line => {
+        const replacedCommas = line.replace(/"([^,"]*,[^,"]*)+"/gm, quote => quote.replace(/,/gm, '%%%%'))
+        const values = replacedCommas.split(',')
+        return values.map(value => value.replace('%%%%', ','))
+    })
     updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
 }
 
