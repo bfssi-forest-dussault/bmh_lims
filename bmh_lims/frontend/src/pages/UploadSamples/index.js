@@ -28,10 +28,51 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
     }
 }
 
-const onClickSubmit = (event, submittedFile) => {
+const contentToJSON = (content) => {
+    const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
+        acc[content.headers[idx]] = item
+        return acc
+    }, {}))
+    console.log(sampleData)
+    return sampleData
+}
+
+const validateData = (sampleData) => {
+    // TODO: instantiate elsewhere
+    const reqHeaders = [
+        'sample_name',
+        'tube/plate_label',
+        'submitting_lab',
+        'submission_date',
+        'submission_format',
+        'sample_volume_in_uL',
+        'requested_services',
+        'submitter_project_name',
+        'genus',
+        'species',
+        'culture_date',
+        'culture_conditions']
+    const optHeaders = Set([
+        'well',
+        'project_id',
+        'strain',
+        'isolate',
+        'subspecies/subtype/lineage',
+        'approx_genome_size_in_bp',
+        'details/comments',
+        'dna_extraction_date',
+        'dna_extraction_method',
+        'qubit_dna_concentration_in_ng/uL'])
+    // check if header exists and that data for the header was actually given
+    reqHeaders.reduce((isValid, header) => isValid && header in sampleData && !!sampleData[header], true)
+    // ensure all headers are valid
+    Object.keys(sampleData).reduce((isValid, header) => isValid && (sampleData[header] in optHeaders || sampleData[header] in reqHeaders))
+}
+
+const onClickSubmit = (event,content, submittedFile) => {
     event.preventDefault()
     if(submittedFile){
-        console.log('submitted file')
+        console.log(contentToJSON(content))
     } else {
         console.log('no file submitted!!')
     }
