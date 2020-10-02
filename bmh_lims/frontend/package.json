@@ -21,6 +21,7 @@
     "enzyme-adapter-react-16": "^1.15.5",
     "file-loader": "^6.1.0",
     "jasmine": "^3.6.1",
+    "jasmine-enzyme": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "webpack": "^4.44.1",
