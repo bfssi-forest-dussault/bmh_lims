@@ -2,6 +2,8 @@ import React from 'react'
 import { TableContainer, StyledTable, StyledTh, StyledTd } from './Styles'
 
 const evenOutRows = ({headers, content}) => {
+    const evenedHeaders = [...headers]
+    const evenedContent = []
     let maxLength = headers.length
     content.forEach(row => {
         if (row.length > maxLength) {
@@ -9,13 +11,15 @@ const evenOutRows = ({headers, content}) => {
         }
     })
     const filler = [...Array(maxLength - headers.length).keys()].map(item => '')
-    headers.push(...filler)
-    content.forEach(row => {
-        if (row.length !== maxLength) {
-            row.push(...filler)
+    evenedHeaders.push(...filler)
+    content.forEach((row, idx) => {
+        evenedContent.push([...row])
+        if (row.length !== maxLength) 
+        {
+            evenedContent[idx].push(...filler)
         }
     })
-    return {headers, content}
+    return {headers: evenedHeaders, content: evenedContent}
 }
 
 // headers: array of headers

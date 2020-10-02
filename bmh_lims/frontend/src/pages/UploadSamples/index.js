@@ -7,8 +7,12 @@ import { csvReader, xlsxReader } from 'utils'
 import { theme } from 'styles'
 
 const displayInTable = (dataText, updateContent) => {
-    const lines = dataText.trim().split('\n').map(line => 
-        line.split(','))
+    const lines = dataText.trim().split('\n').map(line => {
+        const replacedCommas = line.replace(/"([^,"]*,[^,"]*)+"/gm, quote => quote.replace(/,/gm, '%%%%'))
+        const replacedQuotes = replacedCommas.replace(/"[^"]*""[^"]*""[^"]*"/gm, quote => quote.replace(/""/gm, '&&&&').replace(/"/gm, ''))
+        const values = replacedQuotes.split(',')
+        return values.map(value => value.replace(/%%%%/gm, ',').replace(/&&&&/gm, '"'))
+    })
     updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
 }
 
@@ -28,10 +32,56 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
     }
 }
 
-const onClickSubmit = (event, submittedFile) => {
+const contentToJSON = (content) => {
+    const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
+        if (!!content.headers[idx]) {
+            acc[content.headers[idx]] = item
+        } else {
+            return false // TODO: Toast
+        }
+        return acc
+    }, {}))
+    return sampleData
+}
+
+const validateData = (sampleData) => {
+    // TODO: instantiate elsewhere
+    const reqHeaders = new Set([
+        'sample_name',
+        'tube/plate_label',
+        'submitting_lab',
+        'submission_date',
+        'submission_format',
+        'sample_volume_in_uL',
+        'requested_services',
+        'submitter_project_name',
+        'genus',
+        'species',
+        'culture_date',
+        'culture_conditions'])
+    const optHeaders = new Set([
+        'well',
+        'project_id',
+        'strain',
+        'isolate',
+        'subspecies/subtype/lineage',
+        'approx_genome_size_in_bp',
+        'details/comments',
+        'dna_extraction_date',
+        'dna_extraction_method',
+        'qubit_dna_concentration_in_ng/uL'])
+    // ensure all headers are expected and that some value is given for required headers
+    const sampleIsValid = (sample) => Object.keys(sample).reduce((isValid, header) => isValid && ((reqHeaders.has(header) && !!sample[header]) || optHeaders.has(header)), true)
+    return sampleData.reduce((allIsValid, sample) => allIsValid && sampleIsValid(sample), true)
+}
+
+const onClickSubmit = (event,content, submittedFile) => {
     event.preventDefault()
     if(submittedFile){
-        console.log('submitted file')
+        const sampleData = contentToJSON(content)
+        if (validateData(sampleData)) {
+            console.log('send data...')
+        }
     } else {
         console.log('no file submitted!!')
     }
@@ -50,7 +100,7 @@ const UploadSamplesPage = () => {
                 <Table headers={content.headers} content={content.content} />
                 <FooterBar>
                     <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                    <FilledButton onClick={(e) => onClickSubmit(e, submittedFile)}>submit</FilledButton>
+                    <FilledButton onClick={(e) => onClickSubmit(e, content, submittedFile)}>submit</FilledButton>
                 </FooterBar>
             </PageContainer>
         </ThemeProvider>
