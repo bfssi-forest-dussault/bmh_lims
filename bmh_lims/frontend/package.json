@@ -33,6 +33,7 @@
 		"enzyme-adapter-react-16": "^1.15.5",
 		"file-loader": "^6.1.0",
 		"jest": "^26.5.0",
+		"jest-each": "^26.5.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"webpack": "^4.44.1",
