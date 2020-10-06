@@ -13,10 +13,22 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.SampleSerializer
+    queryset = models.Sample.objects.all()
 
     def get_queryset(self):
-        query_params = self.request.query_params
         queryset = models.Sample.objects.all().order_by('-created')
+        return queryset
+
+
+class WorkflowSampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
+    """
+    ViewSet for retrieving Sample objects from the database
+    """
+    serializer_class = serializers.WorkflowSampleSerializer
+    queryset = models.WorkflowSample.objects.all()
+
+    def get_queryset(self):
+        queryset = models.WorkflowSample.objects.all().order_by('-created')
         return queryset
 
 
@@ -27,7 +39,6 @@ class WorkflowBatchViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     serializer_class = serializers.WorkflowBatchSerializer
 
     def get_queryset(self):
-        query_params = self.request.query_params
         queryset = models.WorkflowBatch.objects.all().order_by('-created')
         return queryset
 
@@ -39,7 +50,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
-        query_params = self.request.query_params
         queryset = models.Project.objects.all().order_by('-created')
         return queryset
 
@@ -51,6 +61,5 @@ class LabViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LabSerializer
 
     def get_queryset(self):
-        query_params = self.request.query_params
         queryset = models.Lab.objects.all().order_by('-created')
         return queryset
