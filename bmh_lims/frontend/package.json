@@ -1,37 +1,48 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "webpack --mode development ./src/index.js --output ./static/frontend/main.js --watch",
-    "build": "webpack --mode production ./src/index.js --output ./static/frontend/main.js"
-  },
-  "keywords": [],
-  "author": "Forest Dussault",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-regenerator": "^7.10.4",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
-    "@svgr/webpack": "^5.4.0",
-    "babel-loader": "^8.1.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.5",
-    "file-loader": "^6.1.0",
-    "jasmine": "^3.6.1",
-    "jasmine-enzyme": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
-  },
-  "dependencies": {
-    "axios": "^0.20.0",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.2.0",
-    "tsv-reader": "^1.0.6",
-    "xlsx": "^0.16.7"
-  }
+	"name": "frontend",
+	"version": "0.1.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "webpack --mode development ./src/index.js --output ./static/frontend/main.js --watch",
+		"build": "webpack --mode production ./src/index.js --output ./static/frontend/main.js",
+		"test": "jest"
+	},
+	"jest": {
+		"moduleNameMapper": {
+			"^utils(.*)$": "<rootDir>/src/assets/utils$1",
+			"^icons(.*)$": "<rootDir>/src/assets/icons$1",
+			"^pages(.*)$": "<rootDir>/src/pages$1",
+			"^components(.*)$": "<rootDir>/src/components$1",
+			"^styles(.*)$": "<rootDir>/src/globalStyles.js$1"
+		}
+	},
+	"keywords": [],
+	"author": "Forest Dussault",
+	"license": "MIT",
+	"devDependencies": {
+		"@babel/core": "^7.11.6",
+		"@babel/plugin-transform-regenerator": "^7.10.4",
+		"@babel/preset-env": "^7.11.5",
+		"@babel/preset-react": "^7.10.4",
+		"@svgr/webpack": "^5.4.0",
+		"babel-jest": "^26.5.0",
+		"babel-loader": "^8.1.0",
+		"babel-polyfill": "^6.26.0",
+		"enzyme": "^3.11.0",
+		"enzyme-adapter-react-16": "^1.15.5",
+		"file-loader": "^6.1.0",
+		"jest": "^26.5.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"webpack": "^4.44.1",
+		"webpack-cli": "^3.3.12"
+	},
+	"dependencies": {
+		"axios": "^0.20.0",
+		"react-router-dom": "^5.2.0",
+		"styled-components": "^5.2.0",
+		"tsv-reader": "^1.0.6",
+		"xlsx": "^0.16.7"
+	}
 }

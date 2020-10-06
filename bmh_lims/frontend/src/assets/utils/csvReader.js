@@ -5,7 +5,7 @@ export const csvToJSON = dataText => {
         const replacedCommas = line.replace(/"([^,"]*,[^,"]*)+"/gm, quote => quote.replace(/,/gm, '%%%%'))
         const replacedQuotes = replacedCommas.replace(/"[^"]*""[^"]*""[^"]*"/gm, quote => quote.replace(/""/gm, '&&&&').replace(/"/gm, ''))
         const values = replacedQuotes.split(',')
-        return values.map(value => value.replace(/%%%%/gm, ',').replace(/&&&&/gm, '"'))
+        return values.map(value => value.trim().replace(/%%%%/gm, ',').replace(/&&&&/gm, '"').replace(/"/gm, 's'))
     })
     return lines
 }

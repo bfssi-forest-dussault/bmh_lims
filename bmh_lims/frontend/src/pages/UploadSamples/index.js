@@ -6,6 +6,11 @@ import { HeaderBar, PageContainer, FooterBar } from './Styles'
 import { csvReader, xlsxReader, csvToJSON } from 'utils'
 import { theme } from 'styles'
 
+const displayInTable = (dataText, updateContent) => {
+    const lines = csvToJSON(dataText)
+    updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
+}
+
 const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
     event.preventDefault()
     if(RegExp('\.[csv|xls|xlsx]$').test(event.target.files[0].name)) {
@@ -14,11 +19,10 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
 
         if(RegExp('\.[csv]$').test(submittedFile.name)) {
             csvReader(submittedFile, (dataText) => {
-                const lines = csvToJSON(dataText)
-                updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
+                displayInTable(dataText, updateContent)
             })
         } else if (RegExp('\.[xlsx|xlsx]$').test(submittedFile.name)) {
-            xlsxReader(submittedFile, (dataJSON) => updateContent({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
+            xlsxReader(submittedFile, (dataJSON) => displayIn({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
         }
     } else {
         console.log('invalid file type') // TODO: Toast
