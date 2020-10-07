@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "allowSyntheticDefaultImports": false,
+      "baseUrl": "./",
+      "paths": {
+        "utils/*": ["src/assets/utils/*"],
+        "icons/*": ["src/assets/icons*"],
+        "pages/*": ["src/pages/*"],
+        "components/*": ["src/components/*"],
+        "styles/*": ["src/globalStyles.js"]
+      }
+    },
+    "exclude": ["node_modules", "dist"]
+}

@@ -1,1 +1,1 @@
-export { csvReader, xlsxReader } from './csvReader'
+export { csvReader, xlsxReader, csvToJSON } from './csvReader'
