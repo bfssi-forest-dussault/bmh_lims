@@ -1,10 +1,23 @@
 from django.db import models
+from datetime import datetime
 from bmh_lims.users.models import User
 
 # Sensible field sizes for CharField columns
 LG_CHAR = 1500
 MD_CHAR = 500
 SM_CHAR = 50
+
+
+def generate_sample_id() -> str:
+    """
+    Method to generate a default sample ID for the Sample model. Returns format as LIMS-YYYY-XXXXXX. This method will always
+    return the greatest sample pk value in the database + 1.
+    """
+    last_sample = Sample.objects.all().last()
+    id_ = 1
+    if last_sample is not None:
+        id_ = last_sample.id + 1
+    return f'LIMS-{datetime.now().year}-{id_:06}'
 
 
 # Create your models here.
@@ -54,7 +67,8 @@ class Sample(TimeStampedModel):
     """
     Model to store individual samples
     """
-    sample_id = models.CharField(max_length=SM_CHAR)  # TODO: autogenerate and follow a standard format LIMS-2020-000001
+
+    sample_id = models.CharField(max_length=SM_CHAR, default=generate_sample_id)
     sample_name = models.CharField(max_length=SM_CHAR)
     well = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     submitting_lab = models.ForeignKey(Lab, on_delete=models.SET_NULL, null=True, blank=True),
@@ -79,12 +93,6 @@ class Sample(TimeStampedModel):
 
     def __str__(self):
         return f"{self.sample_id}: {self.sample_name}"
-
-    def verify_sample_id(self):
-        pass
-
-    def generate_sample_id(self):
-        pass
 
     class Meta:
         verbose_name = 'Sample'
