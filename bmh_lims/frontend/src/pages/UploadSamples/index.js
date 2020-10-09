@@ -1,10 +1,14 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton } from 'components'
 import { HeaderBar, PageContainer, FooterBar } from './Styles'
-import { csvReader, xlsxReader, csvToJSON } from 'utils'
+import { csvReader, xlsxReader, csvToJSON, tableToData } from 'utils'
 import { theme } from 'styles'
+
+axios.defaults.xsrfHeaderName = "X-CSRFToken"
+axios.defaults.withCredentials = true
 
 const displayInTable = (dataText, updateContent) => {
     const lines = csvToJSON(dataText)
@@ -77,7 +81,23 @@ const onClickSubmit = (event,content, submittedFile) => {
     if(submittedFile){
         const sampleData = contentToJSON(content)
         if (validateData(sampleData)) {
-            console.log('send data...')
+            axios({
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-type': 'application/json'
+                },
+                url: 'http://localhost:8000/api/samples/',
+                auth: {
+                    user: 'Rose',
+                    password: 'Bioinformatics1'
+                },
+                data: JSON.stringify([{sample_name: "sample01"}]) // TODO: Placeholder
+            }).then((res) => {
+                console.log('success')
+            }).catch(rej => {
+                console.log(rej)
+            })
         }
     } else {
         console.log('no file submitted!!')
