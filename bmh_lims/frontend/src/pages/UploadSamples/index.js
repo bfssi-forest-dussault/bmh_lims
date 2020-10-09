@@ -89,8 +89,8 @@ const onClickSubmit = (event,content, submittedFile) => {
                 },
                 url: 'http://localhost:8000/api/samples/',
                 auth: {
-                    user: 'Rose',
-                    password: 'Bioinformatics1'
+                    user: '',
+                    password: ''
                 },
                 data: JSON.stringify([{sample_name: "sample01"}]) // TODO: Placeholder
             }).then((res) => {
