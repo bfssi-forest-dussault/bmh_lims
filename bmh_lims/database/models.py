@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from bmh_lims.users.models import User
+from simple_history.models import HistoricalRecords
 
 # Sensible field sizes for CharField columns
 LG_CHAR = 1500
@@ -41,6 +42,8 @@ class Lab(TimeStampedModel):
     lab_contact = models.EmailField(max_length=SM_CHAR)
     lab_notes = models.TextField(blank=True, null=True)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.lab_name}"
 
@@ -54,6 +57,8 @@ class Project(TimeStampedModel):
     project_lead = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     project_description = models.TextField(blank=True, null=True)
     supporting_lab = models.ForeignKey(Lab, on_delete=models.CASCADE, blank=True, null=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.project_name} (Lab: {self.supporting_lab})"
@@ -91,6 +96,8 @@ class Sample(TimeStampedModel):
     dna_extraction_method = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     qubit_concentration_in_ng_ul = models.FloatField(blank=True, null=True)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.sample_id}: {self.sample_name}"
 
@@ -105,6 +112,8 @@ class WorkflowDefinition(TimeStampedModel):
     """
     name = models.CharField(max_length=SM_CHAR)  # e.g. "DNA extraction"
     description = models.TextField(null=True, blank=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.name}"
@@ -124,6 +133,8 @@ class WorkflowBatch(TimeStampedModel):
         ('COMPLETE', 'Complete'),
         ('FAIL', 'Fail'),
     ), null=True, blank=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.id}: {self.workflow}"
@@ -145,6 +156,8 @@ class WorkflowSample(TimeStampedModel):
     sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
     workflow_batch = models.ForeignKey(WorkflowBatch, on_delete=models.CASCADE)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.sample}"
 
@@ -158,6 +171,8 @@ class DNAExtractionResults(TimeStampedModel):
     DNA extraction results for a single sample linked to a specific workflow are stored here
     """
     workflow_sample = models.ForeignKey(WorkflowSample, on_delete=models.CASCADE, null=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.workflow_sample} - DNA Extraction Results"
