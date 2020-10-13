@@ -89,14 +89,14 @@ const onClickSubmit = (event,content, submittedFile) => {
                 },
                 url: 'http://localhost:8000/api/samples/',
                 auth: {
-                    user: process.env.USER,
-                    password: process.env.PASSWORD
+                    user: 'USER', // TODO: replace with your own username
+                    password: 'PASSWORD' // TODO: replace with your own password
                 },
-                data: JSON.stringify([{sample_name: "sample01"}]) // TODO: Placeholder
+                data: JSON.stringify(tableToData(content)) // TODO: Placeholder
             }).then((res) => {
-                console.log('success')
+                console.log(res) // TODO: format
             }).catch(rej => {
-                console.log(rej)
+                console.log(rej) // TODO: format
             })
         }
     } else {

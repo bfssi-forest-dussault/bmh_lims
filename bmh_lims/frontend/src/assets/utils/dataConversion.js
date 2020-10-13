@@ -1,9 +1,16 @@
+export const stringNAtoNull = (strValue) => {
+    if (strValue.includes('N/A')) {
+        return null
+    }
+    return strValue
+}
+
 export const mergeHeadersValues = ({headers, values}) => {
     if (headers.length !== values.length) {
         return false // TODO: throw
     }
     return values.reduce((data, currentItem, itemIdx) => {
-        data[headers[itemIdx]] = currentItem
+        data[headers[itemIdx]] = stringNAtoNull(currentItem)
         return data
     }, {})
 }

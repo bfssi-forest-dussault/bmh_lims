@@ -1,2 +1,2 @@
 export { csvReader, xlsxReader, csvToJSON } from './csvReader'
-export { mergeHeadersValues, tableToData } from './dataConversion'
+export { mergeHeadersValues, tableToData, stringNAtoNull } from './dataConversion'
