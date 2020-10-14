@@ -1,10 +1,14 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton } from 'components'
 import { HeaderBar, PageContainer, FooterBar } from './Styles'
-import { csvReader, xlsxReader, csvToJSON } from 'utils'
+import { csvReader, xlsxReader, csvToJSON, tableToData } from 'utils'
 import { theme } from 'styles'
+
+axios.defaults.xsrfHeaderName = "X-CSRFToken"
+axios.defaults.withCredentials = true
 
 const displayInTable = (dataText, updateContent) => {
     const lines = csvToJSON(dataText)
@@ -22,7 +26,7 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
                 displayInTable(dataText, updateContent)
             })
         } else if (RegExp('\.[xlsx|xlsx]$').test(submittedFile.name)) {
-            xlsxReader(submittedFile, (dataJSON) => displayIn({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
+            xlsxReader(submittedFile, (dataJSON) => updateContent({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
         }
     } else {
         console.log('invalid file type') // TODO: Toast
@@ -77,7 +81,23 @@ const onClickSubmit = (event,content, submittedFile) => {
     if(submittedFile){
         const sampleData = contentToJSON(content)
         if (validateData(sampleData)) {
-            console.log('send data...')
+            axios({
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-type': 'application/json'
+                },
+                url: '/api/samples/',
+                auth: {
+                    user: 'USER', // TODO: replace with your own username
+                    password: 'PASSWORD' // TODO: replace with your own password
+                },
+                data: JSON.stringify(tableToData(content)) // TODO: Placeholder
+            }).then((res) => {
+                console.log(res) // TODO: format
+            }).catch(rej => {
+                console.log(rej) // TODO: format
+            })
         }
     } else {
         console.log('no file submitted!!')
