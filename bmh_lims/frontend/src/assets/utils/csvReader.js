@@ -27,7 +27,7 @@ export const xlsxReader = (xlsxFile, toDo) => {
         const wb = XLSX.read(bstr, {type:'binary', cellDates: true});
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws, {header:1});
+        const data = XLSX.utils.sheet_to_json(ws, {header:1, blankrows: false});
         const stringifiedData = data.map(row => {
             return row.map(value => Object.prototype.toString.call(value) === '[object Date]' ? value.toISOString().split('T')[0] : value)
         })
