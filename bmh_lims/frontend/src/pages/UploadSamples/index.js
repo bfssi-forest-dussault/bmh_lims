@@ -87,7 +87,7 @@ const onClickSubmit = (event,content, submittedFile) => {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                     'Content-type': 'application/json'
                 },
-                url: 'http://localhost:8000/api/samples/',
+                url: '/api/samples/',
                 auth: {
                     user: 'USER', // TODO: replace with your own username
                     password: 'PASSWORD' // TODO: replace with your own password
