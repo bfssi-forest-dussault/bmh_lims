@@ -26,7 +26,7 @@ const onClickHandleUpload = (event, updateSubmittedFile, updateContent) => {
                 displayInTable(dataText, updateContent)
             })
         } else if (RegExp('\.[xlsx|xlsx]$').test(submittedFile.name)) {
-            xlsxReader(submittedFile, (dataJSON) => displayIn({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
+            xlsxReader(submittedFile, (dataJSON) => updateContent({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
         }
     } else {
         console.log('invalid file type') // TODO: Toast

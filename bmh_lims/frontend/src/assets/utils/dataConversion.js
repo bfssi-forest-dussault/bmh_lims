@@ -1,5 +1,5 @@
 export const stringNAtoNull = (strValue) => {
-    if (strValue.includes('N/A')) {
+    if (typeof(strValue) === 'string' && strValue.includes('N/A')) {
         return null
     }
     return strValue

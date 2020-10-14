@@ -24,11 +24,14 @@ export const xlsxReader = (xlsxFile, toDo) => {
     const reader = new FileReader();
     reader.onload = (evt) => {
         const bstr = evt.target.result;
-        const wb = XLSX.read(bstr, {type:'binary'});
+        const wb = XLSX.read(bstr, {type:'binary', cellDates: true});
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, {header:1});
-        toDo(data)
+        const stringifiedData = data.map(row => {
+            return row.map(value => Object.prototype.toString.call(value) === '[object Date]' ? value.toISOString().split('T')[0] : value)
+        })
+        toDo(stringifiedData)
     };
     reader.readAsBinaryString(xlsxFile);
 }
