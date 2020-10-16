@@ -22,3 +22,11 @@ export const tableToData = ({headers, content}) => {
         return dataArray
     }, [])
 }
+
+export const dataToString = (errorData) => {
+    const sampleErrorList = errorData.map((sampleData) => {
+        const errorList = Object.keys(sampleData).map(sampleHeader => `${sampleHeader}\n\t\t${sampleData[sampleHeader].join('\n\t\t')}`)
+        return errorList.join('\n\t\t')
+    })
+    return sampleErrorList.map((errorList, idx) => `Sample ${idx + 1}:\n\t${errorList}`).join('\n')
+}

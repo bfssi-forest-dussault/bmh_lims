@@ -1,4 +1,4 @@
-import { mergeHeadersValues } from 'utils'
+import { mergeHeadersValues, dataToString } from 'utils'
 import each from 'jest-each'
 
 
@@ -9,8 +9,6 @@ const isEqual = (obj1, obj2) => {
             && Object.keys(obj1).reduce((equalSoFar, key) => equalSoFar && (obj2[key] === obj1[key]), true)
         )
     }
-    console.log(obj1)
-    console.log(obj2)
     return obj1 === obj2
 }
 
@@ -37,5 +35,14 @@ describe('mergeHeadersValues properly merges headers and values', () => {
         ${['a', 'b', 'c']} | ${[1, 2]}    | ${false}
     `.test('$headers with $values returns $expected', ({headers, values, expected}) => {
         expect(isEqual(mergeHeadersValues({headers, values}), expected)).toBe(true)
+    })
+})
+
+describe('dataToString correctly converts error data object to string', () => {
+    each`
+        errorData                                                              | expected
+        ${[{'a': ['error1']}, {'b': ['error2', 'error3']}, {'c': ['error4']}]} | ${'Sample 1:\n\ta\n\t\terror1\nSample 2:\n\tb\n\t\terror2\n\t\terror3\nSample 3:\n\tc\n\t\terror4'}
+    `.test('$errorData => $expected', ({errorData, expected}) => {
+        expect(dataToString(errorData) === expected)
     })
 })
