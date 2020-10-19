@@ -1,5 +1,6 @@
 import React from 'react'
 import { ModalBackground, Modal, ButtonContainer, InfoContainer} from './Styles'
+import { MultilineText } from 'components'
 
 export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info}) => {
     return (
@@ -11,7 +12,7 @@ export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info
                 {text}
                 {info && (
                 <InfoContainer>
-                        {info}
+                        <MultilineText text={info} />
                 </InfoContainer>)}
                 <ButtonContainer>
                     {ActionButton && <ActionButton />}

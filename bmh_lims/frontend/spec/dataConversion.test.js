@@ -42,6 +42,7 @@ describe('dataToString correctly converts error data object to string', () => {
     each`
         errorData                                                              | expected
         ${[{'a': ['error1']}, {'b': ['error2', 'error3']}, {'c': ['error4']}]} | ${['Sample 1:\n\ta\n\t\terror1','Sample 2:\n\tb\n\t\terror2\n\t\terror3', 'Sample 3:\n\tc\n\t\terror4']}
+        ${[{'a': ['error1'], 'b': ['error2']}]}                                | ${['Sample 1:\n\ta\n\t\terror1\n\tb\n\t\terror2']}
     `.test('$errorData => $expected', ({errorData, expected}) => {
         expect(dataToString(errorData) === expected)
     })

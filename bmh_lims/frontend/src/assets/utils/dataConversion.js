@@ -26,7 +26,7 @@ export const tableToData = ({headers, content}) => {
 export const dataToString = (errorData) => {
     const sampleErrorList = errorData.map((sampleData) => {
         const errorList = Object.keys(sampleData).map(sampleHeader => `${sampleHeader}\n\t\t${sampleData[sampleHeader].join('\n\t\t')}`)
-        return errorList.join('\n\t\t')
+        return errorList.join('\n\t')
     })
     return sampleErrorList.map((errorList, idx) => !!errorList.length ? `Sample ${idx + 1}:\n\t${errorList}` : null).filter(error => !!error).join('\n')
 }
