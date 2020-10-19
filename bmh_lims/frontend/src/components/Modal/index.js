@@ -1,7 +1,7 @@
 import React from 'react'
-import { ModalBackground, Modal, ButtonContainer } from './Styles'
+import { ModalBackground, Modal, ButtonContainer, InfoContainer} from './Styles'
 
-export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick}) => {
+export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info}) => {
     return (
         <ModalBackground onClick={e => {
             e.preventDefault()
@@ -9,6 +9,10 @@ export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick}) => 
         }}>
             <Modal>
                 {text}
+                {info && (
+                <InfoContainer>
+                        {info}
+                </InfoContainer>)}
                 <ButtonContainer>
                     {ActionButton && <ActionButton />}
                     {CloseButton && <CloseButton />}

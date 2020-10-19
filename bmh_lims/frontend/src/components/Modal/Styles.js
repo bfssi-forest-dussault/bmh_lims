@@ -33,3 +33,11 @@ export const ButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
 `
+
+export const InfoContainer = styled.div`
+    width: 100%;
+    overflow: auto;
+    max-height: 70px;
+    border-radius: 2px;
+    border: solid 5px ${props => props.theme.primarybg};
+`

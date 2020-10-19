@@ -56,12 +56,9 @@ const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
                 url: '/api/samples/',
                 data: JSON.stringify(tableToData(content)) // TODO: Placeholder
             }).then((res) => {
-                console.log(res) // TODO: toast
-                updateSubmitted({isSubmitted: true, isError: false})
+                updateSubmitted({isSubmitted: true, isError: false, errorInfo: ''})
             }).catch(rej => {
-                console.log(rej.response)
-                console.log(dataToString(rej.response.data))
-                updateSubmitted({isSubmitted: true, isError: true})
+                updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
             })
         }
     } else {
@@ -72,9 +69,8 @@ const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
 // page currently looks quite strange. This will be styled better later
 const UploadSamplesPage = () => {
     const [isUploaded, updateIsUploaded] = useState(false)
-    const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false})
+    const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false, errorInfo: ''})
     const [isInvalid, updateIsInvalid] = useState(false)
-    const [errorMessage, updateError] = useState({})
     const [content, updateContent] = useState({headers: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'], content: [...Array(10).keys()].map((item, idx) => ['aaa', 'bbb', 'ccc', 'ddd', 'eee'])})
     return (
         <ThemeProvider theme={theme}>
@@ -95,6 +91,7 @@ const UploadSamplesPage = () => {
                 isInvalid &&
                 <Notice text='Invalid filetype'
                     onBackgroundClick={() => updateIsInvalid(false)}
+                    errorInfo={errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false})}>close</FilledButton>}
                 />
             }
@@ -103,6 +100,7 @@ const UploadSamplesPage = () => {
                 submitted.isError && 
                 <Notice text='There was an error with your submission. Please look over it again'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
+                    info={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false})}>close</FilledButton>}
                 />
             } {
