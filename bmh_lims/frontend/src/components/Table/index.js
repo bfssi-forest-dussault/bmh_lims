@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableContainer, StyledTable, StyledTh, StyledTd } from './Styles'
+import { TableContainer, StyledTable, StyledTh, StyledTd, StyledHeader, StyledBody, StyledHeaderCell } from './Styles'
 
 const evenOutRows = ({headers, content}) => {
     const evenedHeaders = [...headers]
@@ -28,7 +28,25 @@ const Table = ({headers, content}) => {
     const evenRows = evenOutRows({headers, content})
     return (
         <TableContainer>
-            <StyledTable>
+            <StyledHeader>
+                {evenRows.headers.map((header, idx) => (
+                    <StyledHeaderCell key={`header-${idx}`}>{header}</StyledHeaderCell>
+                ))}
+            </StyledHeader>
+            <StyledBody>
+                <table>
+                    <tbody>
+                        {evenRows.content.map((row, rIdx) => (
+                            <tr key={`row-${rIdx}`}>{
+                                row.map((value, idx) => (
+                                    <StyledTd key={`cell-${rIdx}-${idx}`}>{value}</StyledTd>
+                                ))
+                            }</tr>
+                        ))}
+                    </tbody>
+                </table>
+            </StyledBody>
+            {/* <StyledTable>
                 <thead>
                     <tr>
                         {evenRows.headers.map((header, idx) => (
@@ -45,7 +63,7 @@ const Table = ({headers, content}) => {
                         </tr>
                     ))}
                 </tbody>
-            </StyledTable>
+            </StyledTable> */}
         </TableContainer>
 )}
 
