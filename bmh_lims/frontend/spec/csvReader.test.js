@@ -10,9 +10,6 @@ const isEqual = (array1, array2) => {
             }
         })
     })
-    if (!isEqual) {
-        console.log(array1, array2)
-    }
     return isEqual
 }
 

@@ -1,11 +1,9 @@
 import styled, { withTheme } from 'styled-components'
 
 export const TableContainer = styled.div`
-    width: 100%;
     height: 100%;
     overflow-x: auto;
     overflow-y: auto;
-    margin: 1.5rem 0px;
     background-color: white;
     border: 3px solid rgb(10, 60, 90);
     border-radius: 5px;
