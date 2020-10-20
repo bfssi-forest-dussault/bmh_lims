@@ -17,6 +17,7 @@ const displayInTable = (dataText, updateContent) => {
 
 const onClickHandleUpload = (event, updateIsUploaded, updateContent, updateIsInvalid) => {
     event.preventDefault()
+    console.log('onClickHandler')
     const submittedFile = event.target.files[0]
     updateIsUploaded(true)
     if(isCSV(submittedFile.name)) {
@@ -109,8 +110,8 @@ const UploadSamplesPage = () => {
                 (<Notice text='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {
-                                            updateSubmitted({isSubmitted: false, isError: false})
                                             onClickHandleUpload(e, updateSubmittedFile, updateContent)
+                                            updateSubmitted({isSubmitted: false, isError: false})
                                         }} />}
                     CloseButton={() => <InvertedLinkButton to='/lims'>back to home</InvertedLinkButton>}
                 />)
