@@ -1,13 +1,14 @@
 import React from 'react'
-import { ModalBackground, Modal, ButtonContainer, InfoContainer} from './Styles'
+import { ModalBackground, Modal, ButtonContainer, InfoContainer, ModalContainer } from './Styles'
 import { MultilineText } from 'components'
 
 export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info}) => {
     return (
-        <ModalBackground onClick={e => {
-            e.preventDefault()
-            onBackgroundClick()
-        }}>
+        <ModalContainer>
+            <ModalBackground onClick={e => {
+                e.preventDefault()
+                onBackgroundClick()
+            }} />
             <Modal>
                 {text}
                 {info && (
@@ -19,6 +20,6 @@ export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info
                     {CloseButton && <CloseButton />}
                 </ButtonContainer>
             </Modal>
-        </ModalBackground>
+        </ModalContainer>
     )
 }
