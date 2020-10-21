@@ -4,34 +4,26 @@ import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
 import { HeaderBar, PageContainer, FooterBar, FooterButtonContainer } from './Styles'
-import { csvReader, xlsxReader, csvToJSON, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
+import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
 import { theme } from 'styles'
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
 axios.defaults.withCredentials = true
 
-const displayInTable = (dataText, updateContent) => {
-    const lines = csvToJSON(dataText)
-    updateContent({headers: lines[0], content: lines.slice(1, lines.length)})
-}
-
-const onClickHandleUpload = (event, updateIsUploaded, updateContent, updateIsInvalid) => {
+const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) => {
     event.preventDefault()
-    console.log('onClickHandler')
     const submittedFile = event.target.files[0]
     updateIsUploaded(true)
     if(isCSV(submittedFile.name)) {
-        csvReader(submittedFile, (dataText) => {
-            displayInTable(dataText, updateContent)
-        })
+        csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
     } else if (isExcel(submittedFile.name)) {
-        xlsxReader(submittedFile, (dataJSON) => updateContent({headers: dataJSON[0], content: dataJSON.slice(1, dataJSON.length)}))
+        xlsxReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
     } else {
         updateIsInvalid(true)
     }
 }
 
-const contentToJSON = (content) => {
+const formatSampleData = (content) => {
     const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
         if (!!content.headers[idx]) {
             acc[content.headers[idx]] = item
@@ -46,7 +38,7 @@ const contentToJSON = (content) => {
 const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
     event.preventDefault()
     if(submittedFile){
-        const sampleData = contentToJSON(content)
+        const sampleData = formatSampleData(content)
         if (validateData(sampleData)) {
             axios({
                 method: 'POST',
@@ -77,7 +69,7 @@ const UploadSamplesPage = () => {
         <ThemeProvider theme={theme}>
             <PageContainer>
                 <HeaderBar>
-                    <FileInputButton onChangeHandler={(e) => onClickHandleUpload(e, updateIsUploaded, updateContent, updateIsInvalid)} />
+                    <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                     <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
                 </HeaderBar>
                 <Table headers={content.headers} content={content.content} />
@@ -110,7 +102,7 @@ const UploadSamplesPage = () => {
                 (<Notice text='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {
-                                            onClickHandleUpload(e, updateSubmittedFile, updateContent)
+                                            uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)
                                             updateSubmitted({isSubmitted: false, isError: false})
                                         }} />}
                     CloseButton={() => <InvertedLinkButton to='/lims'>back to home</InvertedLinkButton>}

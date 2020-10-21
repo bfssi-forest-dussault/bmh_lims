@@ -7,7 +7,6 @@ export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info
         <ModalContainer>
             <ModalBackground onClick={e => {
                 e.preventDefault()
-                console.log('backgroundclicked')
                 onBackgroundClick()
             }} />
             <Modal>
