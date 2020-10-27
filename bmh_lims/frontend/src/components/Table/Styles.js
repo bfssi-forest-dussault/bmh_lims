@@ -1,73 +1,62 @@
-import styled, { withTheme } from 'styled-components'
+import styled, { withTheme, css } from 'styled-components'
+import React, { useCallback } from 'react'
 
 // table: sharp corners with shadows
 // headers are divs (or add scroll to only t-body)
 
-
-/**
- * TableContainer (div)
- *  TableHeader (contains all headers) (div)
- *  TableBody (separate table--has scroll)
- *      Alternating row background colours (lighter theme colours maybe)
- */
-
 export const TableContainer = styled.div`
-    height: 100%;
     overflow-x: auto;
-    margin: 1.5rem 0px;
+    overflow-y: auto;
     background-color: white;
-    border: 3px solid rgb(10, 60, 90);
-    border-radius: 5px;
+    border: 1px solid rgb(100, 100, 100);
+    max-height: 30em;
 `
-export const StyledTable = styled.table`
-    table-layout: fixed;
-    width: 100%;
+
+export const HeaderTable = styled.table`
     border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
 `
 
-export const StyledHeader = styled.div`
-    width: 100%;
+export const HeaderSeparator = styled.thead`
+    top:0;
+    position: sticky;
+`
+
+export const Row = styled.tr`
     display: flex;
-    flex: 1;
-    flex-direction: row;
-    margin: 0;
-    padding: 0;
-    align-items: stretch;
-    z-index: ${props => props.scroll ? 1 : 0};
 `
 
-export const StyledBody = styled.div`
-    width: 100%;
-    z-index: ${props => props.scroll ? 0 : 1};
-    height: 50em;
+export const BodySeparator = styled.tbody`
 `
 
-export const StyledHeaderCell = styled.div`
-    background-color: rgb(150, 200, 200);
-    border: solid 1px rgb(100, 150, 150);
-    color: white;
+export const Content = styled.div`
     min-width: 200px;
-    position: sticky;
-    top: 0;
-    margin: 0;
+    background-color: white;
+    width: ${props => props.width ? `${props.width}px` : 'auto'};
+`
+
+// border-collapse doesn't seem to enjoy flexbox
+export const HeaderCell = styled.th`
+    display: block;
+    border: 1px solid rgb(200, 200, 200);
     padding: 0;
 `
 
-export const StyledTh = styled.th`
-    background-color: rgb(10, 60, 90);
-    color: white;
-    padding: 5px 20px;
-    width: 200px;
-    position: sticky;
-    top: 0;
-`
-
-const Styled = styled.td`
-    border-right: 1px solid ${props => props.theme.secondarybg};
-    border-bottom: 1px solid ${props => props.theme.secondarybg};
-    min-width: 200px;
-    margin: 0;
+export const BodyCell = styled.td`
+    border: 1px solid rgb(100, 100, 100);
     padding: 0;
 `
 
-export const StyledTd = withTheme(Styled)
+export const MappedCell = ({updateColWidths, ...props}) => {
+    const measuredRef = useCallback(node => {
+        if (node !== null) {
+            updateColWidths(node.getBoundingClientRect().width)
+        }
+    }, [])
+    return (
+    <Content ref={measuredRef}>
+        {props.children}
+    </Content>
+    )
+}

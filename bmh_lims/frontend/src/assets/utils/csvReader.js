@@ -12,9 +12,15 @@ export const xlsxReader = (xlsxFile, toDo) => {
         const wb = XLSX.read(bstr, {type:'binary', cellDates: true});
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws, {header: 1, blankrows: false});
+        const data = XLSX.utils.sheet_to_json(ws, {header: 1, blankrows: false, skipUndefined: false});
         const stringifiedData = data.map(row => {
-            return Object.keys(row).map(header => Object.prototype.toString.call(row[header]) === '[object Date]' ? row[header].toISOString().split('T')[0] : row[header])
+            return data[0].map((header, idx) => {
+                if(!row[idx]) {
+                    return ''
+                }
+                return Object.prototype.toString.call(row[idx]) === '[object Date]' ? row[idx].toISOString().split('T')[0] : row[idx]
+            })
+            // return row.map(item => Object.prototype.toString.call(item) === '[object Date]' ? item.toISOString().split('T')[0] : item)
         })
         toDo(stringifiedData)
     };

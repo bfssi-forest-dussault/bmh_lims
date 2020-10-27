@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
-import { HeaderBar, PageContainer, FooterBar, FooterButtonContainer } from './Styles'
+import { HeaderBar, PageContainer, FooterBar, FooterButtonContainer, BodyContainer } from './Styles'
 import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
 import { theme } from 'styles'
 
@@ -17,7 +17,9 @@ const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) 
     if(isCSV(submittedFile.name)) {
         csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
     } else if (isExcel(submittedFile.name)) {
-        xlsxReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
+        xlsxReader(submittedFile, (sampleData) => {
+            updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)})
+        })
     } else {
         updateIsInvalid(true)
     }
@@ -64,7 +66,7 @@ const UploadSamplesPage = () => {
     const [isUploaded, updateIsUploaded] = useState(false)
     const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false, errorInfo: ''})
     const [isInvalid, updateIsInvalid] = useState(false)
-    const [content, updateContent] = useState({headers: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'], content: [...Array(10).keys()].map((item, idx) => ['aaa', 'bbb', 'ccc', 'ddd', 'eee'])})
+    const [content, updateContent] = useState({headers: ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'], content: [...Array(50).keys()].map((item, idx) => ['aaa', 'bbb', 'ccc', 'ddd', 'eee'])})
     return (
         <ThemeProvider theme={theme}>
             <PageContainer>
@@ -72,7 +74,9 @@ const UploadSamplesPage = () => {
                     <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                     <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
                 </HeaderBar>
-                <Table headers={content.headers} content={content.content} />
+                <BodyContainer>
+                    <Table headers={content.headers} content={content.content} />
+                </BodyContainer>
                 <FooterBar>
                     <FooterButtonContainer>
                         <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
