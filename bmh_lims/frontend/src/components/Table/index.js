@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import { TableContainer, Row, HeaderCell, BodyCell, HeaderTable, HeaderSeparator, BodySeparator, Content, MappedCell } from './Styles'
+import React, { useState, useCallback } from 'react'
+import {
+    BodyCell,
+    BodySeparator,
+    Content,
+    HeaderCell,
+    HeaderSeparator,
+    HeaderTable,
+    Row,
+    TableContainer
+} from './Styles'
 
-// ********** commenting this section out until we confirm we no longer need it **********
-
-// const evenOutRows = ({headers, content}) => {
-//     const evenedHeaders = [...headers]
-//     const evenedContent = []
-//     let maxLength = headers.length
-//     content.forEach(row => {
-//         if (row.length > maxLength) {
-//             maxLength = row.length
-//         }
-//     })
-//     const filler = [...Array(maxLength - headers.length).keys()].map(item => '')
-//     evenedHeaders.push(...filler)
-//     content.forEach((row, idx) => {
-//         evenedContent.push([...row])
-//         if (row.length !== maxLength) 
-//         {
-//             evenedContent[idx].push(...filler)
-//         }
-//     })
-//     return {headers: evenedHeaders, content: evenedContent}
-// }
+export const MappedCell = ({updateColWidths, ...props}) => {
+    const measuredRef = useCallback(node => {
+        if (node !== null) {
+            updateColWidths(node.getBoundingClientRect().width)
+        }
+    }, [])
+    return (
+    <Content {...props} ref={measuredRef}>
+        {props.children}
+    </Content>
+    )
+}
 
 /**
  * 

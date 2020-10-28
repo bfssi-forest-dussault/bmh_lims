@@ -16,7 +16,6 @@ export const PageContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-
 `
 
 export const BodyContainer = styled.div`

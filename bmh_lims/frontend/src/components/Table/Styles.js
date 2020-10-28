@@ -1,5 +1,4 @@
-import styled, { withTheme } from 'styled-components'
-import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
 // table: sharp corners with shadows
 // headers are divs (or add scroll to only t-body)
@@ -55,16 +54,3 @@ export const BodyCell = styled.td`
     border: 1px solid rgb(200, 220, 240);
     padding: 0;
 `
-
-export const MappedCell = ({updateColWidths, ...props}) => {
-    const measuredRef = useCallback(node => {
-        if (node !== null) {
-            updateColWidths(node.getBoundingClientRect().width)
-        }
-    }, [])
-    return (
-    <Content {...props} ref={measuredRef}>
-        {props.children}
-    </Content>
-    )
-}
