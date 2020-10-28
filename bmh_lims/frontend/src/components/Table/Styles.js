@@ -1,5 +1,5 @@
 import styled, { withTheme, css } from 'styled-components'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 
 // table: sharp corners with shadows
 // headers are divs (or add scroll to only t-body)
@@ -21,6 +21,7 @@ export const HeaderTable = styled.table`
 export const HeaderSeparator = styled.thead`
     top:0;
     position: sticky;
+    width: 100%;
 `
 
 export const Row = styled.tr`
@@ -34,6 +35,7 @@ export const Content = styled.div`
     min-width: 200px;
     background-color: white;
     width: ${props => props.width ? `${props.width}px` : 'auto'};
+    height: 100%;
 `
 
 // border-collapse doesn't seem to enjoy flexbox
@@ -41,6 +43,8 @@ export const HeaderCell = styled.th`
     display: block;
     border: 1px solid rgb(200, 200, 200);
     padding: 0;
+    width: 100%;
+    height: 50px;
 `
 
 export const BodyCell = styled.td`

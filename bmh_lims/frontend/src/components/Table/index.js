@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TableContainer, Row, HeaderCell, BodyCell, HeaderTable, HeaderSeparator, BodySeparator, Content, MappedCell } from './Styles'
 
 // ********** commenting this section out until we confirm we no longer need it **********
@@ -36,8 +36,7 @@ import { TableContainer, Row, HeaderCell, BodyCell, HeaderTable, HeaderSeparator
 // headers: array of headers
 // content: 2d array of cells
 const Table = ({headers, content}) => {
-    const headerRefArray = [...Array(headers.length).keys()]
-    const [colWidths, updateColWidths] = useState(headerRefArray.map(space => null))
+    const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
     return (
         <TableContainer>
             <HeaderTable>
@@ -45,7 +44,9 @@ const Table = ({headers, content}) => {
                     <Row>
                         {headers.map((header, hidx) => (
                         <HeaderCell key={`header-${hidx}`}>
-                            <MappedCell updateColWidths={(width) => {
+                            <MappedCell 
+                            key={`content-${header}`}
+                            updateColWidths={(width) => {
                                 colWidths[hidx] = width
                                 updateColWidths([...colWidths])
                             }}>

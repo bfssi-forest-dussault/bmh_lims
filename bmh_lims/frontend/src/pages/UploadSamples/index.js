@@ -15,12 +15,15 @@ const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) 
     const submittedFile = event.target.files[0]
     updateIsUploaded(true)
     if(isCSV(submittedFile.name)) {
+        console.log('uploaded CSV')
         csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
     } else if (isExcel(submittedFile.name)) {
+        console.log('uploaded EXCEL')
         xlsxReader(submittedFile, (sampleData) => {
             updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)})
         })
     } else {
+        console.log('updating for invalid file')
         updateIsInvalid(true)
     }
 }
@@ -51,8 +54,10 @@ const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
                 url: '/api/samples/',
                 data: JSON.stringify(tableToData(content)) // TODO: Placeholder
             }).then((res) => {
+                console.log('success')
                 updateSubmitted({isSubmitted: true, isError: false, errorInfo: ''})
             }).catch(rej => {
+                console.log('failed')
                 updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
             })
         }
@@ -88,8 +93,11 @@ const UploadSamplesPage = () => {
                 isInvalid &&
                 <Notice text='Invalid filetype'
                     onBackgroundClick={() => updateIsInvalid(false)}
-                    errorInfo={errorInfo}
-                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false})}>close</FilledButton>}
+                    errorInfo={submitted.errorInfo}
+                    CloseButton={() => <FilledButton onClick={(e) => {
+                        updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})
+                        updateIsInvalid(false)
+                    }}>close</FilledButton>}
                 />
             }
             {
@@ -98,7 +106,7 @@ const UploadSamplesPage = () => {
                 <Notice text='There was an error with your submission. Please look over it again'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
-                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false})}>close</FilledButton>}
+                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
                 />
             } {
                 submitted.isSubmitted && 
