@@ -45,6 +45,7 @@ const Table = ({headers, content}) => {
                         {headers.map((header, hidx) => (
                         <HeaderCell key={`header-${hidx}`}>
                             <MappedCell 
+                            header={true}
                             key={`content-${header}`}
                             updateColWidths={(width) => {
                                 colWidths[hidx] = width
