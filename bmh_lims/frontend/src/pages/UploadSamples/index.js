@@ -60,6 +60,8 @@ const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
                 console.log('failed')
                 updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
             })
+        } else {
+            console.log('data not valid') // TODO: toast (also show info)
         }
     } else {
         console.log('no file submitted!!')
@@ -80,7 +82,15 @@ const UploadSamplesPage = () => {
                     <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
                 </HeaderBar>
                 <BodyContainer>
-                    <Table headers={content.headers} content={content.content} />
+                    <Table
+                    headers={content.headers}
+                    content={content.content}
+                    valueUpdateHandler={(col, row) => (e) => {
+                        console.log(e)
+                        content.content[row][col] = e.target.value
+                        updateContent({headers: content.headers, content: [...content.content]})
+                    }}
+                    />
                 </BodyContainer>
                 <FooterBar>
                     <FooterButtonContainer>

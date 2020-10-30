@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import {
     BodyCell,
+    BodyContent,
     BodySeparator,
     Content,
     HeaderCell,
@@ -34,8 +35,11 @@ export const MappedCell = ({updateColWidths, ...props}) => {
 
 // headers: array of headers
 // content: 2d array of cells
-const Table = ({headers, content}) => {
+// isSelectable: T/F to make rows selectable for some action
+// valueUpdateHandler: () => {} for how table values should be updated
+const Table = ({headers, content, valueUpdateHandler, isSelectable}) => {
     const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
+
     return (
         <TableContainer>
             <HeaderTable>
@@ -58,7 +62,17 @@ const Table = ({headers, content}) => {
                 <BodySeparator>
                     {content.map((row, ridx) => (<Row key={`row-${ridx}`}>{
                         row.map((item, idx) => {
-                            return <BodyCell key={`cell-${ridx}-${idx}`}><Content width={colWidths[idx]}>{item}</Content></BodyCell>
+                            return (
+                            <BodyCell key={`cell-${ridx}-${idx}`}>
+                                <Content width={colWidths[idx]}>
+                                    <BodyContent
+                                    type='text'
+                                    value={item}
+                                    onChange={valueUpdateHandler(idx, ridx)}
+                                    onBlur={valueUpdateHandler(idx, ridx)}
+                                    />
+                                </Content>
+                            </BodyCell>)
                     })
                     }</Row>))}
                 </BodySeparator>
