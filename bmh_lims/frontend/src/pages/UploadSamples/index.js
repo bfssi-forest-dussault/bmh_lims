@@ -15,10 +15,8 @@ const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) 
     const submittedFile = event.target.files[0]
     updateIsUploaded(true)
     if(isCSV(submittedFile.name)) {
-        console.log('uploaded CSV')
         csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
     } else if (isExcel(submittedFile.name)) {
-        console.log('uploaded EXCEL')
         xlsxReader(submittedFile, (sampleData) => {
             updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)})
         })
@@ -55,11 +53,14 @@ const onClickSubmit = (event,content, submittedFile, updateSubmitted) => {
                 data: JSON.stringify(tableToData(content)) // TODO: Placeholder
             }).then((res) => {
                 console.log('success')
+                console.log(res.data)
                 updateSubmitted({isSubmitted: true, isError: false, errorInfo: ''})
             }).catch(rej => {
                 console.log('failed')
                 updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
             })
+        } else {
+            console.log('data not valid') // TODO: toast (also show info)
         }
     } else {
         console.log('no file submitted!!')
@@ -80,7 +81,15 @@ const UploadSamplesPage = () => {
                     <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
                 </HeaderBar>
                 <BodyContainer>
-                    <Table headers={content.headers} content={content.content} />
+                    <Table
+                    headers={content.headers}
+                    content={content.content}
+                    valueUpdateHandler={(col, row) => (e) => {
+                        content.content[row][col] = e.target.value
+                        updateContent({headers: content.headers, content: [...content.content]})
+                    }}
+                    isSelectable={false}
+                    />
                 </BodyContainer>
                 <FooterBar>
                     <FooterButtonContainer>

@@ -1,27 +1,17 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import {
     BodyCell,
+    BodyContent,
     BodySeparator,
     Content,
     HeaderCell,
     HeaderSeparator,
-    HeaderTable,
+    Table,
     Row,
     TableContainer
 } from './Styles'
 
-export const MappedCell = ({updateColWidths, ...props}) => {
-    const measuredRef = useCallback(node => {
-        if (node !== null) {
-            updateColWidths(node.getBoundingClientRect().width)
-        }
-    }, [])
-    return (
-    <Content {...props} ref={measuredRef}>
-        {props.children}
-    </Content>
-    )
-}
+import { CheckboxColumn, MappedCell } from './components/'
 
 /**
  * 
@@ -34,11 +24,23 @@ export const MappedCell = ({updateColWidths, ...props}) => {
 
 // headers: array of headers
 // content: 2d array of cells
-const Table = ({headers, content}) => {
+// isSelectable: T/F to make rows selectable for some action
+// valueUpdateHandler: () => {} for how table values should be updated
+const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
     const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
+    const [selected, updateSelected] =  useState(content.map(row => false))
     return (
         <TableContainer>
-            <HeaderTable>
+            {isSelectable && 
+            <CheckboxColumn
+            selected={selected}
+            updateSelected={(idx) => (e) => {
+                selected[idx] =!selected[idx];
+                updateSelected([...selected])
+            }}
+            numRows={content.length}
+            />}
+            <Table>
                 <HeaderSeparator>
                     <Row>
                         {headers.map((header, hidx) => (
@@ -56,14 +58,23 @@ const Table = ({headers, content}) => {
                     </Row>
                 </HeaderSeparator>
                 <BodySeparator>
-                    {content.map((row, ridx) => (<Row key={`row-${ridx}`}>{
-                        row.map((item, idx) => {
-                            return <BodyCell key={`cell-${ridx}-${idx}`}><Content width={colWidths[idx]}>{item}</Content></BodyCell>
-                    })
-                    }</Row>))}
+                    {content.map((row, ridx) => (
+                    <Row key={`row-${ridx}`}>{
+                        row.map((item, idx) => (
+                            <BodyCell key={`cell-${ridx}-${idx}`}>
+                                <Content width={colWidths[idx]}>
+                                    <BodyContent
+                                    type='text'
+                                    value={item}
+                                    onChange={valueUpdateHandler(idx, ridx)}
+                                    />
+                                </Content>
+                            </BodyCell>)
+                    )}
+                    </Row>))}
                 </BodySeparator>
-            </HeaderTable>
+            </Table>
         </TableContainer>
 )}
 
-export default Table
+export default StickyTable
