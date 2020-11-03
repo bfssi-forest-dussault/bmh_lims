@@ -88,6 +88,7 @@ const UploadSamplesPage = () => {
                         content.content[row][col] = e.target.value
                         updateContent({headers: content.headers, content: [...content.content]})
                     }}
+                    isSelectable={false}
                     />
                 </BodyContainer>
                 <FooterBar>
