@@ -31,6 +31,7 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
     const [selected, updateSelected] =  useState(content.map(row => false))
     return (
         <TableContainer>
+            {isSelectable && 
             <CheckboxColumn
             selected={selected}
             updateSelected={(idx) => (e) => {
@@ -38,7 +39,7 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
                 updateSelected([...selected])
             }}
             numRows={content.length}
-            />
+            />}
             <Table>
                 <HeaderSeparator>
                     <Row>
