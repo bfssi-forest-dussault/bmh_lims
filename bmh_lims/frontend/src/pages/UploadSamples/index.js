@@ -86,7 +86,6 @@ const UploadSamplesPage = () => {
                     headers={content.headers}
                     content={content.content}
                     valueUpdateHandler={(col, row) => (e) => {
-                        console.log(e)
                         content.content[row][col] = e.target.value
                         updateContent({headers: content.headers, content: [...content.content]})
                     }}

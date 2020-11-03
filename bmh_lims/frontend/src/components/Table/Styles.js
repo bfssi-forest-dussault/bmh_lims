@@ -8,12 +8,13 @@ export const TableContainer = styled.div`
     overflow-y: auto;
     background-color: white;
     max-height: 30em;
+    display: flex;
+    flex-direction: row;
 `
 
-export const HeaderTable = styled.table`
+export const Table = styled.table`
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
 `
 
 export const HeaderSeparator = styled.thead`
@@ -24,6 +25,7 @@ export const HeaderSeparator = styled.thead`
 
 export const Row = styled.tr`
     display: flex;
+    width: 100%;
 `
 
 export const BodySeparator = styled.tbody`
