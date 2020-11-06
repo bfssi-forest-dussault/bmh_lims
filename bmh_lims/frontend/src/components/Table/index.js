@@ -26,7 +26,7 @@ import { CheckboxColumn, MappedCell } from './components/'
 // content: 2d array of cells
 // isSelectable: T/F to make rows selectable for some action
 // valueUpdateHandler: () => {} for how table values should be updated
-const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
+const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable, isEditable, onSelect}) => {
     const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
     const [selected, updateSelected] =  useState(content.map(row => false))
     return (
@@ -35,10 +35,12 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
             <CheckboxColumn
             selected={selected}
             updateSelected={(idx) => (e) => {
-                selected[idx] =!selected[idx];
+                selected[idx] =!selected[idx]
                 updateSelected([...selected])
+                onSelect(idx)
             }}
             numRows={content.length}
+            colour={theme.colour4}
             />}
             <Table>
                 <HeaderSeparator>
@@ -65,8 +67,9 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable}) => {
                                 <Content width={colWidths[idx]}>
                                     <BodyContent
                                     type='text'
-                                    value={item}
+                                    value={item || ''}
                                     onChange={valueUpdateHandler(idx, ridx)}
+                                    readOnly={!isEditable}
                                     />
                                 </Content>
                             </BodyCell>)

@@ -29,7 +29,7 @@ export const MappedCell = ({updateColWidths, ...props}) => {
     )
 }
 
-const CheckboxColumn = ({selected, updateSelected, numRows}) => {
+const CheckboxColumn = ({colour, selected, updateSelected, numRows}) => {
     return (
         <ColumnTable>
             <HeaderSeparator>
@@ -49,7 +49,8 @@ const CheckboxColumn = ({selected, updateSelected, numRows}) => {
                                 <CheckboxContent>
                                     <Checkbox
                                     checked={selected[rowNum]}
-                                    onChangeHandler={updateSelected(rowNum)}/>
+                                    onChangeHandler={updateSelected(rowNum)}
+                                    colour={colour}/>
                                 </CheckboxContent>
                             </CheckboxBodyCell>
                         </ColumnRow>

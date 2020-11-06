@@ -33,15 +33,15 @@ const HomePage = () => {
                         }}
                         IconSVG={StatusIcon}
                         onClickHandler={(e) => e.preventDefault() || console.log('redirect to view status page')} />
-                    <IconButton
+                    <IconLink
                         animation={buttonAnimation}
                         text='Workflows'
+                        IconSVG={WorkflowsIcon}
                         iconProps={{
                             height: '10vw',
                             width: '10vw'
                         }}
-                        IconSVG={WorkflowsIcon}
-                        onClickHandler={(e) => e.preventDefault() || console.log('redirect to workflows page')} />
+                        path={'/workflows'} />
                 </ButtonBar>
             </PageContainer>
         </ThemeProvider>

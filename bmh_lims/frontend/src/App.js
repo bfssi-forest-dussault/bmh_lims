@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { GlobalStyle } from 'styles'
 import "regenerator-runtime/runtime.js"
 
-import { HomePage, UploadSamplesPage } from 'pages'
+import { HomePage, UploadSamplesPage, WorkflowsPage } from 'pages'
 
 
 const App = () => {
@@ -13,6 +13,7 @@ const App = () => {
             <Switch>
                 <Route path='/lims' component={ HomePage } />
                 <Route path='/upload' component={ UploadSamplesPage } />
+                <Route path='/workflows' component={ WorkflowsPage } />
             </Switch>
         </div>
     )

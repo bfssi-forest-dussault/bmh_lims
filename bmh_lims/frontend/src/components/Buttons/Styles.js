@@ -10,30 +10,30 @@ const ButtonBase = css`
 `
 
 const FilledButtonBase = styled.button`
-    background: ${props => props.theme.primarybg};
-    color: ${props => props.theme.primaryfg};
+    background: ${props => props.theme.colour5};
+    color: white;
     border: none;
     ${ButtonBase}
 `
 
 const InvertedButtonBase = styled.button`
-    background: ${props => props.theme.primaryfg};
-    color: ${props => props.theme.primarybg};
+    background: white;
+    color: ${props => props.theme.colour5};
     ${ButtonBase}
-    border: 2px solid ${props => props.theme.primaryfg};
+    border: 2px solid ${props => props.theme.colour5};
 `
 
 const FilledLinkBase = styled(Link)`
-    background: ${props => props.theme.primarybg};
-    color: ${props => props.theme.primaryfg} !important;
+    background: ${props => props.theme.colour5};
+    color: white !important;
     border: none;
     ${ButtonBase}
 `
 
 const InvertedLinkBase = styled(Link)`
-    background: ${props => props.theme.primaryfg};
-    color: ${props => props.theme.primarybg} !important;
-    border: 2px solid ${props => props.theme.primarybg};
+    background: white;
+    color: ${props => props.theme.colour5} !important;
+    border: 2px solid ${props => props.theme.colour5};
     ${ButtonBase}
 `
 
