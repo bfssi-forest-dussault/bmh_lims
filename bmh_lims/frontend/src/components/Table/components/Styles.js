@@ -11,7 +11,7 @@ export const ColumnRow = styled.tr`
 `
 
 export const CheckboxContent = styled.div`
-    color: ${props => props.header ? 'white' : 'rgb(10, 60, 90)'};
+    color: ${props => props.header ? 'white' : props.theme.colour2};
     font-weight: ${props => props.header ? '900': 'normal'};
     width: ${props => props.width ? `${props.width}px` : 'auto'};
     height: 19px;
@@ -28,7 +28,7 @@ export const CheckBox = styled.input`
 export const CheckBoxHeaderCell = styled.th`
     display: block;
     border: 1px solid rgb(10, 60, 90);
-    background-color: rgb(10, 60, 90);
+    background-color: ${props => props.theme.colour2};
     padding: 3px;
     height: 50px;
 `
@@ -40,7 +40,7 @@ export const CheckboxBodyCell = styled.td`
 `
 
 export const CheckboxHeaderContent = styled.div`
-    color: ${props => props.header ? 'white' : 'rgb(10, 60, 90)'};
+    color: ${props => props.header ? 'white' : props.theme.colour2};
     font-weight: ${props => props.header ? '900': 'normal'};
     width: 100px;
     height: 100%;
@@ -51,8 +51,8 @@ export const CheckboxHeaderContent = styled.div`
 
 export const CheckboxHeaderCell = styled.th`
     display: block;
-    border: 1px solid rgb(10, 60, 90);
-    background-color: rgb(10, 60, 90);
+    border: 1px solid ${props => props.theme.colour2};
+    background-color: ${props => props.theme.colour2};
     padding: 3px;
     width: 100px;
     height: 50px;

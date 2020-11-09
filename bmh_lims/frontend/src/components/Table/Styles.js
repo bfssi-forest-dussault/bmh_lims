@@ -33,7 +33,7 @@ export const BodySeparator = styled.tbody`
 
 export const Content = styled.div`
     min-width: 200px;
-    color: ${props => props.header ? 'white' : 'rgb(10, 60, 90)'};
+    color: ${props => props.header ? 'white' : props.theme.colour2};
     font-weight: ${props => props.header ? '900': 'normal'};
     width: ${props => props.width ? `${props.width}px` : 'auto'};
     height: 100%;
@@ -45,8 +45,8 @@ export const Content = styled.div`
 // border-collapse doesn't seem to enjoy flexbox
 export const HeaderCell = styled.th`
     display: block;
-    border: 1px solid rgb(10, 60, 90);
-    background-color: rgb(10, 60, 90);
+    border: 1px solid ${props => props.theme.colour2};
+    background-color: ${props => props.theme.colour2};
     padding: 3px;
     width: 100%;
     height: 50px;
@@ -60,6 +60,6 @@ export const BodyCell = styled.td`
 export const BodyContent = styled.input`
     border: none;
     background-color: rgba(0, 0, 0, 0);
-    color: rgb(10, 60, 90);
+    color: ${props => props.theme.colour2};
     width: 100%;
 `

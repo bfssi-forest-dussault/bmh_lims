@@ -28,5 +28,10 @@ export const GlobalStyle = createGlobalStyle`
 export const theme = {
     primarybg: 'rgb(0, 180, 200)',
     primaryfg: 'white',
-    secondarybg: 'rgb(10, 60, 90)'
+    secondarybg: 'rgb(10, 60, 90)',
+    colour1: '#676E79',
+    colour2: '#0C2242',
+    colour3: '#426E88',
+    colour4: '#6899B6',
+    colour5: '#ED7D3A'
 }
