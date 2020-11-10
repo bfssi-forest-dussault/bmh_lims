@@ -54,9 +54,7 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                     </Row>
                 </HeaderSeparator>
                 <BodySeparator>
-                    {content.map((row, ridx) => {
-                        console.log('rendered row')
-                        return (
+                    {content.map((row, ridx) => (
                     <Row key={`row-${ridx}`}>{
                         row.map((item, idx) => (
                             <BodyCell key={`cell-${ridx}-${idx}`}>
@@ -69,8 +67,8 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                                     />
                                 </Content>
                             </BodyCell>)
-                    )}
-                    </Row>)})}
+                        )}
+                    </Row>))}
                 </BodySeparator>
             </Table>
         </TableContainer>

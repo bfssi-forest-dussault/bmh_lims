@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
 import { CombinedLogo, Table, FilledButton } from 'components'
 import { CircularButtonBar, DropdownMenu } from 'components'
-// import { CgSearchLoading } from 'react-icons/cg'
+import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
 
 const PageContainer = styled.div`
@@ -42,14 +42,6 @@ const TableContainer = styled.div`
     flex-grow: 5;
 `
 
-const ContentSection = styled.section`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 7;
-    width: 100%;
-`
-
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
     const menuItems = ['Sample Submission', 'DNA Extraction', 'DNA Processing', 'Library Prep', 'Sequencing']
@@ -64,6 +56,7 @@ const AssignSection = ({theme}) => {
                 const headers = Object.keys(res.data.results[0])
                 const content = res.data.results.map(sample => Object.keys(sample).map(key => sample[key]))
                 setSamples({headers, content})
+                setIsLoading(false)
             })
             .catch(rej => console.log(rej))
         } catch (err) {
@@ -73,23 +66,24 @@ const AssignSection = ({theme}) => {
     return (
         <BodyArea>
             <CircularButtonBar />
-            <ContentSection>
-                <DropdownMenu menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
-            </ContentSection>
-            <TableContainer>
-                <Table
-                theme={theme}
-                headers={samples.headers}
-                content={samples.content}
-                isSelectable={true}
-                isEditable={false}
-                onSelect={(idx) => {
-                    if (!selectedIdx.delete(idx)) {
-                        selectedIdx.add(idx)
-                    }
-                }}
-                />
-            </TableContainer>
+            <DropdownMenu menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
+            {
+                isLoading ? <CgSearchLoading style={{fill: theme.colour2}}/>:
+                <TableContainer>
+                    <Table
+                    theme={theme}
+                    headers={samples.headers}
+                    content={samples.content}
+                    isSelectable={true}
+                    isEditable={false}
+                    onSelect={(idx) => {
+                        if (!selectedIdx.delete(idx)) {
+                            selectedIdx.add(idx)
+                        }
+                    }}
+                    />
+                </TableContainer>
+            }
             <FilledButton onClick={(e) => {console.log('blue button clicked')}}>Assign workflow</FilledButton>
         </BodyArea>
     )
