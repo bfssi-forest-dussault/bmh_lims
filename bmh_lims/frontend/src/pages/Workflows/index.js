@@ -48,6 +48,7 @@ const AssignSection = ({theme}) => {
     const [isLoading, setIsLoading] = useState(true)
 
     const selectedIdx = new Set()
+    let currentWorkflow = ''
 
     useEffect(() => {
         try {
@@ -66,7 +67,12 @@ const AssignSection = ({theme}) => {
     return (
         <BodyArea>
             <CircularButtonBar />
-            <DropdownMenu menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
+            <DropdownMenu
+            menuItems={menuItems}
+            theme={theme}
+            initialValue={'Select Workflow'}
+            onItemClick={(item) => {currentWorkflow = item}}
+            />
             {
                 isLoading ? <CgSearchLoading style={{fill: theme.colour2}}/>:
                 <TableContainer>
@@ -84,7 +90,11 @@ const AssignSection = ({theme}) => {
                     />
                 </TableContainer>
             }
-            <FilledButton onClick={(e) => {console.log('blue button clicked')}}>Assign workflow</FilledButton>
+            <FilledButton
+            onClick={(e) => {
+                console.log(currentWorkflow)
+                console.log(selectedIdx)
+            }}>Assign workflow</FilledButton>
         </BodyArea>
     )
 }

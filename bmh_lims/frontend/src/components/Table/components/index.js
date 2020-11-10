@@ -30,7 +30,7 @@ export const MappedCell = ({updateColWidths, ...props}) => {
 }
 
 const CheckboxColumn = ({colour, onSelect, numRows}) => {
-    const [selected, updateSelected] = useState([...Array(numRows).keys()].map(idx => true))
+    const [selected, updateSelected] = useState([...Array(numRows).keys()].map(idx => false))
     return (
         <ColumnTable>
             <HeaderSeparator>

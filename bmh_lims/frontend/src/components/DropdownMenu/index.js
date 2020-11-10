@@ -16,7 +16,7 @@ const DropdownButton = ({theme, isDown, onClickHandler}) => {
     )
 }
 
-const Dropdown = ({ theme, menuItems, initialValue}) => {
+const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
     let newLeft = 0
     let newTop = 0
 
@@ -61,6 +61,7 @@ const Dropdown = ({ theme, menuItems, initialValue}) => {
                     key={`workflow-${idx}`}
                     onClick={(e) => {
                         setCurrent(item)
+                        onItemClick(item)
                         setMenuIsOpen(!menuIsOpen)
                     }}>
                         {item}
