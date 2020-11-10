@@ -33,11 +33,15 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
         <TableContainer>
             {isSelectable && 
             <CheckboxColumn
-            selected={selected}
-            updateSelected={(idx) => (e) => {
+            // selected={selected}
+            // updateSelected={(idx) => (e) => {
+            //     selected[idx] =!selected[idx]
+            //     updateSelected([...selected])
+            //     onSelect(idx)
+            // }}
+            onSelect={(idx) => {
                 selected[idx] =!selected[idx]
                 updateSelected([...selected])
-                onSelect(idx)
             }}
             numRows={content.length}
             colour={theme.colour4}
@@ -60,7 +64,9 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                     </Row>
                 </HeaderSeparator>
                 <BodySeparator>
-                    {content.map((row, ridx) => (
+                    {content.map((row, ridx) => {
+                        console.log('rendered row')
+                        return (
                     <Row key={`row-${ridx}`}>{
                         row.map((item, idx) => (
                             <BodyCell key={`cell-${ridx}-${idx}`}>
@@ -74,7 +80,7 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                                 </Content>
                             </BodyCell>)
                     )}
-                    </Row>))}
+                    </Row>)})}
                 </BodySeparator>
             </Table>
         </TableContainer>
