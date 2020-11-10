@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
 import { CombinedLogo, Table, FilledButton } from 'components'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
-import { CircularButtonBar } from 'components'
+import { CircularButtonBar, DropdownMenu } from 'components'
 // import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
 
@@ -38,122 +37,6 @@ const BodyArea = styled.div`
     padding: 2% 25%;
 `
 
-const DropDownBar = styled.div`
-    width: 80%;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid ${props => props.theme.colour4};
-    border-radius: 3%;
-    padding: 0px 1.5%;
-    color: ${props => props.theme.colour3}
-    overflow: hidden;
-`
-
-const DropDownMenu = styled.div`
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    left: ${props => props.left ? `${props.left}px`:'28px'};
-    top: ${props => props.top ? `${props.top}px`: '0px'};
-    z-index: 1;
-    width: 83.5%;
-    background-color: white;
-`
-
-const DropDownButtonBackground = styled.div`
-    width: 5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    color: ${props => props.theme.colour2};
-    border-left: 1px solid ${props => props.theme.colour4};
-`
-
-const DropdownMenuItem = styled.div`
-    border: 1px solid ${props => props.theme.colour4};
-    padding: 0px 1.5%;
-    color: ${props => props.theme.colour2};
-    &: hover {
-        background-color: ${props => props.theme.colour4};
-        color: white;
-    }
-`
-
-const DropDownButton = ({theme, isDown, onClickHandler}) => {
-    return (
-        <DropDownButtonBackground onClick={onClickHandler}>
-            {isDown ? <MdKeyboardArrowDown style={{fill: theme.colour4}}/> : <MdKeyboardArrowUp style={{fill: theme.colour4}}/>}
-        </DropDownButtonBackground>
-    )
-}
-
-const DropDownContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80px;
-    flex-direction: column;
-`
-
-const DropDown = ({ theme, menuItems, initialValue}) => {
-    let newLeft = 0
-    let newTop = 0
-
-    const [left, setLeft] = useState(0)
-    const [top, setTop] = useState(0)
-    const [menuIsOpen, setMenuIsOpen] = useState(false)
-    const [currentSelection, setCurrent] = useState(initialValue)
-
-    const dropdownBarRef = useCallback(node => {
-        if(node !== null) {
-            console.log(newLeft + node.getBoundingClientRect().left)
-            newLeft += node.getBoundingClientRect().left
-            newTop += node.getBoundingClientRect().bottom
-            setLeft(newLeft)
-            setTop(newTop)
-        }
-    }, [])
-    const dropdownContainerRef = useCallback(node => {
-        if(node !== null) {
-            console.log(newLeft - node.getBoundingClientRect().left)
-            newLeft -= node.getBoundingClientRect().left
-            newTop -= node.getBoundingClientRect().top
-            setLeft(newLeft)
-            setTop(newTop)
-        }
-    }, [])
-    return (
-        <DropDownContainer ref={dropdownContainerRef}>
-            <DropDownBar ref={dropdownBarRef}>
-                {currentSelection}
-                <DropDownButton
-                theme={theme}
-                isDown={!menuIsOpen}
-                onClickHandler={(e) => {
-                    setMenuIsOpen(!menuIsOpen)
-                }} />
-            </DropDownBar>
-            {menuIsOpen && (
-                <DropDownMenu left={left} top={top}>
-                    {menuItems.map((item, idx) => (
-                    <DropdownMenuItem
-                    key={`workflow-${idx}`}
-                    onClick={(e) => {
-                        setCurrent(item)
-                        setMenuIsOpen(!menuIsOpen)
-                    }}>
-                        {item}
-                    </DropdownMenuItem>))}
-                </DropDownMenu>
-            )}
-        </DropDownContainer>
-    )
-}
-
 const TableContainer = styled.div`
     width: 100%;
     flex-grow: 5;
@@ -170,9 +53,10 @@ const ContentSection = styled.section`
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
     const menuItems = ['Sample Submission', 'DNA Extraction', 'DNA Processing', 'Library Prep', 'Sequencing']
-    const [workflow, setWorkflow] = useState('Select Workflow')
     const [isLoading, setIsLoading] = useState(true)
-    
+
+    const selectedIdx = new Set()
+
     useEffect(() => {
         try {
             axios.get('/api/samples?page=1')
@@ -190,18 +74,19 @@ const AssignSection = ({theme}) => {
         <BodyArea>
             <CircularButtonBar />
             <ContentSection>
-                <DropDown menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
+                <DropdownMenu menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
             </ContentSection>
             <TableContainer>
                 <Table
                 theme={theme}
                 headers={samples.headers}
                 content={samples.content}
-                valueUpdateHandler={(col, row) => (e) => {console.log('hi')}}
                 isSelectable={true}
                 isEditable={false}
                 onSelect={(idx) => {
-
+                    if (!selectedIdx.delete(idx)) {
+                        selectedIdx.add(idx)
+                    }
                 }}
                 />
             </TableContainer>
