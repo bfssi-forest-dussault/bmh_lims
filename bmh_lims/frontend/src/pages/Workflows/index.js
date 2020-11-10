@@ -99,14 +99,14 @@ const DropDownContainer = styled.div`
     flex-direction: column;
 `
 
-const DropDown = ({ theme, workflow}) => {
+const DropDown = ({ theme, menuItems, initialValue}) => {
     let newLeft = 0
     let newTop = 0
 
     const [left, setLeft] = useState(0)
     const [top, setTop] = useState(0)
     const [menuIsOpen, setMenuIsOpen] = useState(false)
-    const menuItems = ['Sample Submission', 'DNA Extraction', 'DNA Processing', 'Library Prep', 'Sequencing']
+    const [currentSelection, setCurrent] = useState(initialValue)
 
     const dropdownBarRef = useCallback(node => {
         if(node !== null) {
@@ -129,7 +129,7 @@ const DropDown = ({ theme, workflow}) => {
     return (
         <DropDownContainer ref={dropdownContainerRef}>
             <DropDownBar ref={dropdownBarRef}>
-                {workflow}
+                {currentSelection}
                 <DropDownButton
                 theme={theme}
                 isDown={!menuIsOpen}
@@ -140,7 +140,12 @@ const DropDown = ({ theme, workflow}) => {
             {menuIsOpen && (
                 <DropDownMenu left={left} top={top}>
                     {menuItems.map((item, idx) => (
-                    <DropdownMenuItem key={`workflow-${idx}`} onClick={(e) => setWorkflow(item)}>
+                    <DropdownMenuItem
+                    key={`workflow-${idx}`}
+                    onClick={(e) => {
+                        setCurrent(item)
+                        setMenuIsOpen(!menuIsOpen)
+                    }}>
                         {item}
                     </DropdownMenuItem>))}
                 </DropDownMenu>
@@ -163,10 +168,11 @@ const ContentSection = styled.section`
 `
 
 const AssignSection = ({theme}) => {
-    const [menuIsOpen, setMenuIsOpen] = useState(false)
     const [samples, setSamples] = useState({headers: [], content: []})
+    const menuItems = ['Sample Submission', 'DNA Extraction', 'DNA Processing', 'Library Prep', 'Sequencing']
     const [workflow, setWorkflow] = useState('Select Workflow')
     const [isLoading, setIsLoading] = useState(true)
+    
     useEffect(() => {
         try {
             axios.get('/api/samples?page=1')
@@ -184,7 +190,7 @@ const AssignSection = ({theme}) => {
         <BodyArea>
             <CircularButtonBar />
             <ContentSection>
-                <DropDown theme={theme} workflow={workflow}/>
+                <DropDown menuItems={menuItems} theme={theme} initialValue={'Select Workflow'}/>
             </ContentSection>
             <TableContainer>
                 <Table
