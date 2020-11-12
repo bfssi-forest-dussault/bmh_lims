@@ -110,7 +110,7 @@ class WorkflowDefinition(TimeStampedModel):
     """
     Model to store workflows and their relevant data
     """
-    name = models.CharField(max_length=SM_CHAR)  # e.g. "DNA extraction"
+    name = models.CharField(max_length=SM_CHAR, unique=True)  # e.g. "DNA extraction"
     description = models.TextField(null=True, blank=True)
 
     history = HistoricalRecords()
