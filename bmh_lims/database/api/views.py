@@ -4,6 +4,8 @@ from bmh_lims.database.api import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -20,6 +22,15 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.SampleSerializer
     queryset = models.Sample.objects.all()
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'sample_id': ['exact'],
+        'sample_name': ['iexact'],
+        'sample_type': ['iexact'],
+        'genus': ['iexact'],
+        'species': ['iexact'],
+        'created': ['date__range'],
+    }
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
@@ -53,6 +64,18 @@ class WorkflowBatchViewSet(viewsets.ModelViewSet, UpdateModelMixin):
 
     def get_queryset(self):
         queryset = models.WorkflowBatch.objects.all().order_by('-created')
+        return queryset
+
+
+class WorkflowDefinitionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
+    """
+    ViewSet for retrieving Sample objects from the database
+    """
+    serializer_class = serializers.WorkflowDefinitionSerializer
+    queryset = models.WorkflowDefinition.objects.all()
+
+    def get_queryset(self):
+        queryset = models.WorkflowDefinition.objects.all().order_by('-created')
         return queryset
 
 

@@ -21,6 +21,7 @@ class SampleSerializer(serializers.ModelSerializer):
 
 class WorkflowSampleSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
+    sample = serializers.PrimaryKeyRelatedField(queryset=models.Sample.objects.all())
 
     class Meta:
         model = models.WorkflowSample
@@ -53,8 +54,8 @@ class WorkflowDefinitionSerializer(serializers.ModelSerializer):
 
 class WorkflowBatchSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-    workflow = WorkflowDefinitionSerializer()
+    workflow = serializers.PrimaryKeyRelatedField(queryset=models.WorkflowDefinition.objects.all())
 
     class Meta:
         model = models.WorkflowBatch
-        fields = '__all__'
+        fields = ['id', 'workflow', 'status']
