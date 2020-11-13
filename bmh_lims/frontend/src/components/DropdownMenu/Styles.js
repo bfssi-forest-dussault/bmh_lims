@@ -7,7 +7,7 @@ export const DropdownBar = styled.div`
     justify-content: space-between;
     align-items: center;
     border: 2px solid ${props => props.theme.colour4};
-    border-radius: 3%;
+    border-radius: 5px;
     padding: 0px 1.5%;
     color: ${props => props.theme.colour3}
     overflow: hidden;

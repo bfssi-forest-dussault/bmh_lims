@@ -27,7 +27,6 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
 
     const dropdownBarRef = useCallback(node => {
         if(node !== null) {
-            console.log(newLeft + node.getBoundingClientRect().left)
             newLeft += node.getBoundingClientRect().left
             newTop += node.getBoundingClientRect().bottom
             setLeft(newLeft)
@@ -36,7 +35,6 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
     }, [])
     const dropdownContainerRef = useCallback(node => {
         if(node !== null) {
-            console.log(newLeft - node.getBoundingClientRect().left)
             newLeft -= node.getBoundingClientRect().left
             newTop -= node.getBoundingClientRect().top
             setLeft(newLeft)
@@ -61,7 +59,7 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
                     key={`workflow-${idx}`}
                     onClick={(e) => {
                         setCurrent(item)
-                        onItemClick(item)
+                        onItemClick(item, idx)
                         setMenuIsOpen(!menuIsOpen)
                     }}>
                         {item}

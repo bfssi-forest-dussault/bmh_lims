@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
-import { CombinedLogo, Table, FilledButton } from 'components'
+import { CombinedLogo, Table, FilledButton, Notice } from 'components'
 import { CircularButtonBar, DropdownMenu } from 'components'
 import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
@@ -44,34 +44,69 @@ const TableContainer = styled.div`
 
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
-    const menuItems = ['Sample Submission', 'DNA Extraction', 'DNA Processing', 'Library Prep', 'Sequencing']
+    const [workflows, setWorkflows] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [modalContents, setModalContents] = useState({text: ''})
     const [isLoading, setIsLoading] = useState(true)
 
     const selectedIdx = new Set()
-    let currentWorkflow = ''
+    let currentWorkflow = {id: -1, name: ''}
 
     useEffect(() => {
-        try {
-            axios.get('/api/samples?page=1')
-            .then(res => {
-                const headers = Object.keys(res.data.results[0])
-                const content = res.data.results.map(sample => Object.keys(sample).map(key => sample[key]))
+        const initializeSamples = async () => {
+            try {
+                const sampleRes = (await axios.get('/api/samples?page=1')).data
+                const headers = Object.keys(sampleRes.results[0])
+                const content = sampleRes.results.map(sample => Object.keys(sample).map(key => sample[key]))
                 setSamples({headers, content})
                 setIsLoading(false)
-            })
-            .catch(rej => console.log(rej))
-        } catch (err) {
-            console.log(err)
+            } catch (err) {
+                console.log(err) // TODO: Notice
+                setModalContents({
+                    text: 'Fetching samples failed',
+                    onBackgroundClick: modalContents.onBackgroundClick,
+                    CloseButton: () => (
+                    <FilledButton onClick={(e) => {
+                        setShowModal(false)
+                    }}>close</FilledButton>)
+                })
+                setShowModal(true)
+            }
         }
+        const initializeWorkflows = async () => {
+            try {
+                const workflowRes = (await axios.get('/api/workflow_definitions')).data
+                setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
+            } catch (err) {
+                console.log(err) // TODO: Notice
+                setModalContents({
+                    text: 'Fetching workflows failed',
+                    onBackgroundClick: modalContents.onBackgroundClick
+                })
+                setShowModal(true)
+            }
+        }
+        initializeSamples()
+        initializeWorkflows()
     }, [])
     return (
         <BodyArea>
+            {showModal && <Notice
+                {...modalContents}
+                onBackgroundClick={() => setShowModal(false)}
+                CloseButton={() => (
+                    <FilledButton onClick={(e) => {
+                        setShowModal(false)
+                    }}>close</FilledButton>)}
+            />}
             <CircularButtonBar />
             <DropdownMenu
-            menuItems={menuItems}
+            menuItems={workflows.map(workflow => workflow.name)}
             theme={theme}
             initialValue={'Select Workflow'}
-            onItemClick={(item) => {currentWorkflow = item}}
+            onItemClick={(item, idx) => {
+                currentWorkflow = workflows[idx]
+            }}
             />
             {
                 isLoading ? <CgSearchLoading style={{fill: theme.colour2}}/>:
@@ -92,8 +127,45 @@ const AssignSection = ({theme}) => {
             }
             <FilledButton
             onClick={(e) => {
-                console.log(currentWorkflow)
-                console.log(selectedIdx)
+                let errors = ''
+                if (currentWorkflow.id < 0) {
+                    errors += 'Please select a workflow. '
+                }
+                if (selectedIdx.size === 0) {
+                    errors += 'Please select at least 1 sample'
+                }
+                if (!!errors) {
+                    setModalContents({
+                        text: errors,
+                        onBackgroundClick: modalContents.onBackgroundClick,
+                        CloseButton: () => (
+                        <FilledButton onClick={(e) => {
+                            setShowModal(false)
+                        }}>close</FilledButton>)
+                    })
+                    setShowModal(true)
+                } else {
+                    const selectedSamples = [...selectedIdx].map(idx => samples.headers.reduce((acc, curHeader, hidx) => {
+                        acc[curHeader] = samples.content[idx][hidx]
+                        return acc
+                    }, {})).reduce((acc, current, idx) => {
+                        acc[idx] = current
+                        return acc
+                    }, {})
+                    axios({
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                            'Content-type': 'application/json'
+                        },
+                        url: '/api/workflow_samples/',
+                        data: JSON.stringify(selectedSamples) // TODO: Placeholder
+                    }).then(res => {
+                        console.log(res.data)
+                    }).catch(rej => {
+                        console.log(rej)
+                    })
+                }
             }}>Assign workflow</FilledButton>
         </BodyArea>
     )
