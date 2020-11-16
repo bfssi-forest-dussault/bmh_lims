@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
-import { CombinedLogo, Table, FilledButton, Notice } from 'components'
+import { CombinedLogo, Table, FilledButton, Notice, FilterMenu } from 'components'
 import { CircularButtonBar, DropdownMenu } from 'components'
 import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
@@ -100,6 +100,7 @@ const AssignSection = ({theme}) => {
                     }}>close</FilledButton>)}
             />}
             <CircularButtonBar />
+            <FilterMenu />
             <DropdownMenu
             menuItems={workflows.map(workflow => workflow.name)}
             theme={theme}
@@ -125,6 +126,9 @@ const AssignSection = ({theme}) => {
                     />
                 </TableContainer>
             }
+            <FilledButton onClick={(e) => {
+
+            }}></FilledButton>
             <FilledButton
             onClick={(e) => {
                 let errors = ''
