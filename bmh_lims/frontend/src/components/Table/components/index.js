@@ -6,6 +6,7 @@ import {
 } from '../Styles'
 
 import {
+    ColumnContainer,
     ColumnTable,
     ColumnRow,
     CheckboxHeaderContent,

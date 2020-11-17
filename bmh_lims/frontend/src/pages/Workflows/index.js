@@ -61,7 +61,6 @@ const AssignSection = ({theme}) => {
                 setSamples({headers, content})
                 setIsLoading(false)
             } catch (err) {
-                console.log(err) // TODO: Notice
                 setModalContents({
                     text: 'Fetching samples failed',
                     onBackgroundClick: modalContents.onBackgroundClick,
@@ -78,7 +77,6 @@ const AssignSection = ({theme}) => {
                 const workflowRes = (await axios.get('/api/workflow_definitions')).data
                 setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
             } catch (err) {
-                console.log(err) // TODO: Notice
                 setModalContents({
                     text: 'Fetching workflows failed',
                     onBackgroundClick: modalContents.onBackgroundClick
@@ -100,7 +98,7 @@ const AssignSection = ({theme}) => {
                     }}>close</FilledButton>)}
             />}
             <CircularButtonBar />
-            <FilterMenu />
+            <FilterMenu theme={theme} />
             <DropdownMenu
             menuItems={workflows.map(workflow => workflow.name)}
             theme={theme}
@@ -126,9 +124,6 @@ const AssignSection = ({theme}) => {
                     />
                 </TableContainer>
             }
-            <FilledButton onClick={(e) => {
-
-            }}></FilledButton>
             <FilledButton
             onClick={(e) => {
                 let errors = ''
@@ -149,21 +144,18 @@ const AssignSection = ({theme}) => {
                     })
                     setShowModal(true)
                 } else {
-                    const selectedSamples = [...selectedIdx].map(idx => samples.headers.reduce((acc, curHeader, hidx) => {
-                        acc[curHeader] = samples.content[idx][hidx]
-                        return acc
-                    }, {})).reduce((acc, current, idx) => {
-                        acc[idx] = current
-                        return acc
-                    }, {})
+                    const selectedSamples = [...selectedIdx].map(idx => ({sample: samples.content[idx][0], parents: []}))
                     axios({
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                             'Content-type': 'application/json'
                         },
-                        url: '/api/workflow_samples/',
-                        data: JSON.stringify(selectedSamples) // TODO: Placeholder
+                        url: '/api/workflow_samplebatch_create/',
+                        data: JSON.stringify({
+                            samples: selectedSamples,
+                            batch_type: currentWorkflow.name
+                        })
                     }).then(res => {
                         console.log(res.data)
                     }).catch(rej => {

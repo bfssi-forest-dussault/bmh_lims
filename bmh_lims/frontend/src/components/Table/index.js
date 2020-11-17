@@ -48,7 +48,7 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                                 colWidths[hidx] = width
                                 updateColWidths([...colWidths])
                             }}>
-                                {header}
+                                {`${header.split('_').join(' ')}`}
                             </MappedCell>
                         </HeaderCell>))}
                     </Row>
