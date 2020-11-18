@@ -81,18 +81,21 @@ const FilterMenu = ({onUpdateHandler, theme}) => {
             <FilterRow>
                 <Filter
                 label='Lab'
+                placeholder='lab name'
                 value={lab}
                 onChangeHandler={(e) => {
                     setLab(e.target.value)
                 }}/>
                 <Filter
                 label='Genus'
+                placeholder='sample genus'
                 value={genus}
                 onChangeHandler={(e) => {
                     setGenus(e.target.value)
                 }}/>
                 <Filter
                 label='Type'
+                placeholder='sample type'
                 value={sampleType}
                 onChangeHandler={(e) => {
                     setSampleType(e.target.value)
