@@ -7,7 +7,11 @@ export const TableContainer = styled.div`
     overflow-x: auto;
     overflow-y: auto;
     background-color: white;
-    max-height: 30em;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: row;
 `

@@ -39,7 +39,9 @@ const BodyArea = styled.div`
 
 const TableContainer = styled.div`
     width: 100%;
-    flex-grow: 5;
+    height: 50%;
+    position: relative;
+    margin-bottom: 1%;
 `
 
 const AssignSection = ({theme}) => {

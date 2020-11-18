@@ -34,11 +34,12 @@ export const FreeTextFilter = styled.input.attrs(props => ({
     &:focus {
         border-bottom: 1px solid ${props => props.theme.colour5};
     }
+    text-align: center;
 `
 
 export const FilterMenuContainer = styled.div`
     max-height: ${props => props.open ? '10em': '2rem'};
     overflow: hidden;
     transition: max-height 1s;
-    border-bottom: 1px solid ${props => props.theme.colour2};
+    border-bottom: 1px solid ${props => props.theme.colour1};
 `

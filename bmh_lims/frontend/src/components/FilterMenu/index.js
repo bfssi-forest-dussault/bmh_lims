@@ -32,11 +32,15 @@ const DateFilter = ({label, date, onChangeHandler}) => {
     )
 }
 
-const FilterMenu = ({dateRange, name, projectID, lab, genus, type, theme}) => {
+const FilterMenu = ({onUpdateHandler, theme}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(new Date())
     const [beforeDate, setBeforeDate] = useState(new Date())
     const [sampleName, setName] = useState('')
+    const [projectID, setProjectID] = useState('')
+    const [lab, setLab] = useState('')
+    const [genus, setGenus] = useState('')
+    const [sampleType, setSampleType] = useState('')
     return (
         <FilterMenuContainer open={isOpen}>
             <FilterHeader onClick={(e) => {setIsOpen(!isOpen)}}>
@@ -57,9 +61,9 @@ const FilterMenu = ({dateRange, name, projectID, lab, genus, type, theme}) => {
                 <Filter
                     label='Project ID'
                     placeholder='project ID'
-                    value={''}
+                    value={projectID}
                     onChangeHandler={(e) => {
-                        console.log(e.target.value)
+                        setProjectID(e.target.value)
                 }}/>
                 <DateFilter
                     label='Created After'
@@ -77,21 +81,21 @@ const FilterMenu = ({dateRange, name, projectID, lab, genus, type, theme}) => {
             <FilterRow>
                 <Filter
                 label='Lab'
-                value={''}
+                value={lab}
                 onChangeHandler={(e) => {
-                    console.log(e.target.value)
+                    setLab(e.target.value)
                 }}/>
                 <Filter
                 label='Genus'
-                value={''}
+                value={genus}
                 onChangeHandler={(e) => {
-                    console.log(e.target.value)
+                    setGenus(e.target.value)
                 }}/>
                 <Filter
                 label='Type'
-                value={''}
+                value={sampleType}
                 onChangeHandler={(e) => {
-                    console.log(e.target.value)
+                    setSampleType(e.target.value)
                 }}/>
             </FilterRow>
         </FilterMenuContainer>
