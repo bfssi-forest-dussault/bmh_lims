@@ -19,3 +19,6 @@ djangorestframework==3.11.1  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.5.0 # https://github.com/adamchainz/django-cors-headers
 django-simple-history==2.11.0
 django-filter==2.4.0
+
+# other
+markdown==3.3.3

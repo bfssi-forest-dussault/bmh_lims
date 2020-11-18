@@ -8,11 +8,10 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.forms.models import model_to_dict
 
 User = get_user_model()
 
-
-# Create your views here.
 
 # Keep this here to give React access to the CSRF token
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -41,6 +40,67 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
 
     def get_queryset(self):
         queryset = models.Sample.objects.all().order_by('-created')
+        return queryset
+
+
+class WorkflowSampleBatchCreateViewSet(viewsets.ModelViewSet, UpdateModelMixin):
+    """
+    ## Overview
+    Viewset that allows for a list of samples to be submitted along with a workflow type, this will then
+    create a new workflow batch and assign newly created workflow samples to that batch.
+
+    Default status of the automatically created workflow_batch is `IN_PROGRESS`
+
+    ### Expected JSON structure:
+    ```json
+    {
+        "samples": [
+            {
+                "sample": 10,
+                "parents": []
+            },
+            {
+                "sample": 11,
+                "parents": []
+            }
+        ],
+        "batch_type": "DNA Extraction"
+    }
+    ```
+    """
+    serializer_class = serializers.WorkflowSampleBatchSerializer
+    queryset = models.WorkflowSample.objects.all()
+    pagination_class = None
+
+    def create(self, request, *args, **kwargs):
+        batch_type = request.data['batch_type']
+        data = request.data['samples']
+
+        # Create a new workflow batch
+        workflow_batch = models.WorkflowBatch.objects.create(
+            workflow=models.WorkflowDefinition.objects.get(name=batch_type), status='IN_PROGRESS')
+
+        # Update the workflow_batch value for each sample to be created
+        workflow_batch_dict = model_to_dict(workflow_batch)
+        for entry in data:
+            entry['workflow_batch'] = workflow_batch_dict
+
+        # Pass prepared data to serializer
+        serializer = self.get_serializer(data=data, many=isinstance(data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        # Setup the response for the user to work with
+        response_data = {
+            'workflow_samples': serializer.data,
+            'workflow_batch_id': workflow_batch.id
+        }
+
+        return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_queryset(self):
+        queryset = models.WorkflowSample.objects.all().order_by('-created')
         return queryset
 
 
