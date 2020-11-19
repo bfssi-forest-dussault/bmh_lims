@@ -11,7 +11,7 @@ export const Notice = ({text, CloseButton, ActionButton, onBackgroundClick, info
             }} />
             <Modal>
                 {text}
-                {info && (
+                {!!info && (
                 <InfoContainer>
                         <MultilineText text={info} />
                 </InfoContainer>)}

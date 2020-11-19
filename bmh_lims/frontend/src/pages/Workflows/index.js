@@ -1,33 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
-import { CombinedLogo, Table, FilledButton } from 'components'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
+import { CombinedLogo, Table, FilledButton, Notice, FilterMenu } from 'components'
+import { CircularButtonBar, DropdownMenu } from 'components'
+import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
-
-const CircularButton = styled.button`
-    border: none;
-    border-radius: 50%;
-    background-color: ${props => props.theme.colour5};
-    width: 7rem;
-    height: 7rem;
-    color: white;
-    font-size: 1.3em;
-`
-
-const DecorativeBar = styled.div`
-    width: 20%;
-    height: 10px;
-    background-color: ${props => props.theme.colour5};
-`
-
-const CircularButtonContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-`
 
 const PageContainer = styled.div`
     display: flex;
@@ -59,170 +37,134 @@ const BodyArea = styled.div`
     padding: 2% 25%;
 `
 
-const CircularButtonBar = () => {
-    return (
-        <CircularButtonContainer>
-            <CircularButton onClick={(e) => {console.log('assign')}}>assign</CircularButton>
-            <DecorativeBar />
-            <CircularButton onClick={(e) => {console.log('execute')}}>execute</CircularButton>
-            <DecorativeBar />
-            <CircularButton onClick={(e) => {console.log('enter results')}}>enter results</CircularButton>
-        </CircularButtonContainer>
-    )
-}
-
-const DropDownBar = styled.div`
-    width: 80%;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid ${props => props.theme.colour4};
-    border-radius: 3%;
-    padding: 0px 1.5%;
-    color: ${props => props.theme.colour3}
-`
-
-const DropDownMenu = styled.div`
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    left: ${props => props.left ? `${props.left}px`:'28px'};
-    top: ${props => props.top ? `${props.top}px`: '0px'};
-    z-index: 1;
-    width: 83.5%;
-    background-color: white;
-`
-
-const DropDownButtonBackground = styled.div`
-    width: 5%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    color: ${props => props.theme.colour2};
-    border-left: 1px solid ${props => props.theme.colour4};
-`
-
-const DropdownMenuItem = styled.div`
-    border: 1px solid ${props => props.theme.colour1};
-    padding: 0px 1.5%;
-`
-
-const DropDownButton = ({theme, isDown, onClickHandler}) => {
-    return (
-        <DropDownButtonBackground onClick={onClickHandler}>
-            {isDown ? <MdKeyboardArrowDown style={{fill: theme.colour4}}/> : <MdKeyboardArrowUp style={{fill: theme.colour4}}/>}
-        </DropDownButtonBackground>
-    )
-}
-
-const DropDownContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80px;
-    flex-direction: column;
-`
-
-const DropDown = ({ theme, menuIsOpen, setMenuIsOpen, setLeft, setTop}) => {
-    const [currentWorkflow, setWorkflow] = useState('Select workflow')
-    let newLeft = 0
-    let newTop = 0
-    const dropdownBarRef = useCallback(node => {
-        if(node !== null) {
-            console.log(newLeft + node.getBoundingClientRect().left)
-            newLeft += node.getBoundingClientRect().left
-            newTop += node.getBoundingClientRect().bottom
-            setLeft(newLeft)
-            setTop(newTop)
-        }
-    }, [])
-    const dropdownContainerRef = useCallback(node => {
-        if(node !== null) {
-            console.log(newLeft - node.getBoundingClientRect().left)
-            newLeft -= node.getBoundingClientRect().left
-            newTop -= node.getBoundingClientRect().top
-            setLeft(newLeft)
-            setTop(newTop)
-        }
-    }, [])
-    return (
-        <DropDownContainer ref={dropdownContainerRef}>
-            <DropDownBar ref={dropdownBarRef}>
-                {currentWorkflow}
-                <DropDownButton
-                theme={theme}
-                isDown={!menuIsOpen}
-                onClickHandler={(e) => {
-                    setMenuIsOpen(!menuIsOpen)
-                }} />
-            </DropDownBar>
-        </DropDownContainer>
-    )
-}
-
 const TableContainer = styled.div`
     width: 100%;
-    flex-grow: 5;
-`
-
-const ContentSection = styled.section`
+    height: 50%;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 7;
-    width: 100%;
+    margin-bottom: 1%;
 `
 
 const AssignSection = ({theme}) => {
-    const [menuIsOpen, setMenuIsOpen] = useState(false)
-    const [left, setLeft] = useState(0)
-    const [top, setTop] = useState(0)
     const [samples, setSamples] = useState({headers: [], content: []})
-    const menuItems = ['workflow1', 'workflow2', 'workflow3']
+    const [workflows, setWorkflows] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [modalContents, setModalContents] = useState({text: ''})
+    const [isLoading, setIsLoading] = useState(true)
+
+    const selectedIdx = new Set()
+    let currentWorkflow = {id: -1, name: ''}
+
     useEffect(() => {
-        try {
-            axios.get('/api/samples')
-            .then(res => {
-                const headers = Object.keys(res.data[0])
-                const content = res.data.splice(0, 50).map(sample => Object.keys(sample).map(key => sample[key]))
+        const initializeSamples = async () => {
+            try {
+                const sampleRes = (await axios.get('/api/samples?page=1')).data
+                const headers = Object.keys(sampleRes.results[0])
+                const content = sampleRes.results.map(sample => Object.keys(sample).map(key => sample[key]))
                 setSamples({headers, content})
-            })
-            .catch(rej => console.log(rej))
-        } catch (err) {
-            console.log(err)
+                setIsLoading(false)
+            } catch (err) {
+                setModalContents({
+                    text: 'Fetching samples failed',
+                    onBackgroundClick: modalContents.onBackgroundClick,
+                    CloseButton: () => (
+                    <FilledButton onClick={(e) => {
+                        setShowModal(false)
+                    }}>close</FilledButton>)
+                })
+                setShowModal(true)
+            }
         }
+        const initializeWorkflows = async () => {
+            try {
+                const workflowRes = (await axios.get('/api/workflow_definitions')).data
+                setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
+            } catch (err) {
+                setModalContents({
+                    text: 'Fetching workflows failed',
+                    onBackgroundClick: modalContents.onBackgroundClick
+                })
+                setShowModal(true)
+            }
+        }
+        initializeSamples()
+        initializeWorkflows()
     }, [])
     return (
         <BodyArea>
+            {showModal && <Notice
+                {...modalContents}
+                onBackgroundClick={() => setShowModal(false)}
+                CloseButton={() => (
+                    <FilledButton onClick={(e) => {
+                        setShowModal(false)
+                    }}>close</FilledButton>)}
+            />}
             <CircularButtonBar />
-            <ContentSection>
-                <DropDown setTop={setTop} setLeft={setLeft} menuIsOpen={menuIsOpen} setMenuIsOpen={setMenuIsOpen} theme={theme}/>
-                {menuIsOpen && (
-                <DropDownMenu left={left} top={top}>
-                    {menuItems.map((item, idx) => (
-                    <DropdownMenuItem key={`workflow-${idx}`} onClick={(e) => setWorkflow(item)}>
-                        {item}
-                    </DropdownMenuItem>))}
-                </DropDownMenu>
-                )}
+            <FilterMenu theme={theme} />
+            <DropdownMenu
+            menuItems={workflows.map(workflow => workflow.name)}
+            theme={theme}
+            initialValue={'Select Workflow'}
+            onItemClick={(item, idx) => {
+                currentWorkflow = workflows[idx]
+            }}
+            />
+            {
+                isLoading ? <CgSearchLoading style={{fill: theme.colour2}}/>:
                 <TableContainer>
                     <Table
                     theme={theme}
                     headers={samples.headers}
                     content={samples.content}
-                    valueUpdateHandler={(col, row) => (e) => {console.log('hi')}}
                     isSelectable={true}
                     isEditable={false}
                     onSelect={(idx) => {
-
+                        if (!selectedIdx.delete(idx)) {
+                            selectedIdx.add(idx)
+                        }
                     }}
                     />
                 </TableContainer>
-            </ContentSection>
-            <FilledButton onClick={(e) => {console.log('blue button clicked')}}>Assign workflow</FilledButton>
+            }
+            <FilledButton
+            onClick={(e) => {
+                let errors = ''
+                if (currentWorkflow.id < 0) {
+                    errors += 'Please select a workflow. '
+                }
+                if (selectedIdx.size === 0) {
+                    errors += 'Please select at least 1 sample'
+                }
+                if (!!errors) {
+                    setModalContents({
+                        text: errors,
+                        onBackgroundClick: modalContents.onBackgroundClick,
+                        CloseButton: () => (
+                        <FilledButton onClick={(e) => {
+                            setShowModal(false)
+                        }}>close</FilledButton>)
+                    })
+                    setShowModal(true)
+                } else {
+                    const selectedSamples = [...selectedIdx].map(idx => ({sample: samples.content[idx][0], parents: []}))
+                    axios({
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                            'Content-type': 'application/json'
+                        },
+                        url: '/api/workflow_samplebatch_create/',
+                        data: JSON.stringify({
+                            samples: selectedSamples,
+                            batch_type: currentWorkflow.name
+                        })
+                    }).then(res => {
+                        console.log(res.data)
+                    }).catch(rej => {
+                        console.log(rej)
+                    })
+                }
+            }}>Assign workflow</FilledButton>
         </BodyArea>
     )
 }
