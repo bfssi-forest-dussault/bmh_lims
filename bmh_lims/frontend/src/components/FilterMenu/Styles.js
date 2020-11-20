@@ -1,4 +1,58 @@
+import React from 'react'
 import styled from 'styled-components'
+
+import { DatePicker } from '@material-ui/pickers'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+
+const muiTheme = ({ theme }) => createMuiTheme({
+    typography: {
+        fontFamily: 'Quicksand'
+    },
+    overrides: {
+        MuiInputBase: {
+            root: {
+                width: '100%',
+                padding: 0,
+                fontSize: '0.9rem',
+                color: theme.colour3
+            },
+            input: {
+                padding: 0,
+                letterSpacing: 'normal',
+                textAlign: 'center',
+                borderBottom: `1px solid ${theme.colour4}`,
+                '&&&:focus': {
+                    borderBottom: `1px solid ${theme.colour5}`
+                }
+            }
+        },
+        MuiPickersToolbar: {
+            toolbar: {
+                backgroundColor: theme.colour2
+            }
+        },
+        MuiPickersDay: {
+            daySelected: {
+                backgroundColor: theme.colour4
+            }
+        },
+        MuiButton: {
+            textPrimary: {
+                color: theme.colour3
+            }
+        }
+    }
+})
+
+export const StyledDatePicker = ({ theme, ...props }) => (
+    <ThemeProvider theme={muiTheme({ theme })}>
+        <DatePicker
+        InputProps={{
+            disableUnderline: true,
+        }}
+        {...props} />
+    </ThemeProvider>
+)
 
 export const FilterHeader = styled.div`
     width: 100%;
@@ -17,22 +71,27 @@ export const FilterRow = styled.div`
 `
 
 export const FilterContainer = styled.div`
-    color: ${props => props.theme.colour2};
+    width: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    color: ${props => props.theme.colour2};
 `
 
 export const FreeTextFilter = styled.input.attrs(props => ({
     type: 'text'
 }))`
-    width: 70%;
-    color: ${props => props.theme.colour2};
+    width: 100%;
+    color: ${props => props.theme.colour3};
     border: none;
     border-bottom: 1px solid ${props => props.theme.colour4};
     background-color: white;
     &:focus {
         border-bottom: 1px solid ${props => props.theme.colour5};
+    }
+    ::placeholder {
+        color: rgb(100, 100, 100);
     }
     text-align: center;
 `

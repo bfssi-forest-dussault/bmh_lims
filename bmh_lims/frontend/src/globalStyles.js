@@ -5,7 +5,6 @@ import { createGlobalStyle } from 'styled-components'
 export const GlobalStyle = createGlobalStyle`
     * {
         text-decoration: none;
-        color: black;
     }
     body {
         font-family: 'Assistant', sans-serif;

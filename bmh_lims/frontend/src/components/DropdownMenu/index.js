@@ -8,9 +8,9 @@ import {
     DropdownBar
 } from './Styles'
 
-const DropdownButton = ({theme, isDown, onClickHandler}) => {
+const DropdownButton = ({theme, isDown }) => {
     return (
-        <DropdownButtonBackground onClick={onClickHandler}>
+        <DropdownButtonBackground>
             {isDown ? <MdKeyboardArrowDown style={{fill: theme.colour4}}/> : <MdKeyboardArrowUp style={{fill: theme.colour4}}/>}
         </DropdownButtonBackground>
     )
@@ -43,14 +43,11 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
     }, [])
     return (
         <DropdownContainer ref={dropdownContainerRef}>
-            <DropdownBar ref={dropdownBarRef}>
+            <DropdownBar ref={dropdownBarRef} onClick={(e) => { setMenuIsOpen(!menuIsOpen) }}>
                 {currentSelection}
                 <DropdownButton
                 theme={theme}
-                isDown={!menuIsOpen}
-                onClickHandler={(e) => {
-                    setMenuIsOpen(!menuIsOpen)
-                }} />
+                isDown={!menuIsOpen} />
             </DropdownBar>
             {menuIsOpen && (
                 <DropdownMenu left={left} top={top}>
