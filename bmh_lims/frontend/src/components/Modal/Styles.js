@@ -1,4 +1,14 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const modalAnimation = keyframes`
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    } to {
+        transform: scale(1);
+        opacity: 1;
+    }
+`
 
 export const Modal = styled.div`
     display: flex;
@@ -13,6 +23,7 @@ export const Modal = styled.div`
     border: solid 2px ${props => props.theme.secondarybg};
     align-self: center;
     z-index: 501;
+    animation: ${modalAnimation} 0.1s linear 1;
 `
 
 export const ModalContainer = styled.div`
