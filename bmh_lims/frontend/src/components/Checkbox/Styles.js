@@ -3,5 +3,6 @@ import { RiCheckboxBlankCircleLine, RiCheckboxCircleFill} from 'react-icons/ri'
 
 export const CheckboxContainer = styled.div`
     display: inline-block;
-    color: blue;
+    width: 100%;
+    text-align: center;
 `
