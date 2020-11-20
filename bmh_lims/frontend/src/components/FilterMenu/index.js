@@ -65,17 +65,17 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                     }}/>
                     <DateFilter
                         theme={theme}
-                        label='Created After'
-                        date={afterDate}
-                        onChangeHandler={(date) => {
-                            setAfterDate(date)
-                    }}/>
-                    <DateFilter
-                        theme={theme}
                         label='Created Before'
                         date={beforeDate}
                         onChangeHandler={(date) => {
                             setBeforeDate(date)
+                    }}/>
+                    <DateFilter
+                        theme={theme}
+                        label='Created After'
+                        date={afterDate}
+                        onChangeHandler={(date) => {
+                            setAfterDate(date)
                     }}/>
                 </FilterRow>
                 <FilterRow>
