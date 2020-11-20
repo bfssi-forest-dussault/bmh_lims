@@ -24,10 +24,12 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = {
         'sample_id': ['iexact'],
-        'sample_name': ['iexact'],
+        'sample_name': ['iexact', 'icontains'],
         'sample_type': ['iexact'],
-        'genus': ['iexact'],
-        'species': ['iexact'],
+        'submitting_lab__lab_name': ['iexact', 'icontains'],
+        'submitter_project__project_name': ['iexact', 'icontains'],
+        'genus': ['iexact', 'icontains'],
+        'species': ['iexact', 'icontains'],
         'strain': ['iexact'],
         'isolate': ['iexact'],
         'comments': ['icontains'],
