@@ -26,7 +26,7 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         'sample_id': ['iexact'],
         'sample_name': ['iexact', 'icontains'],
         'sample_type': ['iexact'],
-        'submitting_lab__lab_name': ['iexact', 'icontains'],
+        # 'submitting_lab__lab_name': ['iexact', 'icontains'],  # TODO: Bug, submitting_lab is broken at the moment
         'submitter_project__project_name': ['iexact', 'icontains'],
         'genus': ['iexact', 'icontains'],
         'species': ['iexact', 'icontains'],
