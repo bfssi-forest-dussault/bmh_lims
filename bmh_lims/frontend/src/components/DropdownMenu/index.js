@@ -49,8 +49,7 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
                 theme={theme}
                 isDown={!menuIsOpen} />
             </DropdownBar>
-            {menuIsOpen && (
-                <DropdownMenu left={left} top={top}>
+                <DropdownMenu isOpen={menuIsOpen} left={left} top={top}>
                     {menuItems.map((item, idx) => (
                     <DropdownMenuItem
                     key={`workflow-${idx}`}
@@ -62,7 +61,6 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
                         {item}
                     </DropdownMenuItem>))}
                 </DropdownMenu>
-            )}
         </DropdownContainer>
     )
 }
