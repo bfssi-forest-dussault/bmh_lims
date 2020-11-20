@@ -2,8 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import { theme } from 'styles'
-import { CombinedLogo, Table, FilledButton, Notice, FilterMenu } from 'components'
-import { CircularButtonBar, DropdownMenu } from 'components'
+import {
+    CircularButtonBar,
+    CombinedLogo,
+    DropdownMenu,
+    FilledButton,
+    FilterMenu,
+    Notice,
+    Table
+} from 'components'
+import { LoadingIconContainer } from './Styles'
+import { IconContext } from 'react-icons'
 import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
 
@@ -118,7 +127,15 @@ const AssignSection = ({theme}) => {
             }}
             />
             {
-                isLoading ? <LoadingContainer><CgSearchLoading style={{fill: theme.colour3, width: '50px', height: '50px'}}/></LoadingContainer>:
+                isLoading ? (
+                    <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
+                        <LoadingContainer>
+                            <LoadingIconContainer>
+                                <CgSearchLoading />
+                            </LoadingIconContainer>
+                        </LoadingContainer>
+                    </IconContext.Provider>
+                    ):
                 <TableContainer>
                     <Table
                     theme={theme}
