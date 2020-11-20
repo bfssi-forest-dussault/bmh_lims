@@ -1,4 +1,58 @@
+import React from 'react'
 import styled from 'styled-components'
+
+import { DatePicker } from '@material-ui/pickers'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+
+const muiTheme = ({ theme }) => createMuiTheme({
+    typography: {
+        fontFamily: 'Quicksand'
+    },
+    overrides: {
+        MuiInputBase: {
+            root: {
+                width: '100%',
+                padding: 0,
+                fontSize: '0.9rem',
+                color: theme.colour3
+            },
+            input: {
+                padding: 0,
+                letterSpacing: 'normal',
+                textAlign: 'center',
+                borderBottom: `1px solid ${theme.colour4}`,
+                '&&&:focus': {
+                    borderBottom: `1px solid ${theme.colour5}`
+                }
+            }
+        },
+        MuiPickersToolbar: {
+            toolbar: {
+                backgroundColor: theme.colour2
+            }
+        },
+        MuiPickersDay: {
+            daySelected: {
+                backgroundColor: theme.colour4
+            }
+        },
+        MuiButton: {
+            textPrimary: {
+                color: theme.colour3
+            }
+        }
+    }
+})
+
+export const StyledDatePicker = ({ theme, ...props }) => (
+    <ThemeProvider theme={muiTheme({ theme })}>
+        <DatePicker
+        InputProps={{
+            disableUnderline: true,
+        }}
+        {...props} />
+    </ThemeProvider>
+)
 
 export const FilterHeader = styled.div`
     width: 100%;

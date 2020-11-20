@@ -5,82 +5,11 @@ import {
     FilterRow,
     FilterContainer,
     FreeTextFilter,
-    FilterMenuContainer
+    FilterMenuContainer,
+    StyledDatePicker
 } from './Styles'
 
-import { theme } from '../../globalStyles'
-
-import { DatePicker } from '@material-ui/pickers'
-import { withStyles, makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
-
-const styledBy = (property, mapping) => (props) => mapping[props[property]];
-
-const muiTheme = createMuiTheme({
-    typography: {
-        fontFamily: 'Quicksand'
-    },
-    overrides: {
-        MuiFormControl: {
-            root: {
-                borderBottom: `1px solid ${theme.colour4}`,
-            }
-        },
-        MuiInputBase: {
-            root: {
-                fontSize: '0.9rem',
-                fontColor: theme.colour2,
-                width: '100%',
-                color: theme.colour3
-            },
-            input: {
-                padding: 0,
-                letterSpacing: 'normal',
-                textAlign: 'center'
-            }
-        },
-        MuiPickersToolbar: {
-            toolbar: {
-                backgroundColor: theme.colour2
-            }
-        },
-        MuiPickersDay: {
-            daySelected: {
-                backgroundColor: theme.colour4
-            }
-        },
-        MuiButton: {
-            textPrimary: {
-                color: theme.colour3
-            }
-        }
-    }
-})
-
-const styles = {
-    root: {
-        fontColor: theme.colour2,
-        width: '100%',
-        padding: 0
-    }
-}
-
-const StyledDatePicker = withStyles(styles)(({classes, active, ...props}) => (
-    <DatePicker
-    className={classes.root}
-    InputProps={{
-        disableUnderline: true,
-        classes: {
-            input: classes.root,
-        }
-    }}
-    {...props} />
-))
-
-// import DatePicker from 'react-datepicker';
-
-// import "react-datepicker/dist/react-datepicker.css"
-
-const Filter = ({label, placeholder, value, onChangeHandler}) => {
+const Filter = ({ label, placeholder, value, onChangeHandler }) => {
     return (
         <FilterContainer>
             {label}
@@ -89,24 +18,19 @@ const Filter = ({label, placeholder, value, onChangeHandler}) => {
     )
 }
 
-const DateFilter = ({label, date, onChangeHandler}) => {
-    const [active, setActive] = useState(false)
+const DateFilter = ({ theme, label, date, onChangeHandler }) => {
     return (
-        <ThemeProvider theme={muiTheme}>
-            <FilterContainer>
-                {label}
-                <StyledDatePicker
-                value={date}
-                active={active}
-                onFocus={(e) => setActive(true)}
-                onBlur={(e) => setActive(false)}
-                onChange={date => onChangeHandler(date)} />
-            </FilterContainer>
-        </ThemeProvider>
+        <FilterContainer>
+            {label}
+            <StyledDatePicker
+            theme={theme}
+            value={date}
+            onChange={date => onChangeHandler(date)} />
+        </FilterContainer>
     )
 }
 
-const FilterMenu = ({onUpdateHandler, theme}) => {
+const FilterMenu = ({ onUpdateHandler, theme }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(new Date())
     const [beforeDate, setBeforeDate] = useState(new Date())
@@ -140,16 +64,18 @@ const FilterMenu = ({onUpdateHandler, theme}) => {
                             setProjectID(e.target.value)
                     }}/>
                     <DateFilter
+                        theme={theme}
                         label='Created After'
                         date={afterDate}
                         onChangeHandler={(date) => {
                             setAfterDate(date)
                     }}/>
                     <DateFilter
-                    label='Created Before'
-                    date={beforeDate}
-                    onChangeHandler={(date) => {
-                        setBeforeDate(date)
+                        theme={theme}
+                        label='Created Before'
+                        date={beforeDate}
+                        onChangeHandler={(date) => {
+                            setBeforeDate(date)
                     }}/>
                 </FilterRow>
                 <FilterRow>
