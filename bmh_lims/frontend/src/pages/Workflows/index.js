@@ -44,6 +44,14 @@ const TableContainer = styled.div`
     margin-bottom: 1%;
 `
 
+const LoadingContainer = styled.div`
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
     const [workflows, setWorkflows] = useState([])
@@ -110,7 +118,7 @@ const AssignSection = ({theme}) => {
             }}
             />
             {
-                isLoading ? <CgSearchLoading style={{fill: theme.colour2}}/>:
+                isLoading ? <LoadingContainer><CgSearchLoading style={{fill: theme.colour3, width: '50px', height: '50px'}}/></LoadingContainer>:
                 <TableContainer>
                     <Table
                     theme={theme}
