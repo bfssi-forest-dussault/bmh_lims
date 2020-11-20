@@ -9,8 +9,8 @@ export const CircularButton = styled.button`
     color: white;
     font-size: 1.3em;
     &:hover {
-        width: 7.5em;
-        height: 7.5em;
+        width: 7.1em;
+        height: 7.1em;
     }
     transition: width 0.7s, height 0.7s;
 `
