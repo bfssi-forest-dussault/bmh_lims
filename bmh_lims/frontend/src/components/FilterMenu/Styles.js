@@ -17,22 +17,27 @@ export const FilterRow = styled.div`
 `
 
 export const FilterContainer = styled.div`
-    color: ${props => props.theme.colour2};
+    width: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    color: ${props => props.theme.colour2};
 `
 
 export const FreeTextFilter = styled.input.attrs(props => ({
     type: 'text'
 }))`
-    width: 70%;
-    color: ${props => props.theme.colour2};
+    width: 100%;
+    color: ${props => props.theme.colour3};
     border: none;
     border-bottom: 1px solid ${props => props.theme.colour4};
     background-color: white;
     &:focus {
         border-bottom: 1px solid ${props => props.theme.colour5};
+    }
+    ::placeholder {
+        color: rgb(100, 100, 100);
     }
     text-align: center;
 `
