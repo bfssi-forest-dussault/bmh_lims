@@ -28,6 +28,13 @@ import { CheckboxColumn, MappedCell } from './components/'
 // valueUpdateHandler: () => {} for how table values should be updated
 const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable, isEditable, onSelect}) => {
     const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
+
+    const isDate = date => !isNaN(Date.parse(date))
+    const sanitizeNumber = num => num < 10 ? '00': num
+    const formatDate = date => `
+    ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} @ ${sanitizeNumber(date.getHours())}:${sanitizeNumber(date.getMinutes())}:${sanitizeNumber(date.getSeconds())}`
+    const sanitizedValue = value => isDate(value) ? formatDate(new Date(value)) : value
+
     return (
         <TableContainer>
             {isSelectable && 
@@ -61,7 +68,7 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
                                 <Content width={colWidths[idx]}>
                                     <BodyContent
                                     type='text'
-                                    value={item || ''}
+                                    value={sanitizedValue(item) || ''}
                                     onChange={valueUpdateHandler ? valueUpdateHandler(idx, ridx): (e) => {}}
                                     readOnly={!isEditable}
                                     />
