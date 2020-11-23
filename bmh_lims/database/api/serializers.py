@@ -34,12 +34,52 @@ class WorkflowBatchSerializer(serializers.ModelSerializer):
         }
 
 
-class SampleSerializer(serializers.ModelSerializer):
+class LabSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
-        model = models.Sample
+        model = models.Lab
         fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+
+    class Meta:
+        model = models.Project
+        fields = '__all__'
+
+
+class SampleSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    # submitting_lab = LabSerializer()  # TODO: Bug, cannot display for some reason
+    submitter_project = ProjectSerializer()
+
+    class Meta:
+        model = models.Sample
+        fields = [
+            'id',
+            'sample_id',
+            'sample_name',
+            'well',
+            # 'submitting_lab',
+            'sample_type',
+            'sample_volume_in_ul',
+            'requested_services',
+            'submitter_project',
+            'strain',
+            'isolate',
+            'genus',
+            'species',
+            'subspecies_subtype_lineage',
+            'approx_genome_size_in_bp',
+            'comments',
+            'culture_date',
+            'culture_conditions',
+            'dna_extraction_date',
+            'dna_extraction_method',
+            'qubit_concentration_in_ng_ul',
+        ]
 
 
 class WorkflowSampleSerializer(serializers.ModelSerializer):
@@ -81,19 +121,3 @@ class WorkflowSampleBatchSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         # TODO
         pass
-
-
-class LabSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField()
-
-    class Meta:
-        model = models.Lab
-        fields = '__all__'
-
-
-class ProjectSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField()
-
-    class Meta:
-        model = models.Project
-        fields = '__all__'

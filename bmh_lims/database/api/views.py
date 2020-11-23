@@ -23,12 +23,19 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     queryset = models.Sample.objects.all()
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = {
-        'sample_id': ['exact'],
-        'sample_name': ['iexact'],
+        'sample_id': ['iexact'],
+        'sample_name': ['iexact', 'icontains'],
         'sample_type': ['iexact'],
-        'genus': ['iexact'],
-        'species': ['iexact'],
+        # 'submitting_lab__lab_name': ['iexact', 'icontains'],  # TODO: Bug, submitting_lab is broken at the moment
+        'submitter_project__project_name': ['iexact', 'icontains'],
+        'genus': ['iexact', 'icontains'],
+        'species': ['iexact', 'icontains'],
+        'strain': ['iexact'],
+        'isolate': ['iexact'],
+        'comments': ['icontains'],
         'created': ['date__range'],
+        'dna_extraction_date': ['range'],
+        'culture_date': ['range']
     }
 
     def create(self, request, *args, **kwargs):
@@ -110,6 +117,12 @@ class WorkflowSampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.WorkflowSampleSerializer
     queryset = models.WorkflowSample.objects.all()
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'sample__sample_id': ['iexact'],
+        'sample__sample_name': ['iexact'],
+        'workflow_batch__status': ['iexact']
+    }
 
     def get_queryset(self):
         queryset = models.WorkflowSample.objects.all().order_by('-created')
@@ -121,6 +134,10 @@ class WorkflowBatchViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.WorkflowBatchSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'status': ['iexact'],
+    }
 
     def get_queryset(self):
         queryset = models.WorkflowBatch.objects.all().order_by('-created')
@@ -133,6 +150,11 @@ class WorkflowDefinitionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.WorkflowDefinitionSerializer
     queryset = models.WorkflowDefinition.objects.all()
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'name': ['iexact'],
+        'description': ['icontains'],
+    }
 
     def get_queryset(self):
         queryset = models.WorkflowDefinition.objects.all().order_by('-created')
@@ -144,6 +166,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.ProjectSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'project_name': ['iexact'],
+        'project_description': ['icontains'],
+    }
 
     def get_queryset(self):
         queryset = models.Project.objects.all().order_by('-created')
@@ -155,6 +182,12 @@ class LabViewSet(viewsets.ModelViewSet):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.LabSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = {
+        'lab_name': ['iexact'],
+        'lab_contact': ['iexact'],
+        'lab_notes': ['icontains']
+    }
 
     def get_queryset(self):
         queryset = models.Lab.objects.all().order_by('-created')
