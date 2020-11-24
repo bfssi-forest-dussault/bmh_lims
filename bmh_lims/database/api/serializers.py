@@ -79,6 +79,8 @@ class SampleSerializer(serializers.ModelSerializer):
             'dna_extraction_date',
             'dna_extraction_method',
             'qubit_concentration_in_ng_ul',
+            'created',
+            'modified'
         ]
 
 
