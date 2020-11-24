@@ -30,3 +30,24 @@ export const dataToString = (errorData) => {
     })
     return sampleErrorList.map((errorList, idx) => !!errorList.length ? `Sample ${idx + 1}:\n\t${errorList}` : null).filter(error => !!error).join('\n')
 }
+
+const queryFields = {
+    sampleName: 'sample_name',
+    projectName: 'submitter_project__project_name',
+    dateRange: 'created__date__range',
+    lab: '',
+    genus: 'genus',
+    sampleType: 'species',
+}
+
+export const formatFilterQuery = ({field, match, isExact}) => {
+    if (!!match) {
+        return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`
+    } else {
+        return ''
+    }
+}
+
+export const formatFilterQueries = (filters) => {
+    return Object.keys(filters).map((filterName) => formatFilterQuery({field: filterName, ...filters[filterName]})).filter((query) => !!query).join('&')
+}
