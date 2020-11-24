@@ -33,7 +33,10 @@ const muiTheme = ({ theme }) => createMuiTheme({
         },
         MuiPickersDay: {
             daySelected: {
-                backgroundColor: theme.colour4
+                backgroundColor: theme.colour4,
+                '&&&:hover': {
+                    backgroundColor: theme.colour5
+                }
             }
         },
         MuiButton: {
