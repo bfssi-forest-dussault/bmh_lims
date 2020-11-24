@@ -40,9 +40,15 @@ const queryFields = {
     sampleType: 'species',
 }
 
-export const formatFilterQuery = ({field, match, isExact}) => {
+const formattedDate = date => {
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+}
+
+const formatFilterQuery = ({field, match, isExact}) => {
     if (!!match) {
         return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`
+    } else if (field === 'dateRange') {
+        return `${queryFields[field]}=${formattedDate(match[0])}%2C+${formattedDate(match[1])}`
     } else {
         return ''
     }

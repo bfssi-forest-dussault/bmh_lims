@@ -30,7 +30,7 @@ const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
             theme={theme}
             value={date}
             onChange={date => onChangeHandler(date)}
-            onBlur={onBlurHandler} />
+            onClose={onBlurHandler} />
         </FilterContainer>
     )
 }
@@ -68,18 +68,18 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         setName({match: newValue, isExact: isExact(newValue)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }} />
                     <Filter
-                        label='Project ID'
-                        placeholder='project ID'
+                        label='Project Name'
+                        placeholder='project name'
                         value={projectName.match}
                         onChangeHandler={(e) => {
                             const newProject = e.target.value
                             setProjectID({match: newProject, isExact: isExact(newProject)})
                         }}
                         onBlurHandler={(e) => {
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                         }}
                     />
                     <DateFilter
@@ -90,7 +90,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                             setBeforeDate(date)
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}/>
                     <DateFilter
                         theme={theme}
@@ -100,7 +100,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                             setAfterDate(date)
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}/>
                 </FilterRow>
                 <FilterRow>
@@ -113,7 +113,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         setLab({match: newLab, isExact: isExact(newLab)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}
                     />
                     <Filter
@@ -125,7 +125,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         setGenus({match: newGenus, isExact: isExact(newGenus)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}
                     />
                     <Filter
@@ -137,7 +137,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         setSampleType({match: newSampleType, isExact: isExact(newSampleType)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: [afterDate, beforeDate] })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}/>
                 </FilterRow>
             </FilterMenuContainer>

@@ -22,7 +22,7 @@ import {
     PageContainer,
     TableContainer
 } from './Styles'
-import { formatFilterQueries, formatFilterQuery } from 'utils'
+import { formatFilterQueries } from 'utils'
 
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
