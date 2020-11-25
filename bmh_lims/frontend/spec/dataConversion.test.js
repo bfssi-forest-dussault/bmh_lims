@@ -1,4 +1,4 @@
-import { mergeHeadersValues, dataToString } from 'utils'
+import { mergeHeadersValues, dataToString, formatFilterQueries } from 'utils'
 import each from 'jest-each'
 
 
@@ -45,5 +45,50 @@ describe('dataToString correctly converts error data object to string', () => {
         ${[{'a': ['error1'], 'b': ['error2']}]}                                | ${['Sample 1:\n\ta\n\t\terror1\n\tb\n\t\terror2']}
     `.test('$errorData => $expected', ({errorData, expected}) => {
         expect(dataToString(errorData) === expected)
+    })
+})
+
+describe('formatFiltersQueries', () => {
+    const inputs = {
+        singleFilter: {
+            sampleName: {
+                match: '',
+                isExact: false
+            },
+            projectName: {
+                match: 'AAA',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: '',
+                isExact: false
+            }
+        },
+        noFilter: {},
+        multipleFilters: {},
+        dateFilter: {},
+        freeTextAndDateFilter: {}
+    }
+    each`
+    numFilters | filter | expected
+    0          | ${{sampleName: {}}}
+    1          |
+    3          |
+    `.test('$numFilters filters', ({filter, expected}) => {
+
+    })
+    it('Correctly formats all provided filters', () => {
+
     })
 })
