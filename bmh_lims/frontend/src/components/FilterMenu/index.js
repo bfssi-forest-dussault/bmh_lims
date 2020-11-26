@@ -29,6 +29,7 @@ const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
             <StyledDatePicker
             theme={theme}
             value={date}
+            placeholder={label}
             onChange={date => onChangeHandler(date)}
             onClose={onBlurHandler} />
         </FilterContainer>
@@ -37,8 +38,8 @@ const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
 
 const FilterMenu = ({ onUpdateHandler, theme }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [afterDate, setAfterDate] = useState(new Date())
-    const [beforeDate, setBeforeDate] = useState(new Date())
+    const [afterDate, setAfterDate] = useState(null)
+    const [beforeDate, setBeforeDate] = useState(null)
     const [sampleName, setName] = useState({match: '', isExact: true})
     const [projectName, setProjectID] = useState({match: '', isExact: true})
     const [lab, setLab] = useState({match: '', isExact: true})
@@ -84,20 +85,20 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                     />
                     <DateFilter
                         theme={theme}
-                        label='Created Before'
-                        date={beforeDate}
+                        label='Uploaded After'
+                        date={afterDate}
                         onChangeHandler={(date) => {
-                            setBeforeDate(date)
+                            setAfterDate(date)
                     }}
                     onBlurHandler={(e) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}/>
                     <DateFilter
                         theme={theme}
-                        label='Created After'
-                        date={afterDate}
+                        label='Uploaded Before'
+                        date={beforeDate}
                         onChangeHandler={(date) => {
-                            setAfterDate(date)
+                            setBeforeDate(date)
                     }}
                     onBlurHandler={(e) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })

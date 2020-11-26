@@ -6,15 +6,15 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 
 const muiTheme = ({ theme }) => createMuiTheme({
     typography: {
-        fontFamily: 'Quicksand'
+        fontFamily: 'inherit',
     },
     overrides: {
         MuiInputBase: {
             root: {
                 width: '100%',
                 padding: 0,
-                fontSize: '0.9rem',
-                color: theme.colour3
+                color: theme.colour3,
+                fontWeight: 900
             },
             input: {
                 padding: 0,
@@ -23,6 +23,9 @@ const muiTheme = ({ theme }) => createMuiTheme({
                 borderBottom: `1px solid ${theme.colour4}`,
                 '&&&:focus': {
                     borderBottom: `1px solid ${theme.colour5}`
+                },
+                '&::placeholder': {
+                    color: 'rgb(100, 100, 100)'
                 }
             }
         },
