@@ -126,12 +126,62 @@ describe('formatFiltersQueries', () => {
             }
         },
         dateFilter: {
-            sampleName: {
-                match: '',
-                isExact: false
+            dateRange: {
+                match: [new Date('October 28, 2020'), new Date('October 30, 2020')]
             }
         },
-        freeTextAndDateFilter: {}
+        freeTextAndDateFilter: {
+            sampleName: {
+                match: 'aaa',
+                isExact: false
+            },
+            dateRange: {
+                match: [new Date('October 28, 2020'), new Date('October 30, 2020')]
+            }
+        },
+        isExactFilter: {
+            sampleName: {
+                match: 'aaa',
+                isExact: true
+            }
+        },
+        allFilters: {
+            sampleName: {
+                sampleName: {
+                    match: 'samplename',
+                    isExact: false
+                }
+            },
+            projectName: {
+                projectName: {
+                    match: 'projectname',
+                    isExact: false
+                }
+            },
+            dateRange: {
+                dateRange: {
+                    match: [new Date('October 20, 2020'), new Date('October 22, 2020')]
+                }
+            },
+            lab: {
+                lab: {
+                    match: 'lab',
+                    isExact: false
+                }
+            },
+            genus:{
+                genus: {
+                    match: 'genus',
+                    isExact: false
+                }
+            },
+            sampleType: {
+                sampleType: {
+                    match: 'sampleType',
+                    isExact: false
+                }
+            }
+        }
     }
     each`
         numFilters    | filter                     | expected
@@ -141,7 +191,26 @@ describe('formatFiltersQueries', () => {
     `.test('$numFilters filters', ({filter, expected}) => {
         expect(formatFilterQueries(filter)).toBe(expected)
     })
-    it('Correctly formats all provided filters', () => {
-        expect(true).toBe(true)
+    // making expected value for 'lab' false since it's not exposed as a filter
+    each`
+        filterName          | expected
+        ${'sampleName'}     | ${true}
+        ${'projectName'}    | ${true}
+        ${'dateRange'}      | ${true}
+        ${'lab'}            | ${false}
+        ${'genus'}          | ${true}
+        ${'sampleType'}     | ${true}
+    `.test('Converting $filterName follows format filter_name[__sub_name]__[iexact | icontains]=[value]', ({filterName, expected}) => {
+        const filterNamePattern = RegExp(/^[a-zA-Z]+(_[a-zA-Z]+)*(__[a-zA-Z]+(_[a-zA-Z]+)*)*__(icontains|iexact|range)=.*$/gm)
+        expect(filterNamePattern.test(formatFilterQueries(inputs.allFilters[filterName]))).toBe(expected)
+    })
+    it('Correctly formats date range filter', () => {
+        expect(formatFilterQueries(inputs.dateFilter)).toBe(`created__date__range=2020-10-28%2C+2020-10-30`)
+    })
+    it('Correctly formats free-text filters and date filters together', () => {
+        expect(formatFilterQueries(inputs.freeTextAndDateFilter)).toBe(`sample_name__icontains=aaa&created__date__range=2020-10-28%2C+2020-10-30`)
+    })
+    it('Changes the query from icontain to iexact if filter is exact', () => {
+        expect(formatFilterQueries(inputs.isExactFilter)).toBe(`sample_name__iexact=aaa`)
     })
 })

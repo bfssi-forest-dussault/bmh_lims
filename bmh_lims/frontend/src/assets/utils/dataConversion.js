@@ -41,13 +41,13 @@ const queryFields = {
 }
 
 const formattedDate = date => {
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 }
 
 const formatFilterQuery = ({field, match, isExact}) => {
     if (field === 'dateRange' && (!!match[0] || !!match[1])) {
         return `${queryFields[field]}=${formattedDate(match[0])}%2C+${formattedDate(match[1])}`
-    } else if (field !== 'dateRange' && !!match) {
+    } else if (field !== 'dateRange' && field !== 'lab' && !!match) {
         return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`
     }  else {
         return ''
