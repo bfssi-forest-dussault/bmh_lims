@@ -75,20 +75,73 @@ describe('formatFiltersQueries', () => {
                 isExact: false
             }
         },
-        noFilter: {},
-        multipleFilters: {},
-        dateFilter: {},
+        noFilter: {
+            sampleName: {
+                match: '',
+                isExact: false
+            },
+            projectName: {
+                match: '',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: '',
+                isExact: false
+            }
+        },
+        multipleFilters: {
+            sampleName: {
+                match: 'BBB',
+                isExact: false
+            },
+            projectName: {
+                match: 'AAA',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: 'aba',
+                isExact: false
+            }
+        },
+        dateFilter: {
+            sampleName: {
+                match: '',
+                isExact: false
+            }
+        },
         freeTextAndDateFilter: {}
     }
     each`
-    numFilters | filter | expected
-    0          | ${{sampleName: {}}}
-    1          |
-    3          |
+        numFilters    | filter                     | expected
+        ${0}          | ${inputs.noFilter}         | ${''}
+        ${1}          | ${inputs.singleFilter}     | ${'submitter_project__project_name__icontains=AAA'}
+        ${3}          | ${inputs.multipleFilters}  | ${'sample_name__icontains=BBB&submitter_project__project_name__icontains=AAA&species__icontains=aba'}
     `.test('$numFilters filters', ({filter, expected}) => {
-
+        expect(formatFilterQueries(filter)).toBe(expected)
     })
     it('Correctly formats all provided filters', () => {
-
+        expect(true).toBe(true)
     })
 })

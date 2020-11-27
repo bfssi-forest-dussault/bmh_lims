@@ -45,11 +45,11 @@ const formattedDate = date => {
 }
 
 const formatFilterQuery = ({field, match, isExact}) => {
-    if (!!match) {
-        return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`
-    } else if (field === 'dateRange') {
+    if (field === 'dateRange' && (!!match[0] || !!match[1])) {
         return `${queryFields[field]}=${formattedDate(match[0])}%2C+${formattedDate(match[1])}`
-    } else {
+    } else if (field !== 'dateRange' && !!match) {
+        return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`
+    }  else {
         return ''
     }
 }
