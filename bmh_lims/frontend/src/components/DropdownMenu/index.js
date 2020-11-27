@@ -49,18 +49,18 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
                 theme={theme}
                 isDown={!menuIsOpen} />
             </DropdownBar>
-                <DropdownMenu isOpen={menuIsOpen} left={left} top={top}>
-                    {menuItems.map((item, idx) => (
-                    <DropdownMenuItem
-                    key={`workflow-${idx}`}
-                    onClick={(e) => {
-                        setCurrent(item)
-                        onItemClick(item, idx)
-                        setMenuIsOpen(!menuIsOpen)
-                    }}>
-                        {item}
-                    </DropdownMenuItem>))}
-                </DropdownMenu>
+            <DropdownMenu isOpen={menuIsOpen} left={left} top={top}>
+                {menuItems.map((item, idx) => (
+                <DropdownMenuItem
+                key={`workflow-${idx}`}
+                onClick={(e) => {
+                    setCurrent(item)
+                    onItemClick(item, idx)
+                    setMenuIsOpen(!menuIsOpen)
+                }}>
+                    {item}
+                </DropdownMenuItem>))}
+            </DropdownMenu>
         </DropdownContainer>
     )
 }

@@ -20,7 +20,8 @@ import {
     LoadingContainer,
     LoadingIconContainer,
     PageContainer,
-    TableContainer
+    TableContainer,
+    DropdownMenuContainer
 } from './Styles'
 import { formatFilterQueries } from 'utils'
 
@@ -90,14 +91,16 @@ const AssignSection = ({theme}) => {
                 setSamples({headers, content})
             }}
             />
-            <DropdownMenu
-            menuItems={workflows.map(workflow => workflow.name)}
-            theme={theme}
-            initialValue={'Select Workflow'}
-            onItemClick={(item, idx) => {
-                currentWorkflow = workflows[idx]
-            }}
-            />
+            <DropdownMenuContainer>
+                <DropdownMenu
+                menuItems={workflows.map(workflow => workflow.name)}
+                theme={theme}
+                initialValue={'Select Workflow'}
+                onItemClick={(item, idx) => {
+                    currentWorkflow = workflows[idx]
+                }}
+                />
+            </DropdownMenuContainer>
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
