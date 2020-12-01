@@ -42,6 +42,7 @@ export const BodyArea = styled.div`
 
 export const TableContainer = styled.div`
     width: 100%;
+    min-height: 20%;
     height: 50%;
     position: relative;
     margin-bottom: 1%;

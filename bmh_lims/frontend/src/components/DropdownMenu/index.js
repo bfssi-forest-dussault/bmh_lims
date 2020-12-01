@@ -21,7 +21,7 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
     const [currentSelection, setCurrent] = useState(initialValue)
     return (
         <DropdownContainer >
-            <DropdownBar onClick={(e) => { setMenuIsOpen(!menuIsOpen) }}>
+            <DropdownBar onClick={(e) => { setMenuIsOpen(!menuIsOpen) }} active={menuIsOpen}>
                 {currentSelection}
                 <DropdownButton
                 theme={theme}
@@ -44,3 +44,4 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
 }
 
 export default Dropdown
+export { UnderlineDropdown } from './UnderlineDropdown'

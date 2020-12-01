@@ -15,7 +15,7 @@ export const DropdownBar = styled.div`
 
 export const DropdownMenu = styled.div`
     max-height: ${props => props.isOpen ? '200px': '0px'};
-    width: 100%;
+    width: ${props => props.width || '100%'};
     overflow-y: auto;
     position: absolute;
     z-index: 1;

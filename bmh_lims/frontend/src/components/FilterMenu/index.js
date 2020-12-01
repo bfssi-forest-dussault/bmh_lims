@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import {
     FilterHeader,
     FilterRow,
     FilterContainer,
     FreeTextFilter,
     FilterMenuContainer,
-    StyledDatePicker
+    StyledDatePicker,
+    StyledUpArrow,
+    StyledDownArrow
 } from './Styles'
+import { UnderlineDropdown } from 'components' 
 
 const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
     return (
@@ -36,6 +38,19 @@ const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
     )
 }
 
+const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
+    return (
+        <FilterContainer>
+            {label}
+            <UnderlineDropdown 
+                menuItems={menuItems}
+                placeholder={placeholder}
+                {...props}
+            />
+        </FilterContainer>
+    )
+}
+
 const FilterMenu = ({ onUpdateHandler, theme }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
@@ -45,19 +60,20 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
     const [lab, setLab] = useState({match: '', isExact: true})
     const [genus, setGenus] = useState({match: '', isExact: true})
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
+    const [shouldOverflow, setShouldOverflow] = useState(false)
 
     const isExact = (value) => value.split('"').length > 1
 
     return (
-            <FilterMenuContainer open={isOpen}>
+            <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
                 <FilterHeader onClick={(e) => {
+                    if (isOpen) {
+                        setShouldOverflow(false)
+                    }
                     setIsOpen(!isOpen)
                 }}>
                     Filters
-                    {isOpen ?
-                    <MdKeyboardArrowUp style={{fill: theme.colour2, verticalAlign: 'middle'}}/>:
-                    <MdKeyboardArrowDown style={{fill: theme.colour2, verticalAlign: 'middle'}}/>
-                    }
+                    { isOpen ? <StyledUpArrow /> : <StyledDownArrow /> }
                 </FilterHeader>
                 <FilterRow>
                     <Filter
@@ -129,17 +145,14 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}
                     />
-                    <Filter
-                    label='Type'
-                    placeholder='sample type'
-                    value={sampleType.match}
-                    onChangeHandler={(e) => {
-                        const newSampleType = e.target.value
-                        setSampleType({match: newSampleType, isExact: isExact(newSampleType)})
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/>
+                    <DropdownFilter
+                        label='Sample Type'
+                        menuItems={['sampleType 1', 'sampleType 2', 'sampleType3']}
+                        placeholder={'select sample type'}
+                        onExpandHandler={() => {
+                            setShouldOverflow(true)
+                        }}
+                    />
                 </FilterRow>
             </FilterMenuContainer>
     )

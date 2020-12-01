@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@material-ui/pickers'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 
 const muiTheme = ({ theme }) => createMuiTheme({
     typography: {
@@ -60,6 +61,16 @@ export const StyledDatePicker = ({ theme, ...props }) => (
     </ThemeProvider>
 )
 
+export const StyledUpArrow = styled(MdKeyboardArrowUp)`
+    fill: ${props => props.theme.colour2};
+    vertical-align: middle;
+`
+
+export const StyledDownArrow = styled(MdKeyboardArrowDown)`
+    fill: ${props => props.theme.colour2};
+    vertical-align: middle;
+`
+
 export const FilterHeader = styled.div`
     width: 100%;
     display: inline-block;
@@ -104,7 +115,7 @@ export const FreeTextFilter = styled.input.attrs(props => ({
 
 export const FilterMenuContainer = styled.div`
     max-height: ${props => props.open ? '10em': '2rem'};
-    overflow: hidden;
+    overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
 `
