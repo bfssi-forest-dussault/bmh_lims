@@ -152,6 +152,9 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         onExpandHandler={() => {
                             setShouldOverflow(true)
                         }}
+                        onChangeHandler={(newValue) => {
+                            setSampleType(newValue)
+                        }}
                     />
                 </FilterRow>
             </FilterMenuContainer>
