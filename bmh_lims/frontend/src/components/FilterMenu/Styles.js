@@ -3,18 +3,19 @@ import styled from 'styled-components'
 
 import { DatePicker } from '@material-ui/pickers'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 
 const muiTheme = ({ theme }) => createMuiTheme({
     typography: {
-        fontFamily: 'Quicksand'
+        fontFamily: 'inherit',
     },
     overrides: {
         MuiInputBase: {
             root: {
                 width: '100%',
                 padding: 0,
-                fontSize: '0.9rem',
-                color: theme.colour3
+                color: theme.colour3,
+                fontWeight: 900
             },
             input: {
                 padding: 0,
@@ -23,6 +24,9 @@ const muiTheme = ({ theme }) => createMuiTheme({
                 borderBottom: `1px solid ${theme.colour4}`,
                 '&&&:focus': {
                     borderBottom: `1px solid ${theme.colour5}`
+                },
+                '&::placeholder': {
+                    color: 'rgb(100, 100, 100)'
                 }
             }
         },
@@ -33,7 +37,10 @@ const muiTheme = ({ theme }) => createMuiTheme({
         },
         MuiPickersDay: {
             daySelected: {
-                backgroundColor: theme.colour4
+                backgroundColor: theme.colour4,
+                '&&&:hover': {
+                    backgroundColor: theme.colour5
+                }
             }
         },
         MuiButton: {
@@ -53,6 +60,16 @@ export const StyledDatePicker = ({ theme, ...props }) => (
         {...props} />
     </ThemeProvider>
 )
+
+export const StyledUpArrow = styled(MdKeyboardArrowUp)`
+    fill: ${props => props.theme.colour2};
+    vertical-align: middle;
+`
+
+export const StyledDownArrow = styled(MdKeyboardArrowDown)`
+    fill: ${props => props.theme.colour2};
+    vertical-align: middle;
+`
 
 export const FilterHeader = styled.div`
     width: 100%;
@@ -98,7 +115,7 @@ export const FreeTextFilter = styled.input.attrs(props => ({
 
 export const FilterMenuContainer = styled.div`
     max-height: ${props => props.open ? '10em': '2rem'};
-    overflow: hidden;
+    overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
 `

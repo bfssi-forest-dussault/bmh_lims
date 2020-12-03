@@ -1,105 +1,161 @@
 import React, { useState } from 'react'
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import {
     FilterHeader,
     FilterRow,
     FilterContainer,
     FreeTextFilter,
     FilterMenuContainer,
-    StyledDatePicker
+    StyledDatePicker,
+    StyledUpArrow,
+    StyledDownArrow
 } from './Styles'
+import { UnderlineDropdown } from 'components' 
 
-const Filter = ({ label, placeholder, value, onChangeHandler }) => {
+const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
     return (
         <FilterContainer>
             {label}
-            <FreeTextFilter placeholder={placeholder} value={value} onChange={onChangeHandler} />
+            <FreeTextFilter
+            placeholder={placeholder}
+            value={value}
+            onChange={onChangeHandler}
+            onBlur={onBlurHandler} />
         </FilterContainer>
     )
 }
 
-const DateFilter = ({ theme, label, date, onChangeHandler }) => {
+const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
     return (
         <FilterContainer>
             {label}
             <StyledDatePicker
             theme={theme}
             value={date}
-            onChange={date => onChangeHandler(date)} />
+            placeholder={label}
+            onChange={date => onChangeHandler(date)}
+            onClose={onBlurHandler} />
+        </FilterContainer>
+    )
+}
+
+const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
+    return (
+        <FilterContainer>
+            {label}
+            <UnderlineDropdown 
+                menuItems={menuItems}
+                placeholder={placeholder}
+                {...props}
+            />
         </FilterContainer>
     )
 }
 
 const FilterMenu = ({ onUpdateHandler, theme }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [afterDate, setAfterDate] = useState(new Date())
-    const [beforeDate, setBeforeDate] = useState(new Date())
-    const [sampleName, setName] = useState('')
-    const [projectID, setProjectID] = useState('')
-    const [lab, setLab] = useState('')
-    const [genus, setGenus] = useState('')
-    const [sampleType, setSampleType] = useState('')
+    const [afterDate, setAfterDate] = useState(null)
+    const [beforeDate, setBeforeDate] = useState(null)
+    const [sampleName, setName] = useState({match: '', isExact: true})
+    const [projectName, setProjectID] = useState({match: '', isExact: true})
+    const [lab, setLab] = useState({match: '', isExact: true})
+    const [genus, setGenus] = useState({match: '', isExact: true})
+    const [sampleType, setSampleType] = useState({match: '', isExact: true})
+    const [shouldOverflow, setShouldOverflow] = useState(false)
+
+    const isExact = (value) => value.split('"').length > 1
+
     return (
-            <FilterMenuContainer open={isOpen}>
-                <FilterHeader onClick={(e) => {setIsOpen(!isOpen)}}>
-                    Filters
-                    {isOpen ?
-                    <MdKeyboardArrowUp style={{fill: theme.colour2, verticalAlign: 'middle'}}/>:
-                    <MdKeyboardArrowDown style={{fill: theme.colour2, verticalAlign: 'middle'}}/>
+            <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
+                <FilterHeader onClick={(e) => {
+                    if (isOpen) {
+                        setShouldOverflow(false)
                     }
+                    setIsOpen(!isOpen)
+                }}>
+                    Filters
+                    { isOpen ? <StyledUpArrow /> : <StyledDownArrow /> }
                 </FilterHeader>
                 <FilterRow>
                     <Filter
                     label='Name'
                     placeholder='sample name'
-                    value={sampleName}
+                    value={sampleName.match}
                     onChangeHandler={(e) => {
-                        setName(e.target.value)
-                    }}/>
+                        const newValue = e.target.value
+                        setName({match: newValue, isExact: isExact(newValue)})
+                    }}
+                    onBlurHandler={(e) => {
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }} />
                     <Filter
-                        label='Project ID'
-                        placeholder='project ID'
-                        value={projectID}
+                        label='Project Name'
+                        placeholder='project name'
+                        value={projectName.match}
                         onChangeHandler={(e) => {
-                            setProjectID(e.target.value)
-                    }}/>
+                            const newProject = e.target.value
+                            setProjectID({match: newProject, isExact: isExact(newProject)})
+                        }}
+                        onBlurHandler={(e) => {
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        }}
+                    />
                     <DateFilter
                         theme={theme}
-                        label='Created Before'
-                        date={beforeDate}
-                        onChangeHandler={(date) => {
-                            setBeforeDate(date)
-                    }}/>
-                    <DateFilter
-                        theme={theme}
-                        label='Created After'
+                        label='Uploaded After'
                         date={afterDate}
                         onChangeHandler={(date) => {
                             setAfterDate(date)
+                    }}
+                    onBlurHandler={(e) => {
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }}/>
+                    <DateFilter
+                        theme={theme}
+                        label='Uploaded Before'
+                        date={beforeDate}
+                        onChangeHandler={(date) => {
+                            setBeforeDate(date)
+                    }}
+                    onBlurHandler={(e) => {
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}/>
                 </FilterRow>
                 <FilterRow>
                     <Filter
                     label='Lab'
                     placeholder='lab name'
-                    value={lab}
+                    value={lab.match}
                     onChangeHandler={(e) => {
-                        setLab(e.target.value)
-                    }}/>
+                        const newLab = e.target.value
+                        setLab({match: newLab, isExact: isExact(newLab)})
+                    }}
+                    onBlurHandler={(e) => {
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }}
+                    />
                     <Filter
                     label='Genus'
                     placeholder='sample genus'
-                    value={genus}
+                    value={genus.match}
                     onChangeHandler={(e) => {
-                        setGenus(e.target.value)
-                    }}/>
-                    <Filter
-                    label='Type'
-                    placeholder='sample type'
-                    value={sampleType}
-                    onChangeHandler={(e) => {
-                        setSampleType(e.target.value)
-                    }}/>
+                        const newGenus = e.target.value
+                        setGenus({match: newGenus, isExact: isExact(newGenus)})
+                    }}
+                    onBlurHandler={(e) => {
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }}
+                    />
+                    <DropdownFilter
+                        label='Sample Type'
+                        menuItems={['sampleType 1', 'sampleType 2', 'sampleType3']}
+                        placeholder={'select sample type'}
+                        onExpandHandler={() => {
+                            setShouldOverflow(true)
+                        }}
+                        onChangeHandler={(newValue) => {
+                            setSampleType(newValue)
+                        }}
+                    />
                 </FilterRow>
             </FilterMenuContainer>
     )

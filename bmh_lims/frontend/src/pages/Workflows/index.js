@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+import { IconContext } from 'react-icons'
+import { CgSearchLoading } from 'react-icons/cg'
+import axios from 'axios'
 import { theme } from 'styles'
 import {
     CircularButtonBar,
@@ -17,11 +20,10 @@ import {
     LoadingContainer,
     LoadingIconContainer,
     PageContainer,
-    TableContainer
+    TableContainer,
+    DropdownMenuContainer
 } from './Styles'
-import { IconContext } from 'react-icons'
-import { CgSearchLoading } from 'react-icons/cg'
-import axios from 'axios'
+import { formatFilterQueries } from 'utils'
 
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
@@ -79,15 +81,26 @@ const AssignSection = ({theme}) => {
                     }}>close</FilledButton>)}
             />}
             <CircularButtonBar />
-            <FilterMenu theme={theme} />
-            <DropdownMenu
-            menuItems={workflows.map(workflow => workflow.name)}
+            <FilterMenu
             theme={theme}
-            initialValue={'Select Workflow'}
-            onItemClick={(item, idx) => {
-                currentWorkflow = workflows[idx]
+            onUpdateHandler={async (filters) => {
+                const queryString = formatFilterQueries(filters)
+                const newSamples = (await axios.get(`/api/samples/?${queryString}`)).data.results
+                const headers = Object.keys(newSamples[0])
+                const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
+                setSamples({headers, content})
             }}
             />
+            <DropdownMenuContainer>
+                <DropdownMenu
+                menuItems={workflows.map(workflow => workflow.name)}
+                theme={theme}
+                initialValue={'Select Workflow'}
+                onItemClick={(item, idx) => {
+                    currentWorkflow = workflows[idx]
+                }}
+                />
+            </DropdownMenuContainer>
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>

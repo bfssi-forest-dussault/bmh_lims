@@ -1,4 +1,4 @@
-import { mergeHeadersValues, dataToString } from 'utils'
+import { mergeHeadersValues, dataToString, formatFilterQueries } from 'utils'
 import each from 'jest-each'
 
 
@@ -45,5 +45,172 @@ describe('dataToString correctly converts error data object to string', () => {
         ${[{'a': ['error1'], 'b': ['error2']}]}                                | ${['Sample 1:\n\ta\n\t\terror1\n\tb\n\t\terror2']}
     `.test('$errorData => $expected', ({errorData, expected}) => {
         expect(dataToString(errorData) === expected)
+    })
+})
+
+describe('formatFiltersQueries', () => {
+    const inputs = {
+        singleFilter: {
+            sampleName: {
+                match: '',
+                isExact: false
+            },
+            projectName: {
+                match: 'AAA',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: '',
+                isExact: false
+            }
+        },
+        noFilter: {
+            sampleName: {
+                match: '',
+                isExact: false
+            },
+            projectName: {
+                match: '',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: '',
+                isExact: false
+            }
+        },
+        multipleFilters: {
+            sampleName: {
+                match: 'BBB',
+                isExact: false
+            },
+            projectName: {
+                match: 'AAA',
+                isExact: false
+            },
+            dateRange: {
+                match: []
+            },
+            lab: {
+                match: '',
+                isExact: false
+            },
+            genus: {
+                match: '',
+                isExact: false
+            },
+            sampleType: {
+                match: 'aba',
+                isExact: false
+            }
+        },
+        dateFilter: {
+            dateRange: {
+                match: [new Date('October 28, 2020'), new Date('October 30, 2020')]
+            }
+        },
+        freeTextAndDateFilter: {
+            sampleName: {
+                match: 'aaa',
+                isExact: false
+            },
+            dateRange: {
+                match: [new Date('October 28, 2020'), new Date('October 30, 2020')]
+            }
+        },
+        isExactFilter: {
+            sampleName: {
+                match: 'aaa',
+                isExact: true
+            }
+        },
+        allFilters: {
+            sampleName: {
+                sampleName: {
+                    match: 'samplename',
+                    isExact: false
+                }
+            },
+            projectName: {
+                projectName: {
+                    match: 'projectname',
+                    isExact: false
+                }
+            },
+            dateRange: {
+                dateRange: {
+                    match: [new Date('October 20, 2020'), new Date('October 22, 2020')]
+                }
+            },
+            lab: {
+                lab: {
+                    match: 'lab',
+                    isExact: false
+                }
+            },
+            genus:{
+                genus: {
+                    match: 'genus',
+                    isExact: false
+                }
+            },
+            sampleType: {
+                sampleType: {
+                    match: 'sampleType',
+                    isExact: false
+                }
+            }
+        }
+    }
+    each`
+        numFilters    | filter                     | expected
+        ${0}          | ${inputs.noFilter}         | ${''}
+        ${1}          | ${inputs.singleFilter}     | ${'submitter_project__project_name__icontains=AAA'}
+        ${3}          | ${inputs.multipleFilters}  | ${'sample_name__icontains=BBB&submitter_project__project_name__icontains=AAA&species__icontains=aba'}
+    `.test('$numFilters filters', ({filter, expected}) => {
+        expect(formatFilterQueries(filter)).toBe(expected)
+    })
+    // making expected value for 'lab' false since it's not exposed as a filter
+    each`
+        filterName          | expected
+        ${'sampleName'}     | ${true}
+        ${'projectName'}    | ${true}
+        ${'dateRange'}      | ${true}
+        ${'lab'}            | ${false}
+        ${'genus'}          | ${true}
+        ${'sampleType'}     | ${true}
+    `.test('Converting $filterName follows format filter_name[__sub_name]__[iexact | icontains]=[value]', ({filterName, expected}) => {
+        const filterNamePattern = RegExp(/^[a-zA-Z]+(_[a-zA-Z]+)*(__[a-zA-Z]+(_[a-zA-Z]+)*)*__(icontains|iexact|range)=.*$/gm)
+        expect(filterNamePattern.test(formatFilterQueries(inputs.allFilters[filterName]))).toBe(expected)
+    })
+    it('Correctly formats date range filter', () => {
+        expect(formatFilterQueries(inputs.dateFilter)).toBe(`created__date__range=2020-10-28%2C+2020-10-30`)
+    })
+    it('Correctly formats free-text filters and date filters together', () => {
+        expect(formatFilterQueries(inputs.freeTextAndDateFilter)).toBe(`sample_name__icontains=aaa&created__date__range=2020-10-28%2C+2020-10-30`)
+    })
+    it('Changes the query from icontain to iexact if filter is exact', () => {
+        expect(formatFilterQueries(inputs.isExactFilter)).toBe(`sample_name__iexact=aaa`)
     })
 })

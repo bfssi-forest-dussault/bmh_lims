@@ -1,26 +1,24 @@
 import styled from 'styled-components'
 
 export const DropdownBar = styled.div`
-    width: 80%;
-    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1%;
+    overflow: hidden;
+    color: ${props => props.theme.colour3};
     border: 2px solid ${props => props.theme.colour4};
     border-radius: 5px;
-    padding: 0px 1.5%;
-    color: ${props => props.theme.colour3}
-    overflow: hidden;
 `
 
 export const DropdownMenu = styled.div`
     max-height: ${props => props.isOpen ? '200px': '0px'};
+    width: ${props => props.width || '100%'};
     overflow-y: auto;
     position: absolute;
-    left: ${props => props.left ? `${props.left}px`:'28px'};
-    top: ${props => props.top ? `${props.top}px`: '0px'};
     z-index: 1;
-    width: 83.5%;
     background-color: white;
     transition: max-height 0.7s
 `
@@ -48,9 +46,6 @@ export const DropdownMenuItem = styled.div`
 export const DropdownContainer = styled.div`
     position: relative;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80px;
-    flex-direction: column;
+    display: inline-block;
+    text-align: center;
 `

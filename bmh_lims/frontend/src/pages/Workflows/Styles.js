@@ -42,6 +42,7 @@ export const BodyArea = styled.div`
 
 export const TableContainer = styled.div`
     width: 100%;
+    min-height: 20%;
     height: 50%;
     position: relative;
     margin-bottom: 1%;
@@ -53,4 +54,10 @@ export const LoadingContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`
+
+export const DropdownMenuContainer = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2% 5%;
 `
