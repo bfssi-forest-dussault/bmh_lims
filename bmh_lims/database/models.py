@@ -76,7 +76,7 @@ class Sample(TimeStampedModel):
     sample_id = models.CharField(max_length=SM_CHAR, default=generate_sample_id)
     sample_name = models.CharField(max_length=SM_CHAR)
     well = models.CharField(max_length=SM_CHAR, blank=True, null=True)
-    submitting_lab = models.ForeignKey(Lab, on_delete=models.SET_NULL, null=True, blank=True),
+    submitting_lab = models.ForeignKey(Lab, on_delete=models.CASCADE, null=True, blank=True)
 
     sample_type = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     sample_volume_in_ul = models.FloatField(null=True, blank=True)
