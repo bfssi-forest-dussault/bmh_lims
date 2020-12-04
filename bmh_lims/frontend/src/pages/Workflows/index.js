@@ -43,11 +43,10 @@ const AssignSection = ({theme}) => {
 
     const validateFilters = (filters) => {
         const [earlier, later] = filters.dateRange.match
-        if (isBefore(later, earlier) || isBefore(DateTime.fromJSDate(new Date()), earlier) || isBefore(DateTime.fromJSDate(new Date()), later)) {
-            console.log('invalid date range')
-            return false
+        if (!!earlier && !!later && (isBefore(later, earlier) || isBefore(DateTime.fromJSDate(new Date()), earlier) || isBefore(DateTime.fromJSDate(new Date()), later))) {
+            return 1
         }
-        return true
+        return 0
     }
 
     useEffect(() => {
@@ -101,7 +100,7 @@ const AssignSection = ({theme}) => {
             <FilterMenu
             theme={theme}
             onUpdateHandler={async (filters) => {
-                if (validateFilters(filters)) {
+                if (validateFilters(filters) === 0) {
                     const queryString = formatFilterQueries(filters)
                     const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
                     if (sampleResponse.data.count > 0) {
@@ -110,10 +109,18 @@ const AssignSection = ({theme}) => {
                         const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
                         setSamples({headers, content})
                     } else {
-                        console.log('no results found') // TODO: modal
+                        setModalContents({
+                            message: 'Filter returned no results',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
                     }
                 } else {
-                    console.log('filters invalid') // TODO: modal; find a way to distinguish between filter errors
+                    setModalContents({
+                        message: 'Invalid filter input: invalid date range',
+                        onBackgroundClick: modalContents.onBackgroundClick
+                    })
+                    setShowModal(true)
                 }
             }}
             maxDate={new Date()} />
