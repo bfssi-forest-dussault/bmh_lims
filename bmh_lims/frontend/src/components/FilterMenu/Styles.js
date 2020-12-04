@@ -54,8 +54,10 @@ const muiTheme = ({ theme }) => createMuiTheme({
 export const StyledDatePicker = ({ theme, ...props }) => (
     <ThemeProvider theme={muiTheme({ theme })}>
         <DatePicker
+        views={['date', 'year']}
+        format='DD'
         InputProps={{
-            disableUnderline: true,
+            disableUnderline: true
         }}
         {...props} />
     </ThemeProvider>
