@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     FilterHeader,
     FilterRow,
@@ -14,6 +14,7 @@ import {
 import { UnderlineDropdown } from 'components' 
 import { AiOutlineLine } from 'react-icons/ai'
 import DateTime from 'luxon/src/datetime.js'
+import axios from 'axios'
 
 const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
     return (
@@ -97,8 +98,18 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [genus, setGenus] = useState({match: '', isExact: true})
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
     const [shouldOverflow, setShouldOverflow] = useState(false)
+    const [allLabNames, setAllLabNames] = useState(null)
 
     const isExact = (value) => value.split('"').length > 1
+
+    useEffect(() => {
+        const initializeLabNames = async () => {
+            const labs = (await axios.get('/api/labs')).data
+            const labNames = labs.map(lab => lab.lab_name)
+            setAllLabNames(labNames)
+        }
+        initializeLabNames()
+    }, [])
 
     return (
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
@@ -151,7 +162,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                 <FilterRow>
                     <DropdownFilter
                         label='Lab'
-                        menuItems={['lab 1', 'lab 2', 'lab 3']}
+                        menuItems={allLabNames || []}
                         placeholder={'select lab'}
                         onExpandHandler={() => {
                             setShouldOverflow(true)

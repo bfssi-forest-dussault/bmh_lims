@@ -59,6 +59,7 @@ const AssignSection = ({theme}) => {
                 setSamples({headers, content})
                 setIsLoading(false)
             } catch (err) {
+                console.log(err)
                 setModalContents({
                     message: 'Fetching samples failed',
                     onBackgroundClick: modalContents.onBackgroundClick,
@@ -75,6 +76,7 @@ const AssignSection = ({theme}) => {
                 const workflowRes = (await axios.get('/api/workflow_definitions')).data
                 setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
             } catch (err) {
+                console.log(err)
                 setModalContents({
                     message: 'Fetching workflows failed',
                     onBackgroundClick: modalContents.onBackgroundClick
