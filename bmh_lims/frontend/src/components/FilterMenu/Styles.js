@@ -121,3 +121,15 @@ export const FilterMenuContainer = styled.div`
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
 `
+
+export const DateRangeFilterContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`
+
+export const DateRangeContainer = styled.div`
+    color: ${props => props.theme.colour2};
+    width: 40%;
+    text-align: center;
+`

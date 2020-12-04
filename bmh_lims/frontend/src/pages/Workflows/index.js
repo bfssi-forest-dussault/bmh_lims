@@ -24,16 +24,31 @@ import {
     DropdownMenuContainer
 } from './Styles'
 import { formatFilterQueries } from 'utils'
+import DateTime from 'luxon/src/datetime.js'
 
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
     const [workflows, setWorkflows] = useState([])
     const [showModal, setShowModal] = useState(false)
-    const [modalContents, setModalContents] = useState({text: ''})
+    const [modalContents, setModalContents] = useState({message: ''})
     const [isLoading, setIsLoading] = useState(true)
 
     const selectedIdx = new Set()
     let currentWorkflow = {id: -1, name: ''}
+
+    const isBefore = (earlier, later) => {
+        const [d1, d2, m1, m2, y1, y2] = [earlier.day, later.day, earlier.month, later.month, earlier.year, later.year]
+        return y1 < y2 || (y1 === y2 && (m1 < m2 || (m1 === m2 && d1 < d2)))
+    }
+
+    const validateFilters = (filters) => {
+        const [earlier, later] = filters.dateRange.match
+        if (isBefore(later, earlier) || isBefore(DateTime.fromJSDate(new Date()), earlier) || isBefore(DateTime.fromJSDate(new Date()), later)) {
+            console.log('invalid date range')
+            return false
+        }
+        return true
+    }
 
     useEffect(() => {
         const initializeSamples = async () => {
@@ -45,7 +60,7 @@ const AssignSection = ({theme}) => {
                 setIsLoading(false)
             } catch (err) {
                 setModalContents({
-                    text: 'Fetching samples failed',
+                    message: 'Fetching samples failed',
                     onBackgroundClick: modalContents.onBackgroundClick,
                     CloseButton: () => (
                     <FilledButton onClick={(e) => {
@@ -61,7 +76,7 @@ const AssignSection = ({theme}) => {
                 setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
             } catch (err) {
                 setModalContents({
-                    text: 'Fetching workflows failed',
+                    message: 'Fetching workflows failed',
                     onBackgroundClick: modalContents.onBackgroundClick
                 })
                 setShowModal(true)
@@ -84,13 +99,22 @@ const AssignSection = ({theme}) => {
             <FilterMenu
             theme={theme}
             onUpdateHandler={async (filters) => {
-                const queryString = formatFilterQueries(filters)
-                const newSamples = (await axios.get(`/api/samples/?${queryString}`)).data.results
-                const headers = Object.keys(newSamples[0])
-                const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
-                setSamples({headers, content})
+                if (validateFilters(filters)) {
+                    const queryString = formatFilterQueries(filters)
+                    const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
+                    if (sampleResponse.data.count > 0) {
+                        const newSamples = sampleResponse.data.results
+                        const headers = Object.keys(newSamples[0])
+                        const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
+                        setSamples({headers, content})
+                    } else {
+                        console.log('no results found') // TODO: modal
+                    }
+                } else {
+                    console.log('filters invalid') // TODO: modal; find a way to distinguish between filter errors
+                }
             }}
-            />
+            maxDate={new Date()} />
             <DropdownMenuContainer>
                 <DropdownMenu
                 menuItems={workflows.map(workflow => workflow.name)}
@@ -98,8 +122,7 @@ const AssignSection = ({theme}) => {
                 initialValue={'Select Workflow'}
                 onItemClick={(item, idx) => {
                     currentWorkflow = workflows[idx]
-                }}
-                />
+                }} />
             </DropdownMenuContainer>
             {
                 isLoading ? (
@@ -122,8 +145,7 @@ const AssignSection = ({theme}) => {
                         if (!selectedIdx.delete(idx)) {
                             selectedIdx.add(idx)
                         }
-                    }}
-                    />
+                    }} />
                 </TableContainer>
             }
             <FilledButton
@@ -137,7 +159,7 @@ const AssignSection = ({theme}) => {
                 }
                 if (!!errors) {
                     setModalContents({
-                        text: errors,
+                        message: errors,
                         onBackgroundClick: modalContents.onBackgroundClick,
                         CloseButton: () => (
                         <FilledButton onClick={(e) => {

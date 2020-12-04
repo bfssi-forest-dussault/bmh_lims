@@ -7,11 +7,13 @@ import {
     FilterMenuContainer,
     StyledDatePicker,
     StyledUpArrow,
-    StyledDownArrow
+    StyledDownArrow,
+    DateRangeContainer,
+    DateRangeFilterContainer
 } from './Styles'
 import { UnderlineDropdown } from 'components' 
-import styled from 'styled-components'
 import { AiOutlineLine } from 'react-icons/ai'
+import DateTime from 'luxon/src/datetime.js'
 
 const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
     return (
@@ -39,21 +41,24 @@ const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
     )
 }
 
-const DateRangeFilterContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-`
-
-const DateRangeContainer = styled.div`
-    color: ${props => props.theme.colour2};
-    width: 40%;
-    text-align: center;
-`
-
-const DateRangeFilter = ({placeholders, label, initialDates, onChangeHandler, theme, onBlurHandler}) => {
+const DateRangeFilter = ({
+        placeholders,
+        label,
+        initialDates,
+        onChangeHandler,
+        theme,
+        maxDate
+    }) => {
     const [lowerBound, setLowerBound] = useState(initialDates[0])
-    const [upperBound, setUpperBound] = useState(initialDates[1])
+    const [upperBound, setUpperBound] = useState(initialDates[1] || maxDate || new Date())
+
+    const toLuxon = (date) => {
+        if (!!date && !date.isLuxonDateTime) {
+            return DateTime.fromJSDate(date)
+        }
+        return date
+    }
+
     return (
         <DateRangeContainer>
             {label}
@@ -62,27 +67,27 @@ const DateRangeFilter = ({placeholders, label, initialDates, onChangeHandler, th
                     theme={theme}
                     value={lowerBound}
                     placeholder={placeholders[0]}
+                    maxDate={maxDate}
                     onChange={date => {
                         setLowerBound(date)
-                        onChangeHandler([date, upperBound])
-                    }}
-                    onClose={onBlurHandler} />
+                        onChangeHandler([date, toLuxon(upperBound)])
+                    }} />
                 <AiOutlineLine style={{stroke: theme.colour2}}/>
                 <StyledDatePicker
                     theme={theme}
                     value={upperBound}
                     placeholder={placeholders[1]}
+                    maxDate={maxDate || upperBound}
                     onChange={date => {
                         setUpperBound(date)
-                        onChangeHandler([lowerBound, date])
-                    }}
-                    onClose={onBlurHandler} />
+                        onChangeHandler([toLuxon(lowerBound), date])
+                    }} />
             </DateRangeFilterContainer>
         </DateRangeContainer>
     )
 }
 
-const FilterMenu = ({ onUpdateHandler, theme }) => {
+const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
     const [beforeDate, setBeforeDate] = useState(null)
@@ -138,10 +143,9 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         onChangeHandler={(dateRange) => {
                             setAfterDate(dateRange[0])
                             setBeforeDate(dateRange[1])
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [dateRange[0], dateRange[1]]} })
                         }}
-                        onBlurHandler={(e) => {
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                        }}
+                        maxDate={maxDate}
                     />
                 </FilterRow>
                 <FilterRow>
