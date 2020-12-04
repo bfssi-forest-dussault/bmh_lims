@@ -21,12 +21,12 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.SampleSerializer
     queryset = models.Sample.objects.all()
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter,)
     filterset_fields = {
         'sample_id': ['iexact'],
         'sample_name': ['iexact', 'icontains'],
         'sample_type': ['iexact'],
-        # 'submitting_lab__lab_name': ['iexact', 'icontains'],  # TODO: Bug, submitting_lab is broken at the moment
+        'submitting_lab__lab_name': ['iexact', 'icontains'],
         'submitter_project__project_name': ['iexact', 'icontains'],
         'genus': ['iexact', 'icontains'],
         'species': ['iexact', 'icontains'],
@@ -117,7 +117,7 @@ class WorkflowSampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.WorkflowSampleSerializer
     queryset = models.WorkflowSample.objects.all()
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     filterset_fields = {
         'sample__sample_id': ['iexact'],
         'sample__sample_name': ['iexact'],
@@ -134,7 +134,7 @@ class WorkflowBatchViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.WorkflowBatchSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     filterset_fields = {
         'status': ['iexact'],
     }
@@ -150,7 +150,7 @@ class WorkflowDefinitionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.WorkflowDefinitionSerializer
     queryset = models.WorkflowDefinition.objects.all()
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     filterset_fields = {
         'name': ['iexact'],
         'description': ['icontains'],
@@ -166,7 +166,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.ProjectSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     filterset_fields = {
         'project_name': ['iexact'],
         'project_description': ['icontains'],
@@ -182,7 +182,8 @@ class LabViewSet(viewsets.ModelViewSet):
     ViewSet for retrieving Sample objects from the database
     """
     serializer_class = serializers.LabSerializer
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    pagination_class = None
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend,)
     filterset_fields = {
         'lab_name': ['iexact'],
         'lab_contact': ['iexact'],

@@ -39,7 +39,7 @@ class LabSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Lab
-        fields = '__all__'
+        fields = ('id', 'lab_name', 'lab_contact',)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -52,17 +52,17 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class SampleSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-    # submitting_lab = LabSerializer()  # TODO: Bug, cannot display for some reason
-    submitter_project = ProjectSerializer()
+    submitting_lab = serializers.PrimaryKeyRelatedField(queryset=models.Lab.objects.all())
+    submitter_project = serializers.PrimaryKeyRelatedField(queryset=models.Project.objects.all())
 
     class Meta:
         model = models.Sample
-        fields = [
+        fields = (
             'id',
             'sample_id',
             'sample_name',
             'well',
-            # 'submitting_lab',
+            'submitting_lab',
             'sample_type',
             'sample_volume_in_ul',
             'requested_services',
@@ -80,8 +80,8 @@ class SampleSerializer(serializers.ModelSerializer):
             'dna_extraction_method',
             'qubit_concentration_in_ng_ul',
             'created',
-            'modified'
-        ]
+            'modified',
+        )
 
 
 class WorkflowSampleSerializer(serializers.ModelSerializer):
