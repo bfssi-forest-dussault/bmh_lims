@@ -35,7 +35,7 @@ const queryFields = {
     sampleName: 'sample_name',
     projectName: 'submitter_project__project_name',
     dateRange: 'created__date__range',
-    lab: '',
+    lab: 'submitting_lab__lab_name',
     genus: 'genus',
     sampleType: 'species',
 }
