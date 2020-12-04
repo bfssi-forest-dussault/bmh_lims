@@ -16,11 +16,8 @@ export const DropdownField = styled.div`
     width: 100%;
     color: ${props => props.hasValue ? props.theme.colour3 : 'rgba(100, 100, 100, 0.6)'};
     border: none;
-    border-bottom: 1px solid ${props => props.theme.colour4};
+    border-bottom: 1px solid ${props => props.isOpen ? props.theme.colour5 : props.theme.colour4};
     background-color: white;
-    &:focus {
-        border-bottom: 1px solid ${props => props.theme.colour5};
-    }
     text-align: center;
 `
 
@@ -45,6 +42,7 @@ export const DropdownMenuItem = styled.div`
     color: ${props => props.theme.colour4};
     background-color: white;
     border: solid 1px ${props => props.theme.colour4};
+    padding-left: 3%;
     &:hover {
         color: white;
         background-color: ${props => props.theme.colour4};
@@ -74,7 +72,7 @@ export const UnderlineDropdown = ({ menuItems, placeholder, onExpandHandler, onC
                 onExpandHandler()
                 setOpen(!open)
             }}>
-            <DropdownField hasValue={!!curVal}>
+            <DropdownField isOpen={open} hasValue={!!curVal}>
                 {!!curVal ? curVal : placeholder}
                 <DropdownButtonContainer>
                     <DropdownButton isOpen={open} />

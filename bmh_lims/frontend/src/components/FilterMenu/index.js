@@ -10,6 +10,8 @@ import {
     StyledDownArrow
 } from './Styles'
 import { UnderlineDropdown } from 'components' 
+import styled from 'styled-components'
+import { AiOutlineLine } from 'react-icons/ai'
 
 const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
     return (
@@ -48,6 +50,50 @@ const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
                 {...props}
             />
         </FilterContainer>
+    )
+}
+
+const DateRangeFilterContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`
+
+const DateRangeContainer = styled.div`
+    color: ${props => props.theme.colour2};
+    width: 40%;
+    text-align: center;
+`
+
+const DateRangeFilter = ({placeholders, label, initialDates, onChangeHandler, theme, onBlurHandler}) => {
+    const [lowerBound, setLowerBound] = useState(initialDates[0])
+    const [upperBound, setUpperBound] = useState(initialDates[1])
+    return (
+        <DateRangeContainer>
+            {label}
+            <DateRangeFilterContainer>
+                <StyledDatePicker
+                    theme={theme}
+                    value={lowerBound}
+                    // format={(date) => DateTime.fromJSDate(date).toLocaleString()}
+                    placeholder={placeholders[0]}
+                    onChange={date => {
+                        setLowerBound(date)
+                        onChangeHandler([date, upperBound])
+                    }}
+                    onClose={onBlurHandler} />
+                <AiOutlineLine style={{stroke: theme.colour2}}/>
+                <StyledDatePicker
+                    theme={theme}
+                    value={upperBound}
+                    placeholder={placeholders[1]}
+                    onChange={date => {
+                        setUpperBound(date)
+                        onChangeHandler([lowerBound, date])
+                    }}
+                    onClose={onBlurHandler} />
+            </DateRangeFilterContainer>
+        </DateRangeContainer>
     )
 }
 
@@ -99,7 +145,20 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                             onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                         }}
                     />
-                    <DateFilter
+                    <DateRangeFilter
+                        theme={theme}
+                        label={'Date uploaded'}
+                        placeholders={['Uploaded after', 'Uploaded before']}
+                        initialDates={[null, null]}
+                        onChangeHandler={(dateRange) => {
+                            setAfterDate(dateRange[0])
+                            setBeforeDate(dateRange[1])
+                        }}
+                        onBlurHandler={(e) => {
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        }}
+                    />
+                    {/* <DateFilter
                         theme={theme}
                         label='Uploaded After'
                         date={afterDate}
@@ -118,20 +177,19 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                     }}
                     onBlurHandler={(e) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/>
+                    }}/> */}
                 </FilterRow>
                 <FilterRow>
-                    <Filter
-                    label='Lab'
-                    placeholder='lab name'
-                    value={lab.match}
-                    onChangeHandler={(e) => {
-                        const newLab = e.target.value
-                        setLab({match: newLab, isExact: isExact(newLab)})
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}
+                    <DropdownFilter
+                        label='Lab'
+                        menuItems={['lab 1', 'lab 2', 'lab 3']}
+                        placeholder={'select lab'}
+                        onExpandHandler={() => {
+                            setShouldOverflow(true)
+                        }}
+                        onChangeHandler={(newValue) => {
+                            setLab(newValue)
+                        }}
                     />
                     <Filter
                     label='Genus'
