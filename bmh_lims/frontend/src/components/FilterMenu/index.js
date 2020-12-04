@@ -26,20 +26,6 @@ const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) =
     )
 }
 
-const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
-    return (
-        <FilterContainer>
-            {label}
-            <StyledDatePicker
-            theme={theme}
-            value={date}
-            placeholder={label}
-            onChange={date => onChangeHandler(date)}
-            onClose={onBlurHandler} />
-        </FilterContainer>
-    )
-}
-
 const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
     return (
         <FilterContainer>
@@ -75,7 +61,6 @@ const DateRangeFilter = ({placeholders, label, initialDates, onChangeHandler, th
                 <StyledDatePicker
                     theme={theme}
                     value={lowerBound}
-                    // format={(date) => DateTime.fromJSDate(date).toLocaleString()}
                     placeholder={placeholders[0]}
                     onChange={date => {
                         setLowerBound(date)
@@ -158,26 +143,6 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                             onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                         }}
                     />
-                    {/* <DateFilter
-                        theme={theme}
-                        label='Uploaded After'
-                        date={afterDate}
-                        onChangeHandler={(date) => {
-                            setAfterDate(date)
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/>
-                    <DateFilter
-                        theme={theme}
-                        label='Uploaded Before'
-                        date={beforeDate}
-                        onChangeHandler={(date) => {
-                            setBeforeDate(date)
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/> */}
                 </FilterRow>
                 <FilterRow>
                     <DropdownFilter
