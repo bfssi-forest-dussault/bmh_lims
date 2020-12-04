@@ -21,7 +21,7 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     serializer_class = serializers.SampleSerializer
     queryset = models.Sample.objects.all()
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = {
         'sample_id': ['iexact'],
         'sample_name': ['iexact', 'icontains'],
@@ -30,8 +30,8 @@ class SampleViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         'submitter_project__project_name': ['iexact', 'icontains'],
         'genus': ['iexact', 'icontains'],
         'species': ['iexact', 'icontains'],
-        'strain': ['iexact'],
-        'isolate': ['iexact'],
+        'strain': ['iexact', 'icontains'],
+        'isolate': ['iexact', 'icontains'],
         'comments': ['icontains'],
         'created': ['date__range'],
         'dna_extraction_date': ['range'],
