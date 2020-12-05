@@ -190,9 +190,18 @@ const AssignSection = ({theme}) => {
                             batch_type: currentWorkflow.name
                         })
                     }).then(res => {
-                        console.log(res.data)
+                        setModalContents({
+                            message: 'Successfully assigned workflows',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
                     }).catch(rej => {
                         console.log(rej)
+                        setModalContents({
+                            message: 'Workflows assignment unsuccessful',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
                     })
                 }
             }}>Assign workflow</FilledButton>
