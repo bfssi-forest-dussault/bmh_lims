@@ -9,10 +9,10 @@ def populate_labs(apps, schema_editor):
     Lab.objects.create(lab_name='VTEC', lab_contact='alex.gill@canada.ca')
     Lab.objects.create(lab_name='Parasitology', lab_contact='brent.dixon@canada.ca')
     Lab.objects.create(lab_name='Botulism', lab_contact='john.austin@canada.ca')
-    Lab.objects.create(lab_name='Listeria', lab_contact='kelly.weedmark@canada.ca')
-    Lab.objects.create(lab_name='Vibrio', lab_contact='kelly.weedmark@canada.ca')
+    Lab.objects.create(lab_name='Listeria', lab_contact='franco.pagotto@canada.ca')
+    Lab.objects.create(lab_name='Vibrio', lab_contact='swapan.banerjee@canada.ca')
     Lab.objects.create(lab_name='Virology', lab_contact='neda.nasheri@canada.ca')
-    Lab.objects.create(lab_name='Rapid-Diagnostics', lab_contact='kelly.weedmark@canada.ca')
+    Lab.objects.create(lab_name='Rapid-Diagnostics', lab_contact='nathalie.corneau@canada.ca')
 
 
 class Migration(migrations.Migration):
