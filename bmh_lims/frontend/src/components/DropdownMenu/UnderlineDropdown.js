@@ -80,10 +80,15 @@ export const UnderlineDropdown = ({ menuItems, placeholder, onExpandHandler, onC
             </DropdownField>
             <DropdownMenu isOpen={open}>
                 <DropdownInternalMenu>
-                    {menuItems.map((menuItem, idx) => (
+                    {['Clear filter', ...menuItems].map((menuItem, idx) => (
                     <DropdownMenuItem onClick={(e) => {
-                        setCurVal(menuItem)
-                        onChangeHandler(menuItem)
+                        if (menuItem === 'Clear filter') {
+                            setCurVal('')
+                            onChangeHandler('')
+                        } else {
+                            setCurVal(menuItem)
+                            onChangeHandler(menuItem)
+                        }
                     }} key={`dropdown-${menuItem}-${idx}`}>
                         {menuItem}
                     </DropdownMenuItem>
