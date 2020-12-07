@@ -78,7 +78,12 @@ class Sample(TimeStampedModel):
     well = models.CharField(max_length=SM_CHAR, blank=True, null=True)
     submitting_lab = models.ForeignKey(Lab, on_delete=models.CASCADE, null=True, blank=True)
 
-    sample_type = models.CharField(max_length=SM_CHAR, blank=True, null=True)
+    sample_type = models.CharField(max_length=SM_CHAR, choices=(
+        ('CELLS', 'Cells (in DNA/RNA shield)'),
+        ('DNA', 'DNA'),
+        ('AMPLICON', 'Amplicon'),
+        ('OTHER', 'Other')
+    ), blank=True, null=True)
     sample_volume_in_ul = models.FloatField(null=True, blank=True)
     requested_services = models.TextField(null=True, blank=True)
     submitter_project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
