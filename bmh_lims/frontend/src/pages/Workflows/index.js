@@ -21,7 +21,8 @@ import {
     LoadingIconContainer,
     PageContainer,
     TableContainer,
-    DropdownMenuContainer
+    DropdownMenuContainer,
+    ResultsContainer
 } from './Styles'
 import { formatFilterQueries } from 'utils'
 import DateTime from 'luxon/src/datetime.js'
@@ -32,8 +33,11 @@ const AssignSection = ({theme}) => {
     const [showModal, setShowModal] = useState(false)
     const [modalContents, setModalContents] = useState({message: ''})
     const [isLoading, setIsLoading] = useState(true)
+    const [resultCount, setResultCount] = useState(0)
+    const [pageNumber, setPageNumer] = useState(1)
+    const [totalResultCount, setTotalResultCount] = useState(0)
+    const [selectedIdxSet, setSelectedIdxSet] = useState(new Set())
 
-    const selectedIdx = new Set()
     let currentWorkflow = {id: -1, name: ''}
 
     const isBefore = (earlier, later) => {
@@ -49,12 +53,15 @@ const AssignSection = ({theme}) => {
         return 0
     }
 
+    // Fetching table contents
     useEffect(() => {
         const initializeSamples = async () => {
             try {
-                const sampleRes = (await axios.get('/api/samples?page=1')).data
+                const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
                 const headers = Object.keys(sampleRes.results[0])
                 const content = sampleRes.results.map(sample => Object.keys(sample).map(key => sample[key]))
+                setTotalResultCount(sampleRes.count)
+                setResultCount(sampleRes.results.length)
                 setSamples({headers, content})
                 setIsLoading(false)
             } catch (err) {
@@ -85,7 +92,8 @@ const AssignSection = ({theme}) => {
         }
         initializeSamples()
         initializeWorkflows()
-    }, [])
+    }, [pageNumber])
+
     return (
         <BodyArea>
             {showModal && <Notice
@@ -133,6 +141,7 @@ const AssignSection = ({theme}) => {
                     currentWorkflow = workflows[idx]
                 }} />
             </DropdownMenuContainer>
+            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedIdxSet.size} selected`}</p><p>{`Showing ${resultCount} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
@@ -151,8 +160,12 @@ const AssignSection = ({theme}) => {
                     isSelectable={true}
                     isEditable={false}
                     onSelect={(idx) => {
-                        if (!selectedIdx.delete(idx)) {
-                            selectedIdx.add(idx)
+                        if (selectedIdxSet.has(idx)) {
+                            selectedIdxSet.delete(idx)
+                            setSelectedIdxSet(new Set(selectedIdxSet))
+                        } else {
+                            selectedIdxSet.add(idx)
+                            setSelectedIdxSet(new Set(selectedIdxSet))
                         }
                     }} />
                 </TableContainer>

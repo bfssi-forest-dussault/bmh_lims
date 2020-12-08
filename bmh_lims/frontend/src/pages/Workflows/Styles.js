@@ -56,6 +56,14 @@ export const LoadingContainer = styled.div`
     justify-content: center;
 `
 
+export const ResultsContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: ${props => props.theme.colour2};
+`
+
 export const DropdownMenuContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
