@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { DatePicker } from '@material-ui/pickers'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
+import { IoIosCloseCircle } from 'react-icons/io'
 
 const muiTheme = ({ theme }) => createMuiTheme({
     typography: {
@@ -51,13 +52,35 @@ const muiTheme = ({ theme }) => createMuiTheme({
     }
 })
 
-export const StyledDatePicker = ({ theme, ...props }) => (
+export const StyledClearButton = styled(IoIosCloseCircle)`
+    fill: ${props => props.theme.colour3};
+    display: none;
+    position: absolute;
+    vertical-align: middle;
+    right: 0;
+    cursor: pointer;
+`
+
+const DatePickerContainer = styled.div`
+    position: relative;
+    width: 100%;
+    &:hover ${StyledClearButton} {
+        display: inline-block;
+    }
+`
+
+export const StyledDatePicker = ({ theme, onClearHandler, ...props }) => (
     <ThemeProvider theme={muiTheme({ theme })}>
-        <DatePicker
-        InputProps={{
-            disableUnderline: true,
-        }}
-        {...props} />
+        <DatePickerContainer>
+            <DatePicker
+            views={['date', 'year']}
+            format='DD'
+            InputProps={{
+                disableUnderline: true
+            }}
+            {...props} />
+            <StyledClearButton onClick={onClearHandler} />
+        </DatePickerContainer>
     </ThemeProvider>
 )
 
@@ -92,8 +115,22 @@ export const FilterContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     color: ${props => props.theme.colour2};
+`
+
+export const FreeTextFilterContainer = styled.div`
+    width: 100%;
+    position: relative;
+    height: 20px;
+    color: ${props => props.theme.colour3};
+    border-bottom: 1px solid ${props => props.theme.colour4};
+    &:focus-within {
+        border-bottom: 1px solid ${props => props.theme.colour5};
+    }
+    &:hover ${StyledClearButton} {
+        display: block;
+    }
+    background-color: white;
 `
 
 export const FreeTextFilter = styled.input.attrs(props => ({
@@ -102,11 +139,7 @@ export const FreeTextFilter = styled.input.attrs(props => ({
     width: 100%;
     color: ${props => props.theme.colour3};
     border: none;
-    border-bottom: 1px solid ${props => props.theme.colour4};
-    background-color: white;
-    &:focus {
-        border-bottom: 1px solid ${props => props.theme.colour5};
-    }
+    position: absolute;
     ::placeholder {
         color: rgb(100, 100, 100);
     }
@@ -118,4 +151,16 @@ export const FilterMenuContainer = styled.div`
     overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
+`
+
+export const DateRangeFilterContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`
+
+export const DateRangeContainer = styled.div`
+    color: ${props => props.theme.colour2};
+    width: 40%;
+    text-align: center;
 `

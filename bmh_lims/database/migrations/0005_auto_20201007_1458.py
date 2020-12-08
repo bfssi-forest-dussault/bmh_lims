@@ -5,15 +5,9 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('database', '0004_workflowsample_parents'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='sample',
-            name='sample_id',
-            field=models.CharField(default=bmh_lims.database.models.generate_sample_id, max_length=50),
-        ),
     ]

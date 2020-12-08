@@ -17,7 +17,9 @@ export const GlobalStyle = createGlobalStyle`
         font-size: 2rem;
     }
     p {
-        font-size: 1.5rem;
+        font-size: 1rem;
+        padding: 0;
+        margin: 0;
     }
     a: visited {
         color: black;

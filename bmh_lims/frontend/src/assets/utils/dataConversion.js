@@ -35,13 +35,13 @@ const queryFields = {
     sampleName: 'sample_name',
     projectName: 'submitter_project__project_name',
     dateRange: 'created__date__range',
-    lab: '',
+    lab: 'submitting_lab__lab_name',
     genus: 'genus',
     sampleType: 'species',
 }
 
 const formattedDate = date => {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    return `${date.c.year}-${date.c.month}-${date.c.day}`
 }
 
 const formatFilterQuery = ({field, match, isExact}) => {
