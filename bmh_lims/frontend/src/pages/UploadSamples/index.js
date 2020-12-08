@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
-import { HeaderBar, PageContainer, FooterBar, FooterButtonContainer, BodyContainer } from './Styles'
+import { HeaderBar, PageContainer, FooterButtonContainer, BodyContainer, TableContainer, ButtonBar, ButtonContainer } from './Styles'
 import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
 import { theme } from 'styles'
 
@@ -77,26 +77,30 @@ const UploadSamplesPage = () => {
         <ThemeProvider theme={theme}>
             <PageContainer>
                 <HeaderBar>
-                    <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                     <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
                 </HeaderBar>
                 <BodyContainer>
-                    <Table
-                    headers={content.headers}
-                    content={content.content}
-                    valueUpdateHandler={(col, row) => (e) => {
-                        content.content[row][col] = e.target.value
-                        updateContent({headers: content.headers, content: [...content.content]})
-                    }}
-                    isSelectable={false}
-                    />
+                    <ButtonBar>
+                        <ButtonContainer>
+                            <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
+                        </ButtonContainer>
+                        <FooterButtonContainer>
+                                <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
+                                <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
+                        </FooterButtonContainer>
+                    </ButtonBar>
+                    <TableContainer>
+                        <Table
+                        headers={content.headers}
+                        content={content.content}
+                        valueUpdateHandler={(col, row) => (e) => {
+                            content.content[row][col] = e.target.value
+                            updateContent({headers: content.headers, content: [...content.content]})
+                        }}
+                        isSelectable={false}
+                        />
+                    </TableContainer>
                 </BodyContainer>
-                <FooterBar>
-                    <FooterButtonContainer>
-                        <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                        <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
-                    </FooterButtonContainer>
-                </FooterBar>
             </PageContainer>
             {
                 isInvalid &&
