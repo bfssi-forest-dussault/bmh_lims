@@ -1,39 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     FilterHeader,
     FilterRow,
     FilterContainer,
     FreeTextFilter,
+    FreeTextFilterContainer,
     FilterMenuContainer,
     StyledDatePicker,
     StyledUpArrow,
-    StyledDownArrow
+    StyledDownArrow,
+    DateRangeContainer,
+    DateRangeFilterContainer,
+    StyledClearButton
 } from './Styles'
 import { UnderlineDropdown } from 'components' 
+import { AiOutlineLine } from 'react-icons/ai'
+import DateTime from 'luxon/src/datetime.js'
+import axios from 'axios'
 
-const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler }) => {
+const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler, onClearHandler }) => {
     return (
         <FilterContainer>
             {label}
-            <FreeTextFilter
-            placeholder={placeholder}
-            value={value}
-            onChange={onChangeHandler}
-            onBlur={onBlurHandler} />
-        </FilterContainer>
-    )
-}
-
-const DateFilter = ({ theme, label, date, onChangeHandler, onBlurHandler }) => {
-    return (
-        <FilterContainer>
-            {label}
-            <StyledDatePicker
-            theme={theme}
-            value={date}
-            placeholder={label}
-            onChange={date => onChangeHandler(date)}
-            onClose={onBlurHandler} />
+            <FreeTextFilterContainer>
+                <FreeTextFilter
+                placeholder={placeholder}
+                value={value}
+                onChange={onChangeHandler}
+                onBlur={onBlurHandler} />
+                <StyledClearButton onClick={onClearHandler} />
+            </FreeTextFilterContainer>
         </FilterContainer>
     )
 }
@@ -51,18 +47,82 @@ const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
     )
 }
 
-const FilterMenu = ({ onUpdateHandler, theme }) => {
+const DateRangeFilter = ({
+        placeholders,
+        label,
+        initialDates,
+        onChangeHandler,
+        theme,
+        maxDate
+    }) => {
+    const [lowerBound, setLowerBound] = useState(initialDates[0])
+    const [upperBound, setUpperBound] = useState(initialDates[1] || maxDate || new Date())
+
+    const toLuxon = (date) => {
+        if (!!date && !date.isLuxonDateTime) {
+            return DateTime.fromJSDate(date)
+        }
+        return date
+    }
+
+    return (
+        <DateRangeContainer>
+            {label}
+            <DateRangeFilterContainer>
+                <StyledDatePicker
+                    theme={theme}
+                    value={lowerBound}
+                    placeholder={placeholders[0]}
+                    maxDate={maxDate}
+                    onChange={date => {
+                        setLowerBound(date)
+                        onChangeHandler([date, toLuxon(upperBound)])
+                    }}
+                    onClearHandler={(e) => {
+                        setLowerBound(null)
+                        onChangeHandler([null, toLuxon(upperBound)])
+                    }} />
+                <AiOutlineLine style={{stroke: theme.colour2}}/>
+                <StyledDatePicker
+                    theme={theme}
+                    value={upperBound}
+                    placeholder={placeholders[1]}
+                    maxDate={maxDate || upperBound}
+                    onChange={date => {
+                        setUpperBound(date)
+                        onChangeHandler([toLuxon(lowerBound), date])
+                    }}
+                    onClearHandler={(e) => {
+                        setUpperBound(null)
+                        onChangeHandler([toLuxon(lowerBound), null])
+                    }} />
+            </DateRangeFilterContainer>
+        </DateRangeContainer>
+    )
+}
+
+const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
     const [beforeDate, setBeforeDate] = useState(null)
     const [sampleName, setName] = useState({match: '', isExact: true})
-    const [projectName, setProjectID] = useState({match: '', isExact: true})
+    const [projectName, setProjectName] = useState({match: '', isExact: true})
     const [lab, setLab] = useState({match: '', isExact: true})
     const [genus, setGenus] = useState({match: '', isExact: true})
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
     const [shouldOverflow, setShouldOverflow] = useState(false)
+    const [allLabNames, setAllLabNames] = useState(null)
 
     const isExact = (value) => value.split('"').length > 1
+
+    useEffect(() => {
+        const initializeLabNames = async () => {
+            const labs = (await axios.get('/api/labs')).data
+            const labNames = labs.map(lab => lab.lab_name)
+            setAllLabNames(labNames)
+        }
+        initializeLabNames()
+    }, [])
 
     return (
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
@@ -86,6 +146,10 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                     }}
                     onBlurHandler={(e) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }}
+                    onClearHandler={(e) => {
+                        setName({match: '', isExact: true})
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }} />
                     <Filter
                         label='Project Name'
@@ -93,45 +157,40 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                         value={projectName.match}
                         onChangeHandler={(e) => {
                             const newProject = e.target.value
-                            setProjectID({match: newProject, isExact: isExact(newProject)})
+                            setProjectName({match: newProject, isExact: isExact(newProject)})
                         }}
                         onBlurHandler={(e) => {
                             onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                         }}
+                        onClearHandler={(e) => {
+                            setProjectName({match: '', isExact: true})
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        }}
                     />
-                    <DateFilter
+                    <DateRangeFilter
                         theme={theme}
-                        label='Uploaded After'
-                        date={afterDate}
-                        onChangeHandler={(date) => {
-                            setAfterDate(date)
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/>
-                    <DateFilter
-                        theme={theme}
-                        label='Uploaded Before'
-                        date={beforeDate}
-                        onChangeHandler={(date) => {
-                            setBeforeDate(date)
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}/>
+                        label={'Date uploaded'}
+                        placeholders={['Uploaded after', 'Uploaded before']}
+                        initialDates={[null, null]}
+                        onChangeHandler={(dateRange) => {
+                            setAfterDate(dateRange[0])
+                            setBeforeDate(dateRange[1])
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [dateRange[0], dateRange[1]]} })
+                        }}
+                        maxDate={maxDate}
+                    />
                 </FilterRow>
                 <FilterRow>
-                    <Filter
-                    label='Lab'
-                    placeholder='lab name'
-                    value={lab.match}
-                    onChangeHandler={(e) => {
-                        const newLab = e.target.value
-                        setLab({match: newLab, isExact: isExact(newLab)})
-                    }}
-                    onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
-                    }}
+                    <DropdownFilter
+                        label='Lab'
+                        menuItems={allLabNames || []}
+                        placeholder={'select lab'}
+                        onExpandHandler={() => {
+                            setShouldOverflow(true)
+                        }}
+                        onChangeHandler={(newValue) => {
+                            setLab({ match: newValue, isExact: true })
+                        }}
                     />
                     <Filter
                     label='Genus'
@@ -144,6 +203,10 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                     onBlurHandler={(e) => {
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}
+                    onClearHandler={(e) => {
+                        setGenus({ match: '', isExact: true })
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                    }}
                     />
                     <DropdownFilter
                         label='Sample Type'
@@ -153,7 +216,7 @@ const FilterMenu = ({ onUpdateHandler, theme }) => {
                             setShouldOverflow(true)
                         }}
                         onChangeHandler={(newValue) => {
-                            setSampleType(newValue)
+                            setSampleType({ match: newValue, isExact: true })
                         }}
                     />
                 </FilterRow>

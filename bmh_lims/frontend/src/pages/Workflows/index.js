@@ -21,31 +21,53 @@ import {
     LoadingIconContainer,
     PageContainer,
     TableContainer,
-    DropdownMenuContainer
+    DropdownMenuContainer,
+    ResultsContainer
 } from './Styles'
 import { formatFilterQueries } from 'utils'
+import DateTime from 'luxon/src/datetime.js'
 
 const AssignSection = ({theme}) => {
     const [samples, setSamples] = useState({headers: [], content: []})
     const [workflows, setWorkflows] = useState([])
     const [showModal, setShowModal] = useState(false)
-    const [modalContents, setModalContents] = useState({text: ''})
+    const [modalContents, setModalContents] = useState({message: ''})
     const [isLoading, setIsLoading] = useState(true)
+    const [resultCount, setResultCount] = useState(0)
+    const [pageNumber, setPageNumer] = useState(1)
+    const [totalResultCount, setTotalResultCount] = useState(0)
+    const [selectedIdxSet, setSelectedIdxSet] = useState(new Set())
 
-    const selectedIdx = new Set()
     let currentWorkflow = {id: -1, name: ''}
 
+    const isBefore = (earlier, later) => {
+        const [d1, d2, m1, m2, y1, y2] = [earlier.day, later.day, earlier.month, later.month, earlier.year, later.year]
+        return y1 < y2 || (y1 === y2 && (m1 < m2 || (m1 === m2 && d1 < d2)))
+    }
+
+    const validateFilters = (filters) => {
+        const [earlier, later] = filters.dateRange.match
+        if (!!earlier && !!later && (isBefore(later, earlier) || isBefore(DateTime.fromJSDate(new Date()), earlier) || isBefore(DateTime.fromJSDate(new Date()), later))) {
+            return 1
+        }
+        return 0
+    }
+
+    // Fetching table contents
     useEffect(() => {
         const initializeSamples = async () => {
             try {
-                const sampleRes = (await axios.get('/api/samples?page=1')).data
+                const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
                 const headers = Object.keys(sampleRes.results[0])
                 const content = sampleRes.results.map(sample => Object.keys(sample).map(key => sample[key]))
+                setTotalResultCount(sampleRes.count)
+                setResultCount(sampleRes.results.length)
                 setSamples({headers, content})
                 setIsLoading(false)
             } catch (err) {
+                console.log(err)
                 setModalContents({
-                    text: 'Fetching samples failed',
+                    message: 'Fetching samples failed',
                     onBackgroundClick: modalContents.onBackgroundClick,
                     CloseButton: () => (
                     <FilledButton onClick={(e) => {
@@ -60,8 +82,9 @@ const AssignSection = ({theme}) => {
                 const workflowRes = (await axios.get('/api/workflow_definitions')).data
                 setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
             } catch (err) {
+                console.log(err)
                 setModalContents({
-                    text: 'Fetching workflows failed',
+                    message: 'Fetching workflows failed',
                     onBackgroundClick: modalContents.onBackgroundClick
                 })
                 setShowModal(true)
@@ -69,7 +92,8 @@ const AssignSection = ({theme}) => {
         }
         initializeSamples()
         initializeWorkflows()
-    }, [])
+    }, [pageNumber])
+
     return (
         <BodyArea>
             {showModal && <Notice
@@ -84,13 +108,30 @@ const AssignSection = ({theme}) => {
             <FilterMenu
             theme={theme}
             onUpdateHandler={async (filters) => {
-                const queryString = formatFilterQueries(filters)
-                const newSamples = (await axios.get(`/api/samples/?${queryString}`)).data.results
-                const headers = Object.keys(newSamples[0])
-                const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
-                setSamples({headers, content})
+                if (validateFilters(filters) === 0) {
+                    const queryString = formatFilterQueries(filters)
+                    const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
+                    if (sampleResponse.data.count > 0) {
+                        const newSamples = sampleResponse.data.results
+                        const headers = Object.keys(newSamples[0])
+                        const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
+                        setSamples({headers, content})
+                    } else {
+                        setModalContents({
+                            message: 'Filter returned no results',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
+                    }
+                } else {
+                    setModalContents({
+                        message: 'Invalid filter input: invalid date range',
+                        onBackgroundClick: modalContents.onBackgroundClick
+                    })
+                    setShowModal(true)
+                }
             }}
-            />
+            maxDate={new Date()} />
             <DropdownMenuContainer>
                 <DropdownMenu
                 menuItems={workflows.map(workflow => workflow.name)}
@@ -98,9 +139,9 @@ const AssignSection = ({theme}) => {
                 initialValue={'Select Workflow'}
                 onItemClick={(item, idx) => {
                     currentWorkflow = workflows[idx]
-                }}
-                />
+                }} />
             </DropdownMenuContainer>
+            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedIdxSet.size} selected`}</p><p>{`Showing ${resultCount} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
@@ -119,11 +160,14 @@ const AssignSection = ({theme}) => {
                     isSelectable={true}
                     isEditable={false}
                     onSelect={(idx) => {
-                        if (!selectedIdx.delete(idx)) {
-                            selectedIdx.add(idx)
+                        if (selectedIdxSet.has(idx)) {
+                            selectedIdxSet.delete(idx)
+                            setSelectedIdxSet(new Set(selectedIdxSet))
+                        } else {
+                            selectedIdxSet.add(idx)
+                            setSelectedIdxSet(new Set(selectedIdxSet))
                         }
-                    }}
-                    />
+                    }} />
                 </TableContainer>
             }
             <FilledButton
@@ -132,12 +176,12 @@ const AssignSection = ({theme}) => {
                 if (currentWorkflow.id < 0) {
                     errors += 'Please select a workflow. '
                 }
-                if (selectedIdx.size === 0) {
+                if (selectedIdxSet.size === 0) {
                     errors += 'Please select at least 1 sample'
                 }
                 if (!!errors) {
                     setModalContents({
-                        text: errors,
+                        message: errors,
                         onBackgroundClick: modalContents.onBackgroundClick,
                         CloseButton: () => (
                         <FilledButton onClick={(e) => {
@@ -146,7 +190,7 @@ const AssignSection = ({theme}) => {
                     })
                     setShowModal(true)
                 } else {
-                    const selectedSamples = [...selectedIdx].map(idx => ({sample: samples.content[idx][0], parents: []}))
+                    const selectedSamples = [...selectedIdxSet].map(idx => ({sample: samples.content[idx][0], parents: []}))
                     axios({
                         method: 'POST',
                         headers: {
@@ -159,9 +203,18 @@ const AssignSection = ({theme}) => {
                             batch_type: currentWorkflow.name
                         })
                     }).then(res => {
-                        console.log(res.data)
+                        setModalContents({
+                            message: 'Successfully assigned workflows',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
                     }).catch(rej => {
                         console.log(rej)
+                        setModalContents({
+                            message: 'Workflows assignment unsuccessful',
+                            onBackgroundClick: modalContents.onBackgroundClick
+                        })
+                        setShowModal(true)
                     })
                 }
             }}>Assign workflow</FilledButton>
