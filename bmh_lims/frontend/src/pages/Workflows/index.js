@@ -176,7 +176,7 @@ const AssignSection = ({theme}) => {
                 if (currentWorkflow.id < 0) {
                     errors += 'Please select a workflow. '
                 }
-                if (selectedIdx.size === 0) {
+                if (selectedIdxSet.size === 0) {
                     errors += 'Please select at least 1 sample'
                 }
                 if (!!errors) {
@@ -190,7 +190,7 @@ const AssignSection = ({theme}) => {
                     })
                     setShowModal(true)
                 } else {
-                    const selectedSamples = [...selectedIdx].map(idx => ({sample: samples.content[idx][0], parents: []}))
+                    const selectedSamples = [...selectedIdxSet].map(idx => ({sample: samples.content[idx][0], parents: []}))
                     axios({
                         method: 'POST',
                         headers: {
