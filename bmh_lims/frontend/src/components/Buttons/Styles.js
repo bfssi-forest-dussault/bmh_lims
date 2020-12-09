@@ -7,6 +7,8 @@ const ButtonBase = css`
     padding: 0.5em 1em;
     border-radius: 5px;
     min-height: 1.5em;
+    width: 100%;
+    text-align: center;
 `
 
 const FilledButtonBase = styled.button`
