@@ -104,8 +104,8 @@ const UploadSamplesPage = () => {
                             <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                         </ButtonContainer>
                         <FooterButtonContainer>
-                                <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                                <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
+                            <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
+                            <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
                         </FooterButtonContainer>
                     </ButtonBar>
                     <TableContainer>

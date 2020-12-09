@@ -34,13 +34,13 @@ export const CheckboxBodyCell = styled.td`
 `
 
 export const CheckboxHeaderContent = styled.div`
-    color: white;
-    font-weight: ${props => props.header ? '900': 'normal'};
-    width: 100px;
-    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: ${props => props.header ? 'center': 'flex-start'};
+    justify-content: center;
+    width: 100px;
+    height: 100%;
+    font-weight: 900;
+    color: white;
 `
 
 export const CheckboxHeaderCell = styled.th`

@@ -1,1 +1,1 @@
-export { AssignSection } from './AssignWorkflows/'
+export { AssignSection } from './AssignSection/'

@@ -193,11 +193,10 @@ export const AssignSection = ({theme}) => {
                     </IconContext.Provider>
                     ):
                     <Table
-                    
-                    theme={theme}
                     headers={samples.headers}
                     content={samples.content}
                     isSelectable={true}
+                    selectedRows={selectedIdxSet}
                     isEditable={false}
                     onSelect={(idx) => {
                         if (selectedIdxSet.has(idx)) {

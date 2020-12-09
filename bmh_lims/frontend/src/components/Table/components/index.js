@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import {
     BodySeparator,
     Content,
@@ -28,8 +28,7 @@ export const MappedCell = ({updateColWidths, ...props}) => {
     )
 }
 
-const CheckboxColumn = ({colour, onSelect, numRows}) => {
-    const [selected, updateSelected] = useState([...Array(numRows).keys()].map(idx => false))
+const CheckboxColumn = ({colour, onSelect, numRows, selectedRows}) => {
     return (
         <ColumnTable>
             <HeaderSeparator>
@@ -48,11 +47,9 @@ const CheckboxColumn = ({colour, onSelect, numRows}) => {
                             <CheckboxBodyCell>
                                 <Checkbox
                                 containerWidth={'100%'}
-                                checked={selected[rowNum]}
+                                checked={selectedRows.has(rowNum)}
                                 onChangeHandler={(e) => {
                                     onSelect(rowNum)
-                                    selected[rowNum] = !selected[rowNum]
-                                    updateSelected([...selected])
                                 }}
                                 colour={colour}/>
                             </CheckboxBodyCell>
