@@ -1,18 +1,10 @@
 import React from 'react'
-import { RiCheckboxBlankCircleLine, RiCheckboxCircleFill} from 'react-icons/ri'
+import { CheckboxContainer, CheckedBox, UncheckedBox } from './Styles'
 
-export const Checkbox = ({checked, onChangeHandler, colour}) => {
+export const Checkbox = ({checked, onChangeHandler, containerWidth}) => {
     return (
-        <div onClick={(e) => {onChangeHandler(e)}}>
-            {checked ? 
-            <RiCheckboxCircleFill style={{
-                fill: colour,
-                verticalAlign: 'middle'
-            }}/> : 
-            <RiCheckboxBlankCircleLine style={{
-                fill: colour,
-                verticalAlign: 'middle'
-            }}/>}
-        </div>
+        <CheckboxContainer width={containerWidth} onClick={onChangeHandler}>
+            {checked ? <CheckedBox /> : <UncheckedBox />}
+        </CheckboxContainer>
     )
 }

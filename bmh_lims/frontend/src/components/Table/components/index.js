@@ -47,6 +47,7 @@ const CheckboxColumn = ({colour, onSelect, numRows}) => {
                         <ColumnRow key={`checkbox-${rowNum}`}>
                             <CheckboxBodyCell>
                                 <Checkbox
+                                containerWidth={'100%'}
                                 checked={selected[rowNum]}
                                 onChangeHandler={(e) => {
                                     onSelect(rowNum)
