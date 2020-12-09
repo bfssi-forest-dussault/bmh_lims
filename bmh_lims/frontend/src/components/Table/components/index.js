@@ -6,12 +6,10 @@ import {
 } from '../Styles'
 
 import {
-    ColumnContainer,
     ColumnTable,
     ColumnRow,
     CheckboxHeaderContent,
     CheckboxBodyCell,
-    CheckboxContent,
     CheckboxHeaderCell
 } from './Styles'
 
@@ -37,7 +35,7 @@ const CheckboxColumn = ({colour, onSelect, numRows}) => {
             <HeaderSeparator>
                 <ColumnRow>
                     <CheckboxHeaderCell width={30}>
-                        <CheckboxHeaderContent header={true} width={30}>
+                        <CheckboxHeaderContent>
                             selected
                         </CheckboxHeaderContent>
                     </CheckboxHeaderCell>
@@ -48,16 +46,14 @@ const CheckboxColumn = ({colour, onSelect, numRows}) => {
                     [...Array(numRows).keys()].map(rowNum => (
                         <ColumnRow key={`checkbox-${rowNum}`}>
                             <CheckboxBodyCell>
-                                <CheckboxContent>
-                                    <Checkbox
-                                    checked={selected[rowNum]}
-                                    onChangeHandler={(e) => {
-                                        onSelect(rowNum)
-                                        selected[rowNum] = !selected[rowNum]
-                                        updateSelected([...selected])
-                                    }}
-                                    colour={colour}/>
-                                </CheckboxContent>
+                                <Checkbox
+                                checked={selected[rowNum]}
+                                onChangeHandler={(e) => {
+                                    onSelect(rowNum)
+                                    selected[rowNum] = !selected[rowNum]
+                                    updateSelected([...selected])
+                                }}
+                                colour={colour}/>
                             </CheckboxBodyCell>
                         </ColumnRow>
                     ))

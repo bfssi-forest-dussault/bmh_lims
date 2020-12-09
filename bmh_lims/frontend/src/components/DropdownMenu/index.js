@@ -16,11 +16,11 @@ const DropdownButton = ({theme, isDown }) => {
     )
 }
 
-const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
+const Dropdown = ({ theme, menuItems, initialValue, onItemClick, width}) => {
     const [menuIsOpen, setMenuIsOpen] = useState(false)
     const [currentSelection, setCurrent] = useState(initialValue)
     return (
-        <DropdownContainer >
+        <DropdownContainer width={width}>
             <DropdownBar onClick={(e) => { setMenuIsOpen(!menuIsOpen) }} active={menuIsOpen}>
                 {currentSelection}
                 <DropdownButton

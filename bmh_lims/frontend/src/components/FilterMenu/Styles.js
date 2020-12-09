@@ -147,6 +147,7 @@ export const FreeTextFilter = styled.input.attrs(props => ({
 `
 
 export const FilterMenuContainer = styled.div`
+    width: 100%;
     max-height: ${props => props.open ? '10em': '2rem'};
     overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;

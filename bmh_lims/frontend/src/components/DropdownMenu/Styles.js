@@ -45,7 +45,8 @@ export const DropdownMenuItem = styled.div`
 
 export const DropdownContainer = styled.div`
     position: relative;
-    width: 100%;
+    width: ${props => props.width || '100%'};
+    margin: 3% 0;
     display: inline-block;
     text-align: center;
 `

@@ -22,6 +22,7 @@ export const DecorativeBar = styled.div`
 `
 
 export const CircularButtonContainer = styled.div`
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
