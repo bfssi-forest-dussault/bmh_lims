@@ -12,7 +12,8 @@ import {
     TableOuterContainer
 } from './Styles'
 
-import { CheckboxColumn, MappedCell } from './components/'
+import { MappedCell } from './components/'
+import { Checkbox } from 'components'
 
 /**
  * 
@@ -30,6 +31,8 @@ import { CheckboxColumn, MappedCell } from './components/'
 const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectedRows}) => {
     const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
 
+    const [checkboxColWidth, updateCheckboxColWidth] = useState(null)
+
     const isDate = date => !isNaN(Date.parse(date))
     const sanitizeNumber = num => num < 10 ? '00': num
     const formatDate = date => `
@@ -39,15 +42,19 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEdit
     return (
         <TableOuterContainer>
             <TableContainer>
-                {isSelectable && 
-                <CheckboxColumn
-                selectedRows={selectedRows}
-                onSelectHandler={onSelectHandler}
-                numRows={content.length}
-                />}
                 <Table>
                     <HeaderSeparator>
                         <Row>
+                            {isSelectable && <HeaderCell isCheckbox={true} key={`header-checkbox`}>
+                                <MappedCell
+                                isCheckbox={true}
+                                header={true}
+                                updateColWidths={(width) => {
+                                    updateCheckboxColWidth(width)
+                                }}>
+                                    selected
+                                </MappedCell>
+                            </HeaderCell>}
                             {headers.map((header, hidx) => (
                             <HeaderCell key={`header-${hidx}`}>
                                 <MappedCell 
@@ -64,8 +71,19 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEdit
                     </HeaderSeparator>
                     <BodySeparator>
                         {content.map((row, ridx) => (
-                        <Row key={`row-${ridx}`}>{
-                            row.map((item, idx) => (
+                        <Row key={`row-${ridx}`}>
+                            {isSelectable && 
+                                <BodyCell key={`cell-checkbox-${ridx}`}>
+                                    <Content isCheckbox={true} width={checkboxColWidth}>
+                                        <Checkbox
+                                        checked={selectedRows.has(ridx)}
+                                        onChangeHandler={(e) => {
+                                            onSelectHandler(ridx)
+                                        }}
+                                        containerWidth={'100%'} />
+                                    </Content>
+                                </BodyCell>}
+                            {row.map((item, idx) => (
                                 <BodyCell key={`cell-${ridx}-${idx}`}>
                                     <Content width={colWidths[idx]}>
                                         <BodyContent

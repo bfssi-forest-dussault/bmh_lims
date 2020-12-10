@@ -198,8 +198,7 @@ export const AssignSection = ({theme}) => {
                     isSelectable={true}
                     selectedRows={selectedIdxSet}
                     isEditable={false}
-                    onSelectHandler={(e, idx) => {
-                        console.log(e.target)
+                    onSelectHandler={(idx) => {
                         if (selectedIdxSet.has(idx)) {
                             selectedIdxSet.delete(idx)
                             setSelectedIdxSet(new Set(selectedIdxSet))
