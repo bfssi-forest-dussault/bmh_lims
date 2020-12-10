@@ -179,7 +179,7 @@ export const AssignSection = ({theme}) => {
             theme={theme}
             initialValue={'Select Workflow'}
             onItemClick={(item, idx) => {
-                console.log(currentWorkflow)
+                currentWorkflow = workflows[idx]
             }} />
             {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedIdxSet.size} selected`}</p><p>{`Showing ${resultCount} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
