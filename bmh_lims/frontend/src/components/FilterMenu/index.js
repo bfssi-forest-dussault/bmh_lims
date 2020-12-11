@@ -191,6 +191,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         onChangeHandler={(newValue) => {
                             setLab({ match: newValue, isExact: true })
                         }}
+                        currentValue={lab.match}
                     />
                     <Filter
                     label='Genus'
@@ -212,6 +213,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         label='Sample Type'
                         menuItems={['sampleType 1', 'sampleType 2', 'sampleType3']}
                         placeholder={'select type'}
+                        currentValue={sampleType.match}
                         onExpandHandler={() => {
                             setShouldOverflow(true)
                         }}

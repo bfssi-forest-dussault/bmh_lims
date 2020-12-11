@@ -63,7 +63,7 @@ export const DropdownButton = ({isOpen}) => {
     return isOpen ? <StyledUpArrow /> : <StyledDownArrow />
 }
 
-export const UnderlineDropdown = ({ menuItems, placeholder, onExpandHandler, onChangeHandler }) => {
+export const UnderlineDropdown = ({ menuItems, currentValue, placeholder, onExpandHandler, onChangeHandler }) => {
     const [open, setOpen] = useState(false)
     const [curVal, setCurVal] = useState('')
     return (
@@ -72,8 +72,8 @@ export const UnderlineDropdown = ({ menuItems, placeholder, onExpandHandler, onC
                 onExpandHandler()
                 setOpen(!open)
             }}>
-            <DropdownField isOpen={open} hasValue={!!curVal}>
-                {!!curVal ? curVal : placeholder}
+            <DropdownField isOpen={open} hasValue={!!currentValue}>
+                {!!currentValue ? currentValue : placeholder}
                 <DropdownButtonContainer>
                     <DropdownButton isOpen={open} />
                 </DropdownButtonContainer>
@@ -83,10 +83,8 @@ export const UnderlineDropdown = ({ menuItems, placeholder, onExpandHandler, onC
                     {['Clear filter', ...menuItems].map((menuItem, idx) => (
                     <DropdownMenuItem onClick={(e) => {
                         if (menuItem === 'Clear filter') {
-                            setCurVal('')
                             onChangeHandler('')
                         } else {
-                            setCurVal(menuItem)
                             onChangeHandler(menuItem)
                         }
                     }} key={`dropdown-${menuItem}-${idx}`}>
