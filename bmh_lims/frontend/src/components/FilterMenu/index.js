@@ -211,7 +211,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     <DropdownFilter
                         label='Sample Type'
                         menuItems={['sampleType 1', 'sampleType 2', 'sampleType3']}
-                        placeholder={'select sample type'}
+                        placeholder={'select type'}
                         onExpandHandler={() => {
                             setShouldOverflow(true)
                         }}

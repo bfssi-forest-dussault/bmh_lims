@@ -41,20 +41,18 @@ const CheckboxColumn = ({onSelectHandler, numRows, selectedRows}) => {
                 </ColumnRow>
             </HeaderSeparator>
             <BodySeparator>
-                {
-                    [...Array(numRows).keys()].map(rowNum => (
-                        <ColumnRow key={`checkbox-${rowNum}`}>
-                            <CheckboxBodyCell>
-                                <Checkbox
-                                containerWidth={'100%'}
-                                checked={selectedRows.has(rowNum)}
-                                onChangeHandler={(e) => {
-                                    onSelectHandler(e, rowNum)
-                                }} />
-                            </CheckboxBodyCell>
-                        </ColumnRow>
-                    ))
-                }
+                {[...Array(numRows).keys()].map(rowNum => (
+                    <ColumnRow key={`checkbox-${rowNum}`}>
+                        <CheckboxBodyCell>
+                            <Checkbox
+                            containerWidth={'100%'}
+                            checked={selectedRows.has(rowNum)}
+                            onChangeHandler={(e) => {
+                                onSelectHandler(e, rowNum)
+                            }} />
+                        </CheckboxBodyCell>
+                    </ColumnRow>
+                ))}
             </BodySeparator>
         </ColumnTable>
     )

@@ -30,8 +30,7 @@ export const AssignSection = ({theme}) => {
     const [resultCount, setResultCount] = useState(0)
     const [totalResultCount, setTotalResultCount] = useState(0)
     const [selectedIdxSet, setSelectedIdxSet] = useState(new Set())
-
-    let currentWorkflow = {id: -1, name: ''}
+    const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
 
     const onAssignWorkflow = (e) => {
         let errors = ''
@@ -177,9 +176,9 @@ export const AssignSection = ({theme}) => {
             width='90%'
             menuItems={workflows.map(workflow => workflow.name)}
             theme={theme}
-            initialValue={'Select Workflow'}
-            onItemClick={(item, idx) => {
-                currentWorkflow = workflows[idx]
+            currentSelection={currentWorkflow.name || 'Select workflow'}
+            onItemClick={(idx) => {
+                setCurrentWorkflow(workflows[idx])
             }} />
             {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedIdxSet.size} selected`}</p><p>{`Showing ${resultCount} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
