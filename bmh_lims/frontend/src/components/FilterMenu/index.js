@@ -89,7 +89,7 @@ const DateRangeFilter = ({
     )
 }
 
-const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
+const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
     const [beforeDate, setBeforeDate] = useState(new Date())
@@ -99,7 +99,6 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [genus, setGenus] = useState({match: '', isExact: true})
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
     const [shouldOverflow, setShouldOverflow] = useState(false)
-    const [allLabNames, setAllLabNames] = useState(null)
 
     const isExact = (value) => value.split('"').length > 1
 
@@ -109,15 +108,6 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
         }
         return date
     }
-
-    useEffect(() => {
-        const initializeLabNames = async () => {
-            const labs = (await axios.get('/api/labs')).data
-            const labNames = labs.map(lab => lab.lab_name)
-            setAllLabNames(labNames)
-        }
-        initializeLabNames()
-    }, [])
 
     return (
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
