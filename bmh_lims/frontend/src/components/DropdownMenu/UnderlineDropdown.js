@@ -65,7 +65,6 @@ export const DropdownButton = ({isOpen}) => {
 
 export const UnderlineDropdown = ({ menuItems, currentValue, placeholder, onExpandHandler, onChangeHandler }) => {
     const [open, setOpen] = useState(false)
-    const [curVal, setCurVal] = useState('')
     return (
         <DropdownFieldContainer
             onClick={(e) => {

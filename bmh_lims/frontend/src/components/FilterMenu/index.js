@@ -50,20 +50,12 @@ const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
 const DateRangeFilter = ({
         placeholders,
         label,
-        initialDates,
         onChangeHandler,
         theme,
-        maxDate
+        maxDate,
+        lowerBound,
+        upperBound,
     }) => {
-    const [lowerBound, setLowerBound] = useState(initialDates[0])
-    const [upperBound, setUpperBound] = useState(initialDates[1] || maxDate || new Date())
-
-    const toLuxon = (date) => {
-        if (!!date && !date.isLuxonDateTime) {
-            return DateTime.fromJSDate(date)
-        }
-        return date
-    }
 
     return (
         <DateRangeContainer>
@@ -75,12 +67,10 @@ const DateRangeFilter = ({
                     placeholder={placeholders[0]}
                     maxDate={maxDate}
                     onChange={date => {
-                        setLowerBound(date)
-                        onChangeHandler([date, toLuxon(upperBound)])
+                        onChangeHandler([date, upperBound])
                     }}
                     onClearHandler={(e) => {
-                        setLowerBound(null)
-                        onChangeHandler([null, toLuxon(upperBound)])
+                        onChangeHandler([null, upperBound])
                     }} />
                 <AiOutlineLine style={{stroke: theme.colour2}}/>
                 <StyledDatePicker
@@ -89,12 +79,10 @@ const DateRangeFilter = ({
                     placeholder={placeholders[1]}
                     maxDate={maxDate || upperBound}
                     onChange={date => {
-                        setUpperBound(date)
-                        onChangeHandler([toLuxon(lowerBound), date])
+                        onChangeHandler([lowerBound, date])
                     }}
                     onClearHandler={(e) => {
-                        setUpperBound(null)
-                        onChangeHandler([toLuxon(lowerBound), null])
+                        onChangeHandler([lowerBound, null])
                     }} />
             </DateRangeFilterContainer>
         </DateRangeContainer>
@@ -104,7 +92,7 @@ const DateRangeFilter = ({
 const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
-    const [beforeDate, setBeforeDate] = useState(null)
+    const [beforeDate, setBeforeDate] = useState(new Date())
     const [sampleName, setName] = useState({match: '', isExact: true})
     const [projectName, setProjectName] = useState({match: '', isExact: true})
     const [lab, setLab] = useState({match: '', isExact: true})
@@ -114,6 +102,13 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [allLabNames, setAllLabNames] = useState(null)
 
     const isExact = (value) => value.split('"').length > 1
+
+    const toLuxon = (date) => {
+        if (!!date && !date.isLuxonDateTime) {
+            return DateTime.fromJSDate(date)
+        }
+        return date
+    }
 
     useEffect(() => {
         const initializeLabNames = async () => {
@@ -171,12 +166,14 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         theme={theme}
                         label={'Date uploaded'}
                         placeholders={['Uploaded after', 'Uploaded before']}
-                        initialDates={[null, null]}
+                        initialDates={[afterDate, beforeDate]}
                         onChangeHandler={(dateRange) => {
                             setAfterDate(dateRange[0])
                             setBeforeDate(dateRange[1])
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [dateRange[0], dateRange[1]]} })
+                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [toLuxon(dateRange[0]), toLuxon(dateRange[1])]} })
                         }}
+                        lowerBound={afterDate}
+                        upperBound={beforeDate}
                         maxDate={maxDate}
                     />
                 </FilterRow>
