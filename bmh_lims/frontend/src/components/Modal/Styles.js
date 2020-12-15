@@ -58,7 +58,7 @@ export const ButtonContainer = styled.div`
 export const InfoContainer = styled.div`
     width: 100%;
     overflow: auto;
-    max-height: 70px;
+    max-height: 100%;
     border-radius: 3px;
     border: solid 2px ${props => props.theme.primarybg};
 `

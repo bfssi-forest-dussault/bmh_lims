@@ -2,31 +2,48 @@ export const validateData = (sampleData) => {
     // TODO: instantiate elsewhere
     const reqHeaders = new Set([
         'sample_name',
-        'tube/plate_label',
-        'submitting_lab',
-        'submission_date',
-        'submission_format',
-        'sample_volume_in_uL',
-        'requested_services',
-        'submitter_project_name',
-        'genus',
-        'species',
-        'culture_date',
-        'culture_conditions'])
-    const optHeaders = new Set([
         'well',
-        'project_id',
+        'submitting_lab',
+        'sample_volume_in_ul',
+        'submitter_project'])
+    const optHeaders = new Set([
         'strain',
         'isolate',
-        'subspecies/subtype/lineage',
+        'genus',
+        'species',
+        'subspecies_subtype_lineage',
         'approx_genome_size_in_bp',
-        'details/comments',
+        'comments',
+        'culture_date',
+        'culture_conditions',
         'dna_extraction_date',
         'dna_extraction_method',
-        'qubit_dna_concentration_in_ng/uL'])
+        'qubit_concentration_in_ng_ul'
+        ])
     // ensure all headers are expected and that some value is given for required headers
-    const sampleIsValid = (sample) => Object.keys(sample).reduce((isValid, header) => isValid && ((reqHeaders.has(header) && !!sample[header]) || optHeaders.has(header)), true)
-    return sampleData.reduce((allIsValid, sample) => allIsValid && sampleIsValid(sample), true)
+    const spreadsheetHeaders = new Set(Object.keys(sampleData[0]))
+    const missingHeaders = [...reqHeaders, ...optHeaders].reduce((missingHeaders, header) => {
+        if(!spreadsheetHeaders.has(header)){
+            missingHeaders.push(header)
+        }
+        return missingHeaders
+    }, [])
+    if (missingHeaders.length > 0) {
+        return `Spreadsheet is missing the following headers: ${missingHeaders.join(', ')}`
+    }
+    const headerErrors = sampleData.reduce((errors, sample, idx) => {
+        const missingHeaders = [...reqHeaders].reduce((missing, header) => {
+            if (!sample[header] && sample[header] !== 0) {
+                missing.push(header)
+            }
+            return missing
+        }, [])
+        if (missingHeaders.length > 0) {
+            errors.push(`Sample no. ${idx + 1} (name: ${sample.sample_name}) is missing values for required headers: ${missingHeaders.join(', ')}`)
+        }
+        return errors
+    }, [])
+    return headerErrors.join('\n')
 }
 
 export const isCSV = (filename) => {
