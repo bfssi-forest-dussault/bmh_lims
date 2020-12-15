@@ -86,7 +86,7 @@ const UploadSamplesPage = () => {
                     updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
                 })
             } else {
-                console.log(validation) // TODO: toast (also show info)
+                updateSubmitted({isSubmitted: true, isError: true, errorInfo: validation})
             }
         } else {
             console.log('no file submitted!!')

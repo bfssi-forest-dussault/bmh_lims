@@ -16,7 +16,7 @@ export const Modal = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 500px;
-    height: 200px;
+    max-height: 100%;
     background-color: white;
     padding: 10px;
     border-radius: 5px;
