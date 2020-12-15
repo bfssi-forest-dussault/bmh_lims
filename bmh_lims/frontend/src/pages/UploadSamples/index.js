@@ -100,25 +100,22 @@ const UploadSamplesPage = () => {
                 </HeaderBar>
                 <BodyContainer>
                     <ButtonBar>
-                        <ButtonContainer>
-                            <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
-                        </ButtonContainer>
+                        <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                         <FooterButtonContainer>
                             <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
                             <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
                         </FooterButtonContainer>
                     </ButtonBar>
-                    <TableContainer>
-                        <Table
-                        headers={content.headers}
-                        content={content.content}
-                        valueUpdateHandler={(col, row) => (e) => {
-                            content.content[row][col] = e.target.value
-                            updateContent({headers: content.headers, content: [...content.content]})
-                        }}
-                        isSelectable={false}
-                        />
-                    </TableContainer>
+                    <Table
+                    headers={content.headers}
+                    content={content.content}
+                    valueUpdateHandler={(col, row) => (e) => {
+                        content.content[row][col] = e.target.value
+                        updateContent({headers: content.headers, content: [...content.content]})
+                    }}
+                    isSelectable={false}
+                    isEditable={true}
+                    />
                 </BodyContainer>
             </PageContainer>
             {
