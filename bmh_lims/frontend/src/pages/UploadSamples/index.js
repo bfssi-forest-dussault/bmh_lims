@@ -67,7 +67,8 @@ const UploadSamplesPage = () => {
         event.preventDefault()
         if(submittedFile){
             const sampleData = formatSampleData(content)
-            if (validateData(sampleData)) {
+            const validation = validateData(sampleData)
+            if (!validation) {
                 axios({
                     method: 'POST',
                     headers: {
@@ -85,7 +86,7 @@ const UploadSamplesPage = () => {
                     updateSubmitted({isSubmitted: true, isError: true, errorInfo: dataToString(rej.response.data)})
                 })
             } else {
-                console.log('data not valid') // TODO: toast (also show info)
+                updateSubmitted({isSubmitted: true, isError: true, errorInfo: validation})
             }
         } else {
             console.log('no file submitted!!')

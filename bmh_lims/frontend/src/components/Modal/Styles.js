@@ -16,7 +16,7 @@ export const Modal = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 500px;
-    height: 200px;
+    max-height: 100%;
     background-color: white;
     padding: 10px;
     border-radius: 5px;
@@ -58,7 +58,7 @@ export const ButtonContainer = styled.div`
 export const InfoContainer = styled.div`
     width: 100%;
     overflow: auto;
-    max-height: 70px;
+    max-height: 100%;
     border-radius: 3px;
     border: solid 2px ${props => props.theme.primarybg};
 `
