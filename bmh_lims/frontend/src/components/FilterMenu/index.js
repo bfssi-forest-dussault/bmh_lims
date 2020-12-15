@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     FilterHeader,
     FilterRow,
@@ -16,7 +16,6 @@ import {
 import { UnderlineDropdown } from 'components' 
 import { AiOutlineLine } from 'react-icons/ai'
 import DateTime from 'luxon/src/datetime.js'
-import axios from 'axios'
 
 const Filter = ({ label, placeholder, value, onChangeHandler, onBlurHandler, onClearHandler }) => {
     return (
