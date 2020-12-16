@@ -28,8 +28,8 @@ import { Checkbox } from 'components'
 // content: 2d array of cells
 // isSelectable: T/F to make rows selectable for some action
 // valueUpdateHandler: () => {} for how table values should be updated
-const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectedRows}) => {
-    const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
+const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectedRows}) => {
+    const [colWidths, updateColWidths] = useState([...Array(Object.keys(content).length).keys()].map(space => null))
 
     const [checkboxColWidth, updateCheckboxColWidth] = useState(null)
 
@@ -55,7 +55,7 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEdit
                                     selected
                                 </MappedCell>
                             </HeaderCell>}
-                            {headers.map((header, hidx) => (
+                            {Object.keys(content[0]).map((header, hidx) => (
                             <HeaderCell key={`header-${hidx}`}>
                                 <MappedCell 
                                 header={true}
@@ -83,12 +83,12 @@ const StickyTable = ({headers, content, valueUpdateHandler, isSelectable, isEdit
                                         containerWidth={'100%'} />
                                     </Content>
                                 </BodyCell>}
-                            {row.map((item, idx) => (
+                            {Object.keys(row).map((item, idx) => (
                                 <BodyCell key={`cell-${ridx}-${idx}`}>
                                     <Content width={colWidths[idx]}>
                                         <BodyContent
                                         type='text'
-                                        value={sanitizedValue(item) || ''}
+                                        value={sanitizedValue(row[item]) || ''}
                                         onChange={valueUpdateHandler ? valueUpdateHandler(idx, ridx): (e) => {}}
                                         readOnly={!isEditable}
                                         />

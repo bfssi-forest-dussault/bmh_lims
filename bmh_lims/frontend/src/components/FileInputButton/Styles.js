@@ -7,6 +7,7 @@ export const FileInputContainer = styled.div`
 
 export const FileInput = styled.input`
     width: 80px;
+    height: 50px;
     position: absolute;
     opacity: 0;
     z-index: 2;

@@ -21,7 +21,7 @@ import DateTime from 'luxon/src/datetime.js'
 
 
 export const AssignSection = ({theme}) => {
-    const [samples, setSamples] = useState({headers: [], content: []})
+    const [samples, setSamples] = useState([])
     const [workflows, setWorkflows] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [modalContents, setModalContents] = useState({message: ''})
@@ -124,11 +124,10 @@ export const AssignSection = ({theme}) => {
         const initializeSamples = async () => {
             try {
                 const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
-                const headers = Object.keys(sampleRes.results[0])
-                const content = sampleRes.results.map(sample => Object.keys(sample).map(key => sample[key]))
+                const content = sampleRes.results
                 setTotalResultCount(sampleRes.count)
                 setResultCount(sampleRes.results.length)
-                setSamples({headers, content})
+                setSamples(content)
                 setIsLoading(false)
             } catch (err) {
                 console.log(err)
@@ -177,9 +176,8 @@ export const AssignSection = ({theme}) => {
                 const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
                 if (sampleResponse.data.count > 0) {
                     const newSamples = sampleResponse.data.results
-                    const headers = Object.keys(newSamples[0])
-                    const content = newSamples.map(sample => Object.keys(sample).map(key => sample[key]))
-                    setSamples({headers, content})
+                    const content = newSamples
+                    setSamples(content)
                 } else {
                     setModalContents({
                         message: 'Filter returned no results',
@@ -238,8 +236,7 @@ export const AssignSection = ({theme}) => {
                     </IconContext.Provider>
                     ):
                     <Table
-                    headers={samples.headers}
-                    content={samples.content}
+                    content={samples}
                     isSelectable={true}
                     selectedRows={selectedIdxSet}
                     isEditable={false}

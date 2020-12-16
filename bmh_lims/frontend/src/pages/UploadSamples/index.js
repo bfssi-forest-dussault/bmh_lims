@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
-import { HeaderBar, PageContainer, FooterButtonContainer, BodyContainer, TableContainer, ButtonBar, ButtonContainer } from './Styles'
+import { HeaderBar, PageContainer, FooterButtonContainer, BodyContainer, ButtonBar } from './Styles'
 import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
 import { theme } from 'styles'
 
@@ -15,7 +15,13 @@ const UploadSamplesPage = () => {
     const [isUploaded, updateIsUploaded] = useState(false)
     const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false, errorInfo: ''})
     const [isInvalid, updateIsInvalid] = useState(false)
-    const [content, updateContent] = useState({headers: [' ', ' ', ' ', ' ', ' '], content: [...Array(50).keys()].map((item, idx) => [' ', ' ', ' ', ' ', ' '])})
+    const [content, updateContent] = useState([...Array(10).keys()].map((idx) => ({
+        ' ': ' ',
+        '\t': ' ',
+        '  ': ' ',
+        '\t ': ' ',
+        '   ': ' '
+    })))
     const [labs, updateLabs] = useState(null)
 
     useEffect(() => {
@@ -35,10 +41,10 @@ const UploadSamplesPage = () => {
         const submittedFile = event.target.files[0]
         updateIsUploaded(true)
         if(isCSV(submittedFile.name)) {
-            csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
+            csvReader(submittedFile, (sampleData) => updateContent(sampleData.slice(1, sampleData.length)))
         } else if (isExcel(submittedFile.name)) {
             xlsxReader(submittedFile, (sampleData) => {
-                updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)})
+                updateContent(sampleData)
             })
         } else {
             console.log('updating for invalid file')
@@ -108,8 +114,7 @@ const UploadSamplesPage = () => {
                         </FooterButtonContainer>
                     </ButtonBar>
                     <Table
-                    headers={content.headers}
-                    content={content.content}
+                    content={content}
                     valueUpdateHandler={(col, row) => (e) => {
                         content.content[row][col] = e.target.value
                         updateContent({headers: content.headers, content: [...content.content]})
