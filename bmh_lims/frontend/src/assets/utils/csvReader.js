@@ -16,11 +16,10 @@ export const xlsxReader = (xlsxFile, toDo) => {
         const stringifiedData = data.map(row => {
             return data[0].map((header, idx) => {
                 if(!row[idx]) {
-                    return ''
+                    return null
                 }
                 return Object.prototype.toString.call(row[idx]) === '[object Date]' ? row[idx].toISOString().split('T')[0] : row[idx]
             })
-            // return row.map(item => Object.prototype.toString.call(item) === '[object Date]' ? item.toISOString().split('T')[0] : item)
         })
         toDo(stringifiedData)
     };
