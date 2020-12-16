@@ -6,8 +6,8 @@ import React from 'react'
 const ButtonBase = css`
     font-size: 1em;
     border-radius: 5px;
-    min-height: 50px;
-    width: ${props => props.width || 'unset'};
+    min-height: 40px;
+    width: ${props => props.width || '100px'};
 `
 
 const FilledButtonBase = styled.button`

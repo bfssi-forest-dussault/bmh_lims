@@ -7,7 +7,6 @@ export const csvReader = (csvFile, toDo) => {
 
 export const xlsxReader = (xlsxFile, toDo) => {
     const reader = new FileReader();
-    // VERY temporary fix
     reader.onload = (evt) => {
         const bstr = evt.target.result
         const wb = XLSX.read(bstr, {type:'binary', cellDates: true, sheetStubs: true})
