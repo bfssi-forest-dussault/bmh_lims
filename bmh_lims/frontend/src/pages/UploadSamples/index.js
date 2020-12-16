@@ -118,6 +118,7 @@ const UploadSamplesPage = () => {
                             updateContent({headers: content.headers, content: [...content.content]})
                         }}
                         isSelectable={false}
+                        isEditable={true}
                         />
                     </TableContainer>
                 </BodyContainer>
