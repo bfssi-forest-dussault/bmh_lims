@@ -17,7 +17,7 @@ import { UnderlineDropdown } from 'components'
 import { AiOutlineLine } from 'react-icons/ai'
 import DateTime from 'luxon/src/datetime.js'
 
-const Filter = React.memo(({ label, placeholder, filterValue, onChangeHandler, onBlurHandler, onClearHandler }) => {
+const Filter = ({ label, placeholder, filterValue, onChangeHandler, onBlurHandler, onClearHandler }) => {
     return (
         <FilterContainer>
             {label}
@@ -31,7 +31,7 @@ const Filter = React.memo(({ label, placeholder, filterValue, onChangeHandler, o
             </FreeTextFilterContainer>
         </FilterContainer>
     )
-}, (prevProps, nextProps) => prevProps.filterValue === nextProps.filterValue)
+}
 
 const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
     return (
@@ -88,7 +88,7 @@ const DateRangeFilter = ({
     )
 }
 
-const FilterMenu = ({ onUpdateHandler, filters, allLabNames, theme, maxDate }) => {
+const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
     const [beforeDate, setBeforeDate] = useState(new Date())
@@ -97,6 +97,7 @@ const FilterMenu = ({ onUpdateHandler, filters, allLabNames, theme, maxDate }) =
     const [genus, setGenus] = useState({match: '', isExact: true})
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
     const [shouldOverflow, setShouldOverflow] = useState(false)
+    const [sampleName, setSampleName] = useState({match: '', isExact: false})
 
     const isExact = (value) => value.split('"').length > 1
 
@@ -122,21 +123,21 @@ const FilterMenu = ({ onUpdateHandler, filters, allLabNames, theme, maxDate }) =
                     <Filter
                     label='Sample name'
                     placeholder='sample name'
-                    filterValue={filters.sampleName.match}
+                    filterValue={sampleName.match}
                     onChangeHandler={(e) => {
-                        onUpdateHandler('sampleName', {match: e.target.value, isExact: isExact(e.target.value)})
+                        setSampleName({match: e.target.value, isExact: isExact(e.target.value)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler('sampleName', e.target.value)
+                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }}
                     onClearHandler={(e) => {
-                        setName({match: '', isExact: true})
+                        setSampleName({match: '', isExact: true})
                         onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
                     }} />
                     <Filter
                         label='Project Name'
                         placeholder='project name'
-                        filterValue={filters.projectName.match}
+                        filterValue={projectName.match}
                         onChangeHandler={(e) => {
                             const newProject = e.target.value
                             setProjectName({match: newProject, isExact: isExact(newProject)})
@@ -175,12 +176,12 @@ const FilterMenu = ({ onUpdateHandler, filters, allLabNames, theme, maxDate }) =
                         onChangeHandler={(newValue) => {
                             setLab({ match: newValue, isExact: true })
                         }}
-                        currentValue={filters.lab.match}
+                        currentValue={lab.match}
                     />
                     <Filter
                     label='Genus'
                     placeholder='sample genus'
-                    filterValue={filters.genus.match}
+                    filterValue={genus.match}
                     onChangeHandler={(e) => {
                         const newGenus = e.target.value
                         setGenus({match: newGenus, isExact: isExact(newGenus)})
@@ -197,7 +198,7 @@ const FilterMenu = ({ onUpdateHandler, filters, allLabNames, theme, maxDate }) =
                         label='Sample Type'
                         menuItems={['sampleType 1', 'sampleType 2', 'sampleType3']}
                         placeholder={'select type'}
-                        currentValue={filters.sampleType.match}
+                        currentValue={sampleType.match}
                         onExpandHandler={() => {
                             setShouldOverflow(true)
                         }}
