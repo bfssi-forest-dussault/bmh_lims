@@ -144,32 +144,29 @@ export const AssignSection = ({theme}) => {
         initializeLabNames()
     }, [])
 
-    // useEffect(() => {
-    //     const refreshResults = async (filters) => {
-    //         if (validateFilters(filters) === 0) {
-    //             const queryString = formatFilterQueries(filters)
-    //             const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
-    //             if (sampleResponse.data.count > 0) {
-    //                 const newSamples = sampleResponse.data.results
-    //                 const content = newSamples
-    //                 setSamples(content)
-    //             } else {
-    //                 setModalContents({
-    //                     message: 'Filter returned no results',
-    //                     onBackgroundClick: modalContents.onBackgroundClick
-    //                 })
-    //                 setShowModal(true)
-    //             }
-    //         } else {
-    //             setModalContents({
-    //                 message: 'Invalid filter input: invalid date range',
-    //                 onBackgroundClick: modalContents.onBackgroundClick
-    //             })
-    //             setShowModal(true)
-    //         }
-    //     }
-    //     refreshResults(filters)
-    // }, [filters])
+    const refreshResults = async (filters) => {
+        if (validateFilters(filters) === 0) {
+            const queryString = formatFilterQueries(filters)
+            const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
+            if (sampleResponse.data.count > 0) {
+                const newSamples = sampleResponse.data.results
+                const content = newSamples
+                setSamples(content)
+            } else {
+                setModalContents({
+                    message: 'Filter returned no results',
+                    onBackgroundClick: modalContents.onBackgroundClick
+                })
+                setShowModal(true)
+            }
+        } else {
+            setModalContents({
+                message: 'Invalid filter input: invalid date range',
+                onBackgroundClick: modalContents.onBackgroundClick
+            })
+            setShowModal(true)
+        }
+    }
 
     return (
         <BodyArea>
@@ -184,29 +181,7 @@ export const AssignSection = ({theme}) => {
             <CircularButtonBar />
             <FilterMenu
             theme={theme}
-            onUpdateHandler={async (filters) => {
-                if (validateFilters(filters) === 0) {
-                    const queryString = formatFilterQueries(filters)
-                    const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
-                    if (sampleResponse.data.count > 0) {
-                        const newSamples = sampleResponse.data.results
-                        const content = newSamples
-                        setSamples(content)
-                    } else {
-                        setModalContents({
-                            message: 'Filter returned no results',
-                            onBackgroundClick: modalContents.onBackgroundClick
-                        })
-                        setShowModal(true)
-                    }
-                } else {
-                    setModalContents({
-                        message: 'Invalid filter input: invalid date range',
-                        onBackgroundClick: modalContents.onBackgroundClick
-                    })
-                    setShowModal(true)
-                }
-            }}
+            onUpdateHandler={refreshResults}
             maxDate={new Date()}
             allLabNames={allLabNames} />
             <DropdownMenu
