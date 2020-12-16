@@ -211,7 +211,11 @@ export const AssignSection = ({theme}) => {
             <CircularButtonBar />
             <FilterMenu
             theme={theme}
-            onUpdateHandler={() => {}}
+            onUpdateHandler={(fieldName, value) => {
+                filters[fieldName] = value
+                setFilters({...filters})
+            }}
+            filters={filters}
             maxDate={new Date()}
             allLabNames={allLabNames} />
             <DropdownMenu
