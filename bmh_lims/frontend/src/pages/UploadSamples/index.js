@@ -20,7 +20,6 @@ import {
 import { 
     csvReader,
     xlsxReader,
-    tableToData,
     validateData,
     isCSV,
     isExcel,
@@ -61,28 +60,14 @@ const UploadSamplesPage = () => {
         }
     }
     
-    const formatSampleData = (content) => {
-        const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
-            if (!!content.headers[idx]) {
-                acc[content.headers[idx]] = item
-            } else {
-                return false // TODO: Toast
-            }
-            return acc
-        }, {}))
-        return sampleData
-    }
-    
     const onClickSubmit = (event, content, submittedFile, updateSubmitted) => {
-        const tabularSamples = tableToData(content)
-        const sanitizedSamples = tabularSamples.map(({submitting_lab, ...otherFields}) => ({
+        const sanitizedSamples = content.map(({submitting_lab, ...otherFields}) => ({
             submitting_lab: labs[submitting_lab],
             ...otherFields
         }))
         event.preventDefault()
         if(submittedFile){
-            const sampleData = formatSampleData(content)
-            const validation = validateData(sampleData)
+            const validation = validateData(content)
             if (!validation) {
                 axios({
                     method: 'POST',
@@ -136,9 +121,9 @@ const UploadSamplesPage = () => {
                     </ButtonBar>
                     <Table
                     content={content}
-                    valueUpdateHandler={(col, row) => (e) => {
-                        content.content[row][col] = e.target.value
-                        updateContent({headers: content.headers, content: [...content.content]})
+                    valueUpdateHandler={(header, row) => (e) => {
+                        content[row][header] = e.target.value
+                        updateContent([...content])
                     }}
                     isSelectable={false}
                     isEditable={true}
