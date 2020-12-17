@@ -6,7 +6,6 @@ import {
     CircularButtonBar,
     DropdownMenu,
     FilledButton,
-    FilterMenu,
     Notice,
     Table
 } from 'components'
@@ -16,6 +15,7 @@ import {
     LoadingIconContainer,
     ResultsContainer
 } from './Styles'
+import { FilterMenu } from './components'
 import { formatFilterQueries } from 'utils'
 import DateTime from 'luxon/src/datetime.js'
 
