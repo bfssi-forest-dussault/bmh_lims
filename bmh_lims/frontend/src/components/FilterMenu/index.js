@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     FilterHeader,
     FilterRow,
@@ -16,6 +16,7 @@ import {
 import { UnderlineDropdown } from 'components' 
 import { AiOutlineLine } from 'react-icons/ai'
 import DateTime from 'luxon/src/datetime.js'
+import axios from 'axios'
 
 const Filter = ({ label, placeholder, filterValue, onChangeHandler, onBlurHandler, onClearHandler }) => {
     return (
@@ -88,7 +89,7 @@ const DateRangeFilter = ({
     )
 }
 
-const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
+const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [afterDate, setAfterDate] = useState(null)
     const [beforeDate, setBeforeDate] = useState(new Date())
@@ -98,6 +99,7 @@ const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
     const [sampleType, setSampleType] = useState({match: '', isExact: true})
     const [shouldOverflow, setShouldOverflow] = useState(false)
     const [sampleName, setSampleName] = useState({match: '', isExact: false})
+    const [allLabNames, setAllLabNames] = useState([])
 
     const isExact = (value) => value.split('"').length > 1
 
@@ -107,6 +109,15 @@ const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
         }
         return date
     }
+
+    useEffect(() => {
+        const initializeLabNames = async () => {
+            const labs = (await axios.get('/api/labs')).data
+            const labNames = labs.map(lab => lab.lab_name)
+            setAllLabNames(labNames)
+        }
+        initializeLabNames()
+    }, [])
 
     return (
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
@@ -162,7 +173,7 @@ const FilterMenu = ({ onUpdateHandler, allLabNames, theme, maxDate }) => {
                         }}
                         lowerBound={afterDate}
                         upperBound={beforeDate}
-                        maxDate={maxDate}
+                        maxDate={maxDate || new Date()}
                     />
                 </FilterRow>
                 <FilterRow>

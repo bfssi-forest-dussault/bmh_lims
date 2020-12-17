@@ -31,7 +31,6 @@ export const AssignSection = ({theme}) => {
     const [totalResultCount, setTotalResultCount] = useState(0)
     const [selectedIdxSet, setSelectedIdxSet] = useState(new Set())
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
-    const [allLabNames, setAllLabNames] = useState([])
 
     const onAssignWorkflow = (e) => {
         let errors = ''
@@ -134,16 +133,6 @@ export const AssignSection = ({theme}) => {
         initializeWorkflows()
     }, [pageNumber])
 
-
-    useEffect(() => {
-        const initializeLabNames = async () => {
-            const labs = (await axios.get('/api/labs')).data
-            const labNames = labs.map(lab => lab.lab_name)
-            setAllLabNames(labNames)
-        }
-        initializeLabNames()
-    }, [])
-
     const refreshResults = async (filters) => {
         if (validateFilters(filters) === 0) {
             const queryString = formatFilterQueries(filters)
@@ -181,9 +170,7 @@ export const AssignSection = ({theme}) => {
             <CircularButtonBar />
             <FilterMenu
             theme={theme}
-            onUpdateHandler={refreshResults}
-            maxDate={new Date()}
-            allLabNames={allLabNames} />
+            onUpdateHandler={refreshResults} />
             <DropdownMenu
             width='90%'
             menuItems={workflows.map(workflow => workflow.name)}
