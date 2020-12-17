@@ -41,6 +41,9 @@ const queryFields = {
 }
 
 const formattedDate = date => {
+    if (!date) {
+        return null
+    }
     return `${date.c.year}-${date.c.month}-${date.c.day}`
 }
 
