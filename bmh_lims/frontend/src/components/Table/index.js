@@ -28,7 +28,7 @@ import { Checkbox } from 'components'
 // content: 2d array of cells
 // isSelectable: T/F to make rows selectable for some action
 // valueUpdateHandler: () => {} for how table values should be updated
-const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectedRows}) => {
+const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectProps}) => {
     const [colWidths, updateColWidths] = useState([...Array(Object.keys(content).length).keys()].map(space => null))
 
     const [checkboxColWidth, updateCheckboxColWidth] = useState(null)
@@ -76,7 +76,7 @@ const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onS
                                 <BodyCell key={`cell-checkbox-${ridx}`}>
                                     <Content isCheckbox={true} width={checkboxColWidth}>
                                         <Checkbox
-                                        checked={selectedRows.has(ridx)}
+                                        checked={selectProps.items.has(row[selectProps.property])}
                                         onChangeHandler={(e) => {
                                             onSelectHandler(ridx)
                                         }}

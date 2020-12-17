@@ -21,15 +21,14 @@ import { FilterMenu } from './components'
 
 
 export const AssignSection = ({theme}) => {
-    const [samples, setSamples] = useState([])
-    const [workflows, setWorkflows] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [modalContents, setModalContents] = useState({message: ''})
-    const [isLoading, setIsLoading] = useState(true)
+    const [samples, setSamples] = useState([])
+    const [workflows, setWorkflows] = useState([])
     const [pageNumber, setPageNumer] = useState(1)
-    const [resultCount, setResultCount] = useState(0)
     const [totalResultCount, setTotalResultCount] = useState(0)
-    const [selectedIdxSet, setSelectedIdxSet] = useState(new Set())
+    const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
 
     const onAssignWorkflow = (e) => {
@@ -37,7 +36,7 @@ export const AssignSection = ({theme}) => {
         if (currentWorkflow.id < 0) {
             errors += 'Please select a workflow. '
         }
-        if (selectedIdxSet.size === 0) {
+        if (selectedSamples.items.size === 0) {
             errors += 'Please select at least 1 sample'
         }
         if (!!errors) {
@@ -51,7 +50,7 @@ export const AssignSection = ({theme}) => {
             })
             setShowModal(true)
         } else {
-            const selectedSamples = [...selectedIdxSet].map(idx => ({sample: samples.content[idx][0], parents: []}))
+            const selectedSamples = [...selectedSamples.items].map(idx => ({sample: samples.content[idx][0], parents: []}))
             axios({
                 method: 'POST',
                 headers: {
@@ -94,12 +93,14 @@ export const AssignSection = ({theme}) => {
     }
 
     const refreshResults = async (filters) => {
+        setIsLoading(true)
         if (validateFilters(filters) === 0) {
             const queryString = formatFilterQueries(filters)
             const sampleResponse = await axios.get(`/api/samples/?${queryString}`)
             if (sampleResponse.data.count > 0) {
                 const newSamples = sampleResponse.data.results
                 const content = newSamples
+                setTotalResultCount(sampleResponse.data.count)
                 setSamples(content)
             } else {
                 setModalContents({
@@ -108,6 +109,7 @@ export const AssignSection = ({theme}) => {
                 })
                 setShowModal(true)
             }
+            setIsLoading(false)
         } else {
             setModalContents({
                 message: 'Invalid filter input: invalid date range',
@@ -124,7 +126,6 @@ export const AssignSection = ({theme}) => {
                 const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
                 const content = sampleRes.results
                 setTotalResultCount(sampleRes.count)
-                setResultCount(sampleRes.results.length)
                 setSamples(content)
                 setIsLoading(false)
             } catch (err) {
@@ -182,7 +183,7 @@ export const AssignSection = ({theme}) => {
             onItemClick={(idx) => {
                 setCurrentWorkflow(workflows[idx])
             }} />
-            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedIdxSet.size} selected`}</p><p>{`Showing ${resultCount} of ${totalResultCount} results`}</p></ResultsContainer>}
+            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedSamples.items.size} selected`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
@@ -196,16 +197,17 @@ export const AssignSection = ({theme}) => {
                     <Table
                     content={samples}
                     isSelectable={true}
-                    selectedRows={selectedIdxSet}
+                    selectProps={selectedSamples}
                     isEditable={false}
                     onSelectHandler={(idx) => {
-                        if (selectedIdxSet.has(idx)) {
-                            selectedIdxSet.delete(idx)
-                            setSelectedIdxSet(new Set(selectedIdxSet))
+                        if (selectedSamples.items.has(samples[idx][selectedSamples.property])) {
+                            selectedSamples.items.delete(samples[idx][selectedSamples.property])
+                            setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
                         } else {
-                            selectedIdxSet.add(idx)
-                            setSelectedIdxSet(new Set(selectedIdxSet))
+                            selectedSamples.items.add(samples[idx][selectedSamples.property])
+                            setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
                         }
+                        console.log(selectedSamples)
                     }} />
             }
             <FilledButton
