@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import DateTime from 'luxon/src/datetime.js'
 import {
     FilterHeader,
     FilterRow,
@@ -9,8 +11,6 @@ import {
     DateRangeFilter,
     DropdownFilter
 } from 'components'
-import DateTime from 'luxon/src/datetime.js'
-import axios from 'axios'
 
 const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [isOpen, setIsOpen] = useState(false)

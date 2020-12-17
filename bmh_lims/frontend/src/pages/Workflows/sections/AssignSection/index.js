@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons'
 import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
+import DateTime from 'luxon/src/datetime.js'
 import {
     CircularButtonBar,
     DropdownMenu,
@@ -9,6 +10,7 @@ import {
     Notice,
     Table
 } from 'components'
+import { formatFilterQueries } from 'utils'
 import {
     BodyArea,
     LoadingContainer,
@@ -16,8 +18,6 @@ import {
     ResultsContainer
 } from './Styles'
 import { FilterMenu } from './components'
-import { formatFilterQueries } from 'utils'
-import DateTime from 'luxon/src/datetime.js'
 
 
 export const AssignSection = ({theme}) => {

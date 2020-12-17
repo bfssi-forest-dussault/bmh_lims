@@ -1,7 +1,7 @@
 
+import React from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css, withTheme } from 'styled-components'
-import React from 'react'
 
 const ButtonBase = css`
     font-size: 1em;
