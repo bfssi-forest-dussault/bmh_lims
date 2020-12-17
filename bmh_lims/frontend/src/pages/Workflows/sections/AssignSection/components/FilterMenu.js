@@ -24,7 +24,14 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [sampleName, setSampleName] = useState({match: '', isExact: false})
     const [allLabNames, setAllLabNames] = useState([])
 
-    const isExact = (value) => value.split('"').length > 1
+    const isExact = (value) => value.split('"').length === 3
+    
+    const sanitizedFilter = ({match, isExact}) => {
+        if (isExact) {
+            return {match: match.split('"')[1], isExact}
+        }
+        return filter
+    }
 
     const toLuxon = (date) => {
         if (!!date && !date.isLuxonDateTime) {
@@ -41,6 +48,19 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
         }
         initializeLabNames()
     }, [])
+
+    // types of operations: sanitize, set
+    const runUpdateHandler = (filterName, operation, newFilterValue=null) => {
+        const updateFilter = {sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]}}
+        if (operation === 'sanitize') {
+            updateFilter[filterName] = sanitizedFilter(updateFilter[filterName])
+            onUpdateHandler(updateFilter)
+        }
+        if (operation === 'set') {
+            updateFilter[filterName] = newFilterValue
+            onUpdateHandler(updateFilter)
+        }
+    }
 
     return (
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
@@ -62,11 +82,11 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         setSampleName({match: e.target.value, isExact: isExact(e.target.value)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        runUpdateHandler('sampleName', 'sanitize')
                     }}
                     onClearHandler={(e) => {
-                        setSampleName({match: '', isExact: true})
-                        onUpdateHandler({ sampleName: {match: '', isExact: true}, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        setSampleName({match: '', isExact: false})
+                        runUpdateHandler('sampleName', 'set', {match: '', isExact: false})
                     }} />
                     <Filter
                         label='Project Name'
@@ -77,22 +97,22 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                             setProjectName({match: newProject, isExact: isExact(newProject)})
                         }}
                         onBlurHandler={(e) => {
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                            runUpdateHandler('projectName', 'sanitize')
                         }}
                         onClearHandler={(e) => {
                             setProjectName({match: '', isExact: true})
-                            onUpdateHandler({ sampleName, projectName: {match: '', isExact: true}, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                            runUpdateHandler('projectName', 'set', {match: '', isExact: false})
                         }}
                     />
                     <DateRangeFilter
                         theme={theme}
-                        label={'Date uploaded'}
+                        label={'Date submitted'}
                         placeholders={['Uploaded after', 'Uploaded before']}
                         initialDates={[afterDate, beforeDate]}
                         onChangeHandler={(dateRange) => {
                             setAfterDate(dateRange[0])
                             setBeforeDate(dateRange[1])
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [toLuxon(dateRange[0]), toLuxon(dateRange[1])]} })
+                            runUpdateHandler('dateRange', 'set', {match: [toLuxon(dateRange[0]), toLuxon(dateRange[1])]})
                         }}
                         lowerBound={afterDate}
                         upperBound={beforeDate}
@@ -109,7 +129,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         }}
                         onChangeHandler={(newValue) => {
                             setLab({ match: newValue, isExact: true })
-                            onUpdateHandler({ sampleName, projectName, lab: { match: newValue, isExact: true }, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                            runUpdateHandler('lab', 'set', { match: newValue, isExact: true })
                         }}
                         currentValue={lab.match}
                     />
@@ -118,15 +138,15 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     placeholder='sample genus'
                     filterValue={genus.match}
                     onChangeHandler={(e) => {
-                        const newGenus = e.target.value
+                        const newGenus = sanitizedFilter(e.target.value)
                         setGenus({match: newGenus, isExact: isExact(newGenus)})
                     }}
                     onBlurHandler={(e) => {
-                        onUpdateHandler({ sampleName, projectName, lab, genus, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        runUpdateHandler('genus', 'sanitize')
                     }}
                     onClearHandler={(e) => {
                         setGenus({ match: '', isExact: true })
-                        onUpdateHandler({ sampleName, projectName, lab, genus: {match: '', isExact: true}, sampleType, dateRange: {match: [afterDate, beforeDate]} })
+                        runUpdateHandler('genus', 'set', { match: '', isExact: false })
                     }}
                     />
                     <DropdownFilter
@@ -139,7 +159,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                         }}
                         onChangeHandler={(newValue) => {
                             setSampleType({ match: newValue, isExact: true })
-                            onUpdateHandler({ sampleName, projectName, lab, genus, sampleType: { match: newValue, isExact: true }, dateRange: {match: [afterDate, beforeDate]} })
+                            runUpdateHandler('sampleType', 'set', { match: newValue, isExact: true })
                         }}
                     />
                 </FilterRow>
