@@ -1,10 +1,31 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
-import { HeaderBar, PageContainer, FooterButtonContainer, BodyContainer, ButtonBar } from './Styles'
-import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
+import axios from 'axios'
+import { 
+    CombinedLogo,
+    FilledButton,
+    FileInputButton,
+    InvertedLinkButton,
+    Notice, 
+    Table
+} from 'components'
+import { 
+    BodyContainer,
+    ButtonBar, 
+    FooterButtonContainer,
+    HeaderBar,
+    PageContainer
+} from './Styles'
+import { 
+    csvReader,
+    xlsxReader,
+    tableToData,
+    validateData,
+    isCSV,
+    isExcel,
+    dataToString 
+} from 'utils'
 import { theme } from 'styles'
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
@@ -23,18 +44,6 @@ const UploadSamplesPage = () => {
         '   ': ' '
     })))
     const [labs, updateLabs] = useState(null)
-
-    useEffect(() => {
-        const initializeLabs = async () => {
-            const labsRes = (await axios.get('/api/labs/')).data
-            const labsList = labsRes.reduce((acc, currentLab) => {
-                acc[currentLab.lab_name] = currentLab.id
-                return acc
-            }, {})
-            updateLabs(labsList)
-        }
-        initializeLabs()
-    }, [])
 
     const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) => {
         event.preventDefault()
@@ -98,6 +107,18 @@ const UploadSamplesPage = () => {
             console.log('no file submitted!!')
         }
     }
+
+    useEffect(() => {
+        const initializeLabs = async () => {
+            const labsRes = (await axios.get('/api/labs/')).data
+            const labsList = labsRes.reduce((acc, currentLab) => {
+                acc[currentLab.lab_name] = currentLab.id
+                return acc
+            }, {})
+            updateLabs(labsList)
+        }
+        initializeLabs()
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>
