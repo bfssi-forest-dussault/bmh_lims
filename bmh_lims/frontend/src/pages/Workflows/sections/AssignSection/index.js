@@ -209,7 +209,6 @@ export const AssignSection = ({theme}) => {
                             selectedSamples.items.add(samples[idx][selectedSamples.property])
                             setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
                         }
-                        console.log(selectedSamples)
                     }} />
             }
             <FilledButton
