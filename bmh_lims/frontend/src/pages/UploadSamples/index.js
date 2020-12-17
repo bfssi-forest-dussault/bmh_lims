@@ -7,7 +7,7 @@ import {
     FilledButton,
     FileInputButton,
     InvertedLinkButton,
-    Notice, 
+    Modal, 
     Table
 } from 'components'
 import { 
@@ -132,7 +132,7 @@ const UploadSamplesPage = () => {
             </PageContainer>
             {
                 isInvalid &&
-                <Notice text='Invalid filetype'
+                <Modal text='Invalid filetype'
                     onBackgroundClick={() => updateIsInvalid(false)}
                     errorInfo={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => {
@@ -144,7 +144,7 @@ const UploadSamplesPage = () => {
             {
                 submitted.isSubmitted && 
                 submitted.isError && 
-                <Notice text='There was an error with your submission. Please look over it again'
+                <Modal text='There was an error with your submission. Please look over it again'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
@@ -152,7 +152,7 @@ const UploadSamplesPage = () => {
             } {
                 submitted.isSubmitted && 
                 !submitted.isError  && 
-                (<Notice text='Samples uploaded successfully. Upload more?'
+                (<Modal text='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {
                                             uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)

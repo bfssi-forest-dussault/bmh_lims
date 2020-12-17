@@ -7,7 +7,7 @@ import {
     CircularButtonBar,
     DropdownMenu,
     FilledButton,
-    Notice,
+    Modal,
     Table
 } from 'components'
 import { formatFilterQueries } from 'utils'
@@ -163,7 +163,7 @@ export const AssignSection = ({theme}) => {
 
     return (
         <BodyArea>
-            {showModal && <Notice
+            {showModal && <Modal
                 {...modalContents}
                 onBackgroundClick={() => setShowModal(false)}
                 CloseButton={() => (

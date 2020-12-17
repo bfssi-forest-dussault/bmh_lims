@@ -2,7 +2,7 @@ import React from 'react'
 import { ModalBackground, Modal, ButtonContainer, InfoContainer, ModalContainer } from './Styles'
 import { MultilineText } from 'components'
 
-export const Notice = ({message, CloseButton, ActionButton, onBackgroundClick, info}) => {
+export const Modal = ({message, CloseButton, ActionButton, onBackgroundClick, info}) => {
     return (
         <ModalContainer>
             <ModalBackground onClick={e => {
