@@ -121,8 +121,8 @@ const UploadSamplesPage = () => {
                     </ButtonBar>
                     <Table
                     content={content}
-                    valueUpdateHandler={(header, row) => (e) => {
-                        content[row][header] = e.target.value
+                    valueUpdateHandler={(header, sampleIdx) => (e) => {
+                        content[sampleIdx][header] = e.target.value
                         updateContent([...content])
                     }}
                     isSelectable={false}
