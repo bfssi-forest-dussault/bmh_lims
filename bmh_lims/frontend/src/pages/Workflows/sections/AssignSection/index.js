@@ -4,7 +4,6 @@ import { CgSearchLoading } from 'react-icons/cg'
 import axios from 'axios'
 import DateTime from 'luxon/src/datetime.js'
 import {
-    CircularButtonBar,
     DropdownMenu,
     FilledButton,
     Modal,
@@ -18,6 +17,7 @@ import {
     ResultsContainer
 } from './Styles'
 import { FilterMenu } from './components'
+import { CircularButtonBar } from '../components'
 
 
 export const AssignSection = ({theme}) => {
