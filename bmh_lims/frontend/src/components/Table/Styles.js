@@ -3,6 +3,14 @@ import styled from 'styled-components'
 // table: sharp corners with shadows
 // headers are divs (or add scroll to only t-body)
 
+export const TableOuterContainer = styled.div`
+    width: ${props => props.width || '100%'};
+    min-height: ${props => props.minHeight || '20%'};
+    height: ${props => props.height || '50%'};
+    position: relative;
+    margin: ${props => props.margin || '0 0 1% 0'};
+`
+
 export const TableContainer = styled.div`
     overflow-x: auto;
     overflow-y: auto;
@@ -36,7 +44,7 @@ export const BodySeparator = styled.tbody`
 `
 
 export const Content = styled.div`
-    min-width: 200px;
+    min-width: ${props => props.isCheckbox ? '100px': '200px'};
     color: ${props => props.header ? 'white' : props.theme.colour2};
     font-weight: ${props => props.header ? '900': 'normal'};
     width: ${props => props.width ? `${props.width}px` : 'auto'};
@@ -52,7 +60,7 @@ export const HeaderCell = styled.th`
     border: 1px solid ${props => props.theme.colour2};
     background-color: ${props => props.theme.colour2};
     padding: 3px;
-    width: 100%;
+    width: ${props => props.isCheckbox ? '100px' : '100%'};
     height: 50px;
 `
 

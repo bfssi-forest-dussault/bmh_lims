@@ -10,16 +10,6 @@ export const ColumnRow = styled.tr`
     width: 100%;
 `
 
-export const CheckboxContent = styled.div`
-    color: ${props => props.header ? 'white' : props.theme.colour2};
-    font-weight: ${props => props.header ? '900': 'normal'};
-    width: ${props => props.width ? `${props.width}px` : 'auto'};
-    height: 19px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-
 export const CheckBox = styled.input`
     color: rgb(10, 60, 90);
     margin: 1.5px;
@@ -34,19 +24,23 @@ export const CheckBoxHeaderCell = styled.th`
 `
 
 export const CheckboxBodyCell = styled.td`
-    border: 1px solid rgb(200, 220, 240);
-    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
+    height: 19px;
+    padding: 3px;
+    border: 1px solid rgb(200, 220, 240);
 `
 
 export const CheckboxHeaderContent = styled.div`
-    color: ${props => props.header ? 'white' : props.theme.colour2};
-    font-weight: ${props => props.header ? '900': 'normal'};
-    width: 100px;
-    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: ${props => props.header ? 'center': 'flex-start'};
+    justify-content: center;
+    width: 100px;
+    height: 100%;
+    font-weight: 900;
+    color: white;
 `
 
 export const CheckboxHeaderCell = styled.th`

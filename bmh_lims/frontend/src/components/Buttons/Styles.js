@@ -1,14 +1,13 @@
 
+import React from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css, withTheme } from 'styled-components'
 
 const ButtonBase = css`
     font-size: 1em;
-    padding: 0.5em 1em;
     border-radius: 5px;
-    min-height: 1.5em;
-    width: 100%;
-    text-align: center;
+    min-height: 40px;
+    width: ${props => props.width || '100px'};
 `
 
 const FilledButtonBase = styled.button`
@@ -32,6 +31,19 @@ const FilledLinkBase = styled(Link)`
     ${ButtonBase}
 `
 
+const LinkText = styled.span`
+    display: inline;
+    vertical-align: middle;
+`
+
+export const FilledLinkButton = withTheme(({to, ...props}) => 
+    <FilledLinkBase to={to}>
+        <LinkText>
+            {props.children}
+        </LinkText>
+    </FilledLinkBase>
+)
+
 const InvertedLinkBase = styled(Link)`
     background: white;
     color: ${props => props.theme.colour5} !important;
@@ -39,7 +51,13 @@ const InvertedLinkBase = styled(Link)`
     ${ButtonBase}
 `
 
+export const InvertedLinkButton = withTheme(({to, ...props}) => 
+    <InvertedLinkBase to={to}>
+        <LinkText>
+            {props.children}
+        </LinkText>
+    </InvertedLinkBase>
+)
+
 export const FilledButton = withTheme(FilledButtonBase)
 export const InvertedButton = withTheme(InvertedButtonBase)
-export const FilledLinkButton = withTheme(FilledLinkBase)
-export const InvertedLinkButton = withTheme(InvertedLinkBase)

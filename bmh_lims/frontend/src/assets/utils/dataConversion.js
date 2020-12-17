@@ -5,24 +5,6 @@ export const stringNAtoNull = (strValue) => {
     return strValue
 }
 
-export const mergeHeadersValues = ({headers, values}) => {
-    if (headers.length !== values.length) {
-        return false // TODO: throw
-    }
-    return values.reduce((data, currentItem, itemIdx) => {
-        data[headers[itemIdx]] = stringNAtoNull(currentItem)
-        return data
-    }, {})
-}
-
-export const tableToData = ({headers, content}) => {
-    return content.reduce((dataArray, sampleInfo) => {
-        const rowData = mergeHeadersValues({headers, values: sampleInfo})
-        dataArray.push(rowData)
-        return dataArray
-    }, [])
-}
-
 export const dataToString = (errorData) => {
     const sampleErrorList = errorData.map((sampleData) => {
         const errorList = Object.keys(sampleData).map(sampleHeader => `${sampleHeader}\n\t\t${sampleData[sampleHeader].join('\n\t\t')}`)
@@ -41,11 +23,14 @@ const queryFields = {
 }
 
 const formattedDate = date => {
+    if (!date) {
+        return null
+    }
     return `${date.c.year}-${date.c.month}-${date.c.day}`
 }
 
 const formatFilterQuery = ({field, match, isExact}) => {
-    if (field === 'dateRange' && (!!match[0] || !!match[1])) {
+    if (field === 'dateRange' && (!!match[0] && !!match[1])) {
         return `${queryFields[field]}=${formattedDate(match[0])}%2C+${formattedDate(match[1])}`
     } else if (field !== 'dateRange' && field !== 'lab' && !!match) {
         return `${queryFields[field]}__${isExact ? 'iexact' : 'icontains'}=${match}`

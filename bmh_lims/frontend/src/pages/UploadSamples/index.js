@@ -1,10 +1,30 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { Table, CombinedLogo, FilledButton, InvertedLinkButton, FileInputButton, Notice } from 'components'
-import { HeaderBar, PageContainer, FooterButtonContainer, BodyContainer, TableContainer, ButtonBar, ButtonContainer } from './Styles'
-import { csvReader, xlsxReader, tableToData, validateData, isCSV, isExcel, dataToString } from 'utils'
+import axios from 'axios'
+import { 
+    CombinedLogo,
+    FilledButton,
+    FileInputButton,
+    InvertedLinkButton,
+    Modal, 
+    Table
+} from 'components'
+import { 
+    BodyContainer,
+    ButtonBar, 
+    FooterButtonContainer,
+    HeaderBar,
+    PageContainer
+} from './Styles'
+import { 
+    csvReader,
+    xlsxReader,
+    validateData,
+    isCSV,
+    isExcel,
+    dataToString 
+} from 'utils'
 import { theme } from 'styles'
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken"
@@ -15,30 +35,24 @@ const UploadSamplesPage = () => {
     const [isUploaded, updateIsUploaded] = useState(false)
     const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false, errorInfo: ''})
     const [isInvalid, updateIsInvalid] = useState(false)
-    const [content, updateContent] = useState({headers: [' ', ' ', ' ', ' ', ' '], content: [...Array(50).keys()].map((item, idx) => [' ', ' ', ' ', ' ', ' '])})
+    const [content, updateContent] = useState([...Array(10).keys()].map((idx) => ({
+        ' ': ' ',
+        '\t': ' ',
+        '  ': ' ',
+        '\t ': ' ',
+        '   ': ' '
+    })))
     const [labs, updateLabs] = useState(null)
-
-    useEffect(() => {
-        const initializeLabs = async () => {
-            const labsRes = (await axios.get('/api/labs/')).data
-            const labsList = labsRes.reduce((acc, currentLab) => {
-                acc[currentLab.lab_name] = currentLab.id
-                return acc
-            }, {})
-            updateLabs(labsList)
-        }
-        initializeLabs()
-    }, [])
 
     const uploadHandler = (event, updateIsUploaded, updateContent, updateIsInvalid) => {
         event.preventDefault()
         const submittedFile = event.target.files[0]
         updateIsUploaded(true)
         if(isCSV(submittedFile.name)) {
-            csvReader(submittedFile, (sampleData) => updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)}))
+            csvReader(submittedFile, (sampleData) => updateContent(sampleData.slice(1, sampleData.length)))
         } else if (isExcel(submittedFile.name)) {
             xlsxReader(submittedFile, (sampleData) => {
-                updateContent({headers: sampleData[0], content: sampleData.slice(1, sampleData.length)})
+                updateContent(sampleData)
             })
         } else {
             console.log('updating for invalid file')
@@ -46,28 +60,14 @@ const UploadSamplesPage = () => {
         }
     }
     
-    const formatSampleData = (content) => {
-        const sampleData = content.content.map(row => row.reduce((acc, item, idx) => {
-            if (!!content.headers[idx]) {
-                acc[content.headers[idx]] = item
-            } else {
-                return false // TODO: Toast
-            }
-            return acc
-        }, {}))
-        return sampleData
-    }
-    
     const onClickSubmit = (event, content, submittedFile, updateSubmitted) => {
-        const tabularSamples = tableToData(content)
-        const sanitizedSamples = tabularSamples.map(({submitting_lab, ...otherFields}) => ({
+        const sanitizedSamples = content.map(({submitting_lab, ...otherFields}) => ({
             submitting_lab: labs[submitting_lab],
             ...otherFields
         }))
         event.preventDefault()
         if(submittedFile){
-            const sampleData = formatSampleData(content)
-            const validation = validateData(sampleData)
+            const validation = validateData(content)
             if (!validation) {
                 axios({
                     method: 'POST',
@@ -93,6 +93,18 @@ const UploadSamplesPage = () => {
         }
     }
 
+    useEffect(() => {
+        const initializeLabs = async () => {
+            const labsRes = (await axios.get('/api/labs/')).data
+            const labsList = labsRes.reduce((acc, currentLab) => {
+                acc[currentLab.lab_name] = currentLab.id
+                return acc
+            }, {})
+            updateLabs(labsList)
+        }
+        initializeLabs()
+    }, [])
+
     return (
         <ThemeProvider theme={theme}>
             <PageContainer>
@@ -101,31 +113,26 @@ const UploadSamplesPage = () => {
                 </HeaderBar>
                 <BodyContainer>
                     <ButtonBar>
-                        <ButtonContainer>
-                            <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
-                        </ButtonContainer>
+                        <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                         <FooterButtonContainer>
-                                <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                                <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
+                            <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
+                            <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
                         </FooterButtonContainer>
                     </ButtonBar>
-                    <TableContainer>
-                        <Table
-                        headers={content.headers}
-                        content={content.content}
-                        valueUpdateHandler={(col, row) => (e) => {
-                            content.content[row][col] = e.target.value
-                            updateContent({headers: content.headers, content: [...content.content]})
-                        }}
-                        isSelectable={false}
-                        isEditable={true}
-                        />
-                    </TableContainer>
+                    <Table
+                    content={content}
+                    valueUpdateHandler={(header, row) => (e) => {
+                        content[row][header] = e.target.value
+                        updateContent([...content])
+                    }}
+                    isSelectable={false}
+                    isEditable={true}
+                    />
                 </BodyContainer>
             </PageContainer>
             {
                 isInvalid &&
-                <Notice text='Invalid filetype'
+                <Modal text='Invalid filetype'
                     onBackgroundClick={() => updateIsInvalid(false)}
                     errorInfo={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => {
@@ -137,7 +144,7 @@ const UploadSamplesPage = () => {
             {
                 submitted.isSubmitted && 
                 submitted.isError && 
-                <Notice text='There was an error with your submission. Please look over it again'
+                <Modal text='There was an error with your submission. Please look over it again'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
@@ -145,7 +152,7 @@ const UploadSamplesPage = () => {
             } {
                 submitted.isSubmitted && 
                 !submitted.isError  && 
-                (<Notice text='Samples uploaded successfully. Upload more?'
+                (<Modal text='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {
                                             uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)

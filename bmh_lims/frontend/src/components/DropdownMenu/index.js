@@ -16,11 +16,10 @@ const DropdownButton = ({theme, isDown }) => {
     )
 }
 
-const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
+const Dropdown = ({ theme, menuItems, currentSelection, onItemClick, width}) => {
     const [menuIsOpen, setMenuIsOpen] = useState(false)
-    const [currentSelection, setCurrent] = useState(initialValue)
     return (
-        <DropdownContainer >
+        <DropdownContainer width={width}>
             <DropdownBar onClick={(e) => { setMenuIsOpen(!menuIsOpen) }} active={menuIsOpen}>
                 {currentSelection}
                 <DropdownButton
@@ -32,8 +31,7 @@ const Dropdown = ({ theme, menuItems, initialValue, onItemClick}) => {
                 <DropdownMenuItem
                 key={`workflow-${idx}`}
                 onClick={(e) => {
-                    setCurrent(item)
-                    onItemClick(item, idx)
+                    onItemClick(idx)
                     setMenuIsOpen(!menuIsOpen)
                 }}>
                     {item}

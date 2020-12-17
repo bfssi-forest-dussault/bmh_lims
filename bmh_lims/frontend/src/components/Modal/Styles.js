@@ -10,7 +10,7 @@ const modalAnimation = keyframes`
     }
 `
 
-export const Modal = styled.div`
+export const StyledModal = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;

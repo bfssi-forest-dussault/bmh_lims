@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import {
     BodySeparator,
     Content,
@@ -6,12 +6,10 @@ import {
 } from '../Styles'
 
 import {
-    ColumnContainer,
     ColumnTable,
     ColumnRow,
     CheckboxHeaderContent,
     CheckboxBodyCell,
-    CheckboxContent,
     CheckboxHeaderCell
 } from './Styles'
 
@@ -30,38 +28,31 @@ export const MappedCell = ({updateColWidths, ...props}) => {
     )
 }
 
-const CheckboxColumn = ({colour, onSelect, numRows}) => {
-    const [selected, updateSelected] = useState([...Array(numRows).keys()].map(idx => false))
+const CheckboxColumn = ({onSelectHandler, numRows, selectedRows}) => {
     return (
         <ColumnTable>
             <HeaderSeparator>
                 <ColumnRow>
                     <CheckboxHeaderCell width={30}>
-                        <CheckboxHeaderContent header={true} width={30}>
+                        <CheckboxHeaderContent>
                             selected
                         </CheckboxHeaderContent>
                     </CheckboxHeaderCell>
                 </ColumnRow>
             </HeaderSeparator>
             <BodySeparator>
-                {
-                    [...Array(numRows).keys()].map(rowNum => (
-                        <ColumnRow key={`checkbox-${rowNum}`}>
-                            <CheckboxBodyCell>
-                                <CheckboxContent>
-                                    <Checkbox
-                                    checked={selected[rowNum]}
-                                    onChangeHandler={(e) => {
-                                        onSelect(rowNum)
-                                        selected[rowNum] = !selected[rowNum]
-                                        updateSelected([...selected])
-                                    }}
-                                    colour={colour}/>
-                                </CheckboxContent>
-                            </CheckboxBodyCell>
-                        </ColumnRow>
-                    ))
-                }
+                {[...Array(numRows).keys()].map(rowNum => (
+                    <ColumnRow key={`checkbox-${rowNum}`}>
+                        <CheckboxBodyCell>
+                            <Checkbox
+                            containerWidth={'100%'}
+                            checked={selectedRows.has(rowNum)}
+                            onChangeHandler={(e) => {
+                                onSelectHandler(e, rowNum)
+                            }} />
+                        </CheckboxBodyCell>
+                    </ColumnRow>
+                ))}
             </BodySeparator>
         </ColumnTable>
     )

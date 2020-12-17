@@ -3,13 +3,13 @@ import { FilledButton, InvertedButton } from 'components'
 
 export const FileInputContainer = styled.div`
     position: relative;
-    width: 100%;
 `
 
 export const FileInput = styled.input`
-    position: relative;
+    width: 80px;
+    height: 50px;
+    position: absolute;
     opacity: 0;
-    width: 100%;
     z-index: 2;
 `
 

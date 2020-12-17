@@ -8,10 +8,12 @@ import {
     HeaderSeparator,
     Table,
     Row,
-    TableContainer
+    TableContainer,
+    TableOuterContainer
 } from './Styles'
 
-import { CheckboxColumn, MappedCell } from './components/'
+import { MappedCell } from './components/'
+import { Checkbox } from 'components'
 
 /**
  * 
@@ -26,8 +28,10 @@ import { CheckboxColumn, MappedCell } from './components/'
 // content: 2d array of cells
 // isSelectable: T/F to make rows selectable for some action
 // valueUpdateHandler: () => {} for how table values should be updated
-const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable, isEditable, onSelect}) => {
-    const [colWidths, updateColWidths] = useState([...Array(headers.length).keys()].map(space => null))
+const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onSelectHandler, selectProps}) => {
+    const [colWidths, updateColWidths] = useState([...Array(Object.keys(content).length).keys()].map(space => null))
+
+    const [checkboxColWidth, updateCheckboxColWidth] = useState(null)
 
     const isDate = date => !isNaN(Date.parse(date))
     const sanitizeNumber = num => num < 10 ? '00': num
@@ -36,49 +40,66 @@ const StickyTable = ({theme, headers, content, valueUpdateHandler, isSelectable,
     const sanitizedValue = value => isDate(value) ? formatDate(new Date(value)) : value
 
     return (
-        <TableContainer>
-            {isSelectable && 
-            <CheckboxColumn
-            onSelect={onSelect}
-            numRows={content.length}
-            colour={theme.colour4}
-            />}
-            <Table>
-                <HeaderSeparator>
-                    <Row>
-                        {headers.map((header, hidx) => (
-                        <HeaderCell key={`header-${hidx}`}>
-                            <MappedCell 
-                            header={true}
-                            key={`content-${header}`}
-                            updateColWidths={(width) => {
-                                colWidths[hidx] = width
-                                updateColWidths([...colWidths])
-                            }}>
-                                {`${header.split('_').join(' ')}`}
-                            </MappedCell>
-                        </HeaderCell>))}
-                    </Row>
-                </HeaderSeparator>
-                <BodySeparator>
-                    {content.map((row, ridx) => (
-                    <Row key={`row-${ridx}`}>{
-                        row.map((item, idx) => (
-                            <BodyCell key={`cell-${ridx}-${idx}`}>
-                                <Content width={colWidths[idx]}>
-                                    <BodyContent
-                                    type='text'
-                                    value={sanitizedValue(item) || ''}
-                                    onChange={valueUpdateHandler ? valueUpdateHandler(idx, ridx): (e) => {}}
-                                    readOnly={!isEditable}
-                                    />
-                                </Content>
-                            </BodyCell>)
-                        )}
-                    </Row>))}
-                </BodySeparator>
-            </Table>
-        </TableContainer>
+        <TableOuterContainer>
+            <TableContainer>
+                <Table>
+                    <HeaderSeparator>
+                        <Row>
+                            {isSelectable && <HeaderCell isCheckbox={true} key={`header-checkbox`}>
+                                <MappedCell
+                                isCheckbox={true}
+                                header={true}
+                                updateColWidths={(width) => {
+                                    updateCheckboxColWidth(width)
+                                }}>
+                                    selected
+                                </MappedCell>
+                            </HeaderCell>}
+                            {Object.keys(content[0]).map((header, hidx) => (
+                            <HeaderCell key={`header-${hidx}`}>
+                                <MappedCell 
+                                header={true}
+                                key={`content-${header}`}
+                                updateColWidths={(width) => {
+                                    colWidths[hidx] = width
+                                    updateColWidths([...colWidths])
+                                }}>
+                                    {`${header.split('_').join(' ')}`}
+                                </MappedCell>
+                            </HeaderCell>))}
+                        </Row>
+                    </HeaderSeparator>
+                    <BodySeparator>
+                        {content.map((row, ridx) => (
+                        <Row key={`row-${ridx}`}>
+                            {isSelectable && 
+                                <BodyCell key={`cell-checkbox-${ridx}`}>
+                                    <Content isCheckbox={true} width={checkboxColWidth}>
+                                        <Checkbox
+                                        checked={selectProps.items.has(row[selectProps.property])}
+                                        onChangeHandler={(e) => {
+                                            onSelectHandler(ridx)
+                                        }}
+                                        containerWidth={'100%'} />
+                                    </Content>
+                                </BodyCell>}
+                            {Object.keys(row).map((item, idx) => (
+                                <BodyCell key={`cell-${ridx}-${idx}`}>
+                                    <Content width={colWidths[idx]}>
+                                        <BodyContent
+                                        type='text'
+                                        value={sanitizedValue(row[item]) || ''}
+                                        onChange={valueUpdateHandler ? valueUpdateHandler(idx, ridx): (e) => {}}
+                                        readOnly={!isEditable}
+                                        />
+                                    </Content>
+                                </BodyCell>)
+                            )}
+                        </Row>))}
+                    </BodySeparator>
+                </Table>
+            </TableContainer>
+        </TableOuterContainer>
 )}
 
 export default StickyTable
