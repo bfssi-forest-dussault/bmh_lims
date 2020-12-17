@@ -26,7 +26,7 @@ export const AssignSection = ({theme}) => {
     const [modalContents, setModalContents] = useState({message: ''})
     const [samples, setSamples] = useState([])
     const [workflows, setWorkflows] = useState([])
-    const [pageNumber, setPageNumer] = useState(1)
+    const [pageNumber, setPageNumber] = useState(1)
     const [totalResultCount, setTotalResultCount] = useState(0)
     const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
@@ -50,7 +50,7 @@ export const AssignSection = ({theme}) => {
             })
             setShowModal(true)
         } else {
-            const selectedSamples = [...selectedSamples.items].map(idx => ({sample: samples.content[idx][0], parents: []}))
+            const selectedSampleRequest = [...selectedSamples.items].map(sampleId => ({sample: sampleId, parents: []}))
             axios({
                 method: 'POST',
                 headers: {
@@ -59,7 +59,7 @@ export const AssignSection = ({theme}) => {
                 },
                 url: '/api/workflow_samplebatch_create/',
                 data: JSON.stringify({
-                    samples: selectedSamples,
+                    samples: selectedSampleRequest,
                     batch_type: currentWorkflow.name
                 })
             }).then(res => {
