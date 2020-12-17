@@ -93,46 +93,6 @@ export const AssignSection = ({theme}) => {
         return 0
     }
 
-    // Fetching table contents
-    useEffect(() => {
-        const initializeSamples = async () => {
-            try {
-                const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
-                const content = sampleRes.results
-                setTotalResultCount(sampleRes.count)
-                setResultCount(sampleRes.results.length)
-                setSamples(content)
-                setIsLoading(false)
-            } catch (err) {
-                console.log(err)
-                setModalContents({
-                    message: 'Fetching samples failed',
-                    onBackgroundClick: modalContents.onBackgroundClick,
-                    CloseButton: () => (
-                    <FilledButton onClick={(e) => {
-                        setShowModal(false)
-                    }}>close</FilledButton>)
-                })
-                setShowModal(true)
-            }
-        }
-        const initializeWorkflows = async () => {
-            try {
-                const workflowRes = (await axios.get('/api/workflow_definitions')).data
-                setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
-            } catch (err) {
-                console.log(err)
-                setModalContents({
-                    message: 'Fetching workflows failed',
-                    onBackgroundClick: modalContents.onBackgroundClick
-                })
-                setShowModal(true)
-            }
-        }
-        initializeSamples()
-        initializeWorkflows()
-    }, [pageNumber])
-
     const refreshResults = async (filters) => {
         if (validateFilters(filters) === 0) {
             const queryString = formatFilterQueries(filters)
@@ -156,6 +116,49 @@ export const AssignSection = ({theme}) => {
             setShowModal(true)
         }
     }
+
+    // Fetching table contents
+    useEffect(() => {
+        const initializeSamples = async () => {
+            try {
+                const sampleRes = (await axios.get(`/api/samples?page=${pageNumber}`)).data
+                const content = sampleRes.results
+                setTotalResultCount(sampleRes.count)
+                setResultCount(sampleRes.results.length)
+                setSamples(content)
+                setIsLoading(false)
+            } catch (err) {
+                console.log(err)
+                setModalContents({
+                    message: 'Fetching samples failed',
+                    onBackgroundClick: modalContents.onBackgroundClick,
+                    CloseButton: () => (
+                    <FilledButton onClick={(e) => {
+                        setShowModal(false)
+                    }}>close</FilledButton>)
+                })
+                setShowModal(true)
+            }
+        }
+        initializeSamples()
+    }, [pageNumber])
+
+    useEffect(() => {
+        const initializeWorkflows = async () => {
+            try {
+                const workflowRes = (await axios.get('/api/workflow_definitions')).data
+                setWorkflows(workflowRes.results.map(workflow => ({id: workflow.id, name: workflow.name})))
+            } catch (err) {
+                console.log(err)
+                setModalContents({
+                    message: 'Fetching workflows failed',
+                    onBackgroundClick: modalContents.onBackgroundClick
+                })
+                setShowModal(true)
+            }
+        }
+        initializeWorkflows()
+    }, [])
 
     return (
         <BodyArea>
