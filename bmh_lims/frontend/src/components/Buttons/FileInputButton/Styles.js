@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { FilledButton, InvertedButton } from 'components'
+import { FilledButton, InvertedButton } from '../Styles'
 
 export const FileInputContainer = styled.div`
     position: relative;
