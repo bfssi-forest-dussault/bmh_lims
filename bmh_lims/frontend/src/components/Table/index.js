@@ -70,26 +70,26 @@ const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onS
                         </Row>
                     </HeaderSeparator>
                     <BodySeparator>
-                        {content.map((row, ridx) => (
+                        {content.map((sample, ridx) => (
                         <Row key={`row-${ridx}`}>
                             {isSelectable && 
                                 <BodyCell key={`cell-checkbox-${ridx}`}>
                                     <Content isCheckbox={true} width={checkboxColWidth}>
                                         <Checkbox
-                                        checked={selectProps.items.has(row[selectProps.property])}
+                                        checked={selectProps.items.has(sample[selectProps.property])}
                                         onChangeHandler={(e) => {
                                             onSelectHandler(ridx)
                                         }}
                                         containerWidth={'100%'} />
                                     </Content>
                                 </BodyCell>}
-                            {Object.keys(row).map((item, idx) => (
+                            {Object.keys(sample).map((header, idx) => (
                                 <BodyCell key={`cell-${ridx}-${idx}`}>
                                     <Content width={colWidths[idx]}>
                                         <BodyContent
                                         type='text'
-                                        value={sanitizedValue(row[item]) || ''}
-                                        onChange={valueUpdateHandler ? valueUpdateHandler(idx, ridx): (e) => {}}
+                                        value={sanitizedValue(sample[header]) || ''}
+                                        onChange={valueUpdateHandler ? valueUpdateHandler(header, ridx): (e) => {}}
                                         readOnly={!isEditable}
                                         />
                                     </Content>

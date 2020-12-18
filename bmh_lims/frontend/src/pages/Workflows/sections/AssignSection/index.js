@@ -68,6 +68,8 @@ export const AssignSection = ({theme}) => {
                     onBackgroundClick: modalContents.onBackgroundClick
                 })
                 setShowModal(true)
+                setSelectedSamples({property: 'id', items: new Set()})
+                setCurrentWorkflow({id: -1, name: ''})
             }).catch(rej => {
                 console.log(rej)
                 setModalContents({
