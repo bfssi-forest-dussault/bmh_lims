@@ -34,5 +34,6 @@ export const theme = {
     colour2: '#0C2242',
     colour3: '#426E88',
     colour4: '#6899B6',
-    colour5: '#ED7D3A'
+    colour5: '#ED7D3A',
+    colour6: '#b13434',
 }
