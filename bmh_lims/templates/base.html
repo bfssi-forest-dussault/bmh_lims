@@ -5,7 +5,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>{% block title %}BMH LIMS{% endblock title %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Behold My Awesome Project!">
+  <meta name="description" content="BMH LIMS">
   <meta name="author" content="Forest Dussault">
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -21,14 +21,11 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
     <!-- Your stuff: Third-party CSS libraries go here -->
 
     <!-- This file stores project-specific CSS -->
 
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-
-
   {% endblock %}
 
 </head>
@@ -38,21 +35,18 @@
 <div class="container">
   {% if request.user.is_authenticated %}
     {# URL provided by django-allauth/account/urls.py #}
-    <a class="nav-link" href="{% url 'users:detail' request.user.username %}">{% trans "My Profile" %}</a>
+{#    <a class="nav-link" href="{% url 'users:detail' request.user.username %}">{% trans "My Profile" %}</a>#}
     {# URL provided by django-allauth/account/urls.py #}
-    <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-    <a class="nav-link" href="{% url 'frontend:index' %}">{% trans "LIMS" %}</a>
+{#    <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
+{#    <a class="nav-link" href="{% url 'frontend:index' %}">{% trans "LIMS" %}</a>#}
   {% else %}
-    {# URL provided by django-allauth/account/urls.py #}
-    <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-    {# URL provided by django-allauth/account/urls.py #}
-    <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
   {% endif %}
 </div>
 
 <div class="container">
 
   {% if messages %}
+    <br>
     {% for message in messages %}
       <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -85,7 +79,6 @@
           crossorigin="anonymous"></script>
 
   <!-- Your stuff: Third-party javascript libraries go here -->
-
 
   <!-- place project specific Javascript in this file -->
 
