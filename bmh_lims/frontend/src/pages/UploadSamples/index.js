@@ -2,28 +2,28 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import axios from 'axios'
-import { 
+import {
     CombinedLogo,
     FilledButton,
     FileInputButton,
     InvertedLinkButton,
-    Modal, 
+    Modal,
     Table
 } from 'components'
-import { 
+import {
     BodyContainer,
-    ButtonBar, 
+    ButtonBar,
     FooterButtonContainer,
     HeaderBar,
     PageContainer
 } from './Styles'
-import { 
+import {
     csvReader,
     xlsxReader,
     validateData,
     isCSV,
     isExcel,
-    dataToString 
+    dataToString
 } from 'utils'
 import { theme } from 'styles'
 
@@ -59,7 +59,7 @@ const UploadSamplesPage = () => {
             updateIsInvalid(true)
         }
     }
-    
+
     const onClickSubmit = (event, content, submittedFile, updateSubmitted) => {
         const sanitizedSamples = content.map(({submitting_lab, ...otherFields}) => ({
             submitting_lab: labs[submitting_lab],
@@ -109,14 +109,14 @@ const UploadSamplesPage = () => {
         <ThemeProvider theme={theme}>
             <PageContainer>
                 <HeaderBar>
-                    <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
+                    <Link to='/lims'><CombinedLogo height='50px' width='50px' inputColor = 'white'/></Link>
                 </HeaderBar>
                 <BodyContainer>
                     <ButtonBar>
                         <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
                         <FooterButtonContainer>
-                            <InvertedLinkButton to='/lims'>cancel</InvertedLinkButton>
-                            <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>submit</FilledButton>
+                            <InvertedLinkButton to='/lims'>Cancel</InvertedLinkButton>
+                            <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>Submit</FilledButton>
                         </FooterButtonContainer>
                     </ButtonBar>
                     <Table
@@ -142,16 +142,16 @@ const UploadSamplesPage = () => {
                 />
             }
             {
-                submitted.isSubmitted && 
-                submitted.isError && 
+                submitted.isSubmitted &&
+                submitted.isError &&
                 <Modal text='There was an error with your submission. Please look over it again'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
                 />
             } {
-                submitted.isSubmitted && 
-                !submitted.isError  && 
+                submitted.isSubmitted &&
+                !submitted.isError  &&
                 (<Modal text='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {

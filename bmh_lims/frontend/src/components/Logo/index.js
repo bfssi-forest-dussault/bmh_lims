@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Logo } from 'icons'
 import { LogoContainer, NameText } from './Styles'
 
-const CombinedLogo = ({height, width}) => {
+const CombinedLogo = ({height, width, inputColor}) => {
     const [containerWidth, setWidth] = useState(0)
     return (
     <LogoContainer height={height} width={width} ref={el => {
@@ -11,7 +11,7 @@ const CombinedLogo = ({height, width}) => {
         }
     }}>
         <Logo fill='#00AAB2' height='100%' width='100%' />
-        <NameText width={containerWidth / 6}>BMH LIMS</NameText>
+        <NameText width={containerWidth / 5} inputColor={inputColor}>BMH LIMS</NameText>
     </LogoContainer>
 )}
 

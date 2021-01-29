@@ -11,4 +11,5 @@ export const LogoContainer = styled.div`
 // TODO: convert full logo into its own SVG.
 export const NameText = styled.h1`
     font-size: ${props => props.width}px;
+    color: ${props => props.inputColor || 'black'};
 `

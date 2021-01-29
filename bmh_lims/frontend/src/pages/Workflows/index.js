@@ -20,7 +20,7 @@ const WorkflowsPage = () => {
         <ThemeProvider theme={theme}>
             <PageContainer>
                 <HeaderBar>
-                <Link to='/lims'><CombinedLogo height='50px' width='50px' /></Link>
+                <Link to='/lims'><CombinedLogo height='50px' width='50px' inputColor='white' /></Link>
                 </HeaderBar>
                 <AssignSection theme={theme} />
             </PageContainer>
