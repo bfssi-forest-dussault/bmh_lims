@@ -4,6 +4,7 @@ export const HeaderBar = styled.div`
     display: flex;
     justify-content: space-between;
     background-color: ${props => props.theme.colour2};
+    min-height: 7%;
 `
 
 export const PageContainer = styled.div`
@@ -48,4 +49,5 @@ export const ButtonBar = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 5px;
 `

@@ -14,11 +14,11 @@ export const PageContainer = styled.div`
 
 export const HeaderBar = styled.div`
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     width: 100%;
     background-color: ${props => props.theme.colour2};
     border-bottom: 2px solid ${props => props.theme.colour2};
     color: white;
     align-items: center;
-    height: 7%;
+    min-height: 7%;
 `

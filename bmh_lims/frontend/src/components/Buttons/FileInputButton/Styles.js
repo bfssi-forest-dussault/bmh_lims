@@ -17,6 +17,7 @@ export const DummyButton = styled(FilledButton)`
     position: absolute;
     left: 0;
     z-index: 1;
+    height: 44px;
 `
 
 export const DummyInvertedButton = styled(InvertedButton)`
