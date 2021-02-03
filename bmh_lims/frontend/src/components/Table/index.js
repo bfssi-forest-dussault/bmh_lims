@@ -16,12 +16,12 @@ import { MappedCell } from './components/'
 import { Checkbox } from 'components'
 
 /**
- * 
+ *
  * sticky header: sticky div with thead (table1)
  * scrolling body: tbody (table2)
- *  
+ *
  * all cells focusable to edit when needed
- * 
+ *
  */
 
 // headers: array of headers
@@ -57,12 +57,13 @@ const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onS
                             </HeaderCell>}
                             {Object.keys(content[0]).map((header, hidx) => (
                             <HeaderCell key={`header-${hidx}`}>
-                                <MappedCell 
+                                <MappedCell
                                 header={true}
                                 key={`content-${header}`}
                                 updateColWidths={(width) => {
                                     colWidths[hidx] = width
                                     updateColWidths([...colWidths])
+                                    console.log(colWidths)
                                 }}>
                                     {`${header.split('_').join(' ')}`}
                                 </MappedCell>
@@ -72,7 +73,7 @@ const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onS
                     <BodySeparator>
                         {content.map((sample, ridx) => (
                         <Row key={`row-${ridx}`}>
-                            {isSelectable && 
+                            {isSelectable &&
                                 <BodyCell key={`cell-checkbox-${ridx}`}>
                                     <Content isCheckbox={true} width={checkboxColWidth}>
                                         <Checkbox
