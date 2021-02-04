@@ -35,7 +35,7 @@ const UploadSamplesPage = () => {
     const [isUploaded, updateIsUploaded] = useState(false)
     const [submitted, updateSubmitted] = useState({isSubmitted: false, isError: false, errorInfo: ''})
     const [isInvalid, updateIsInvalid] = useState(false)
-    const [content, updateContent] = useState([...Array(10).keys()].map((idx) => ({
+    const [content, updateContent] = useState([...Array(30).keys()].map((idx) => ({
         ' ': ' ',
         '\t': ' ',
         '  ': ' ',

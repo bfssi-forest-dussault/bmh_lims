@@ -5,6 +5,7 @@ export const HeaderBar = styled.div`
     justify-content: space-between;
     background-color: ${props => props.theme.colour2};
     min-height: 7%;
+  align-items: center;
 `
 
 export const PageContainer = styled.div`
@@ -23,7 +24,7 @@ export const BodyContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10%;
+    padding: 5% 7% 5% 7%;
 `
 
 export const TableContainer = styled.div`

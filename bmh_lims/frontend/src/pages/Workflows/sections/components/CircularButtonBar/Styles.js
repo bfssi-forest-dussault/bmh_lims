@@ -17,7 +17,7 @@ export const CircularButton = styled.button`
 
 export const DecorativeBar = styled.div`
     width: 20%;
-    height: 10px;
+    height: 7px;
     background-color: ${props => props.theme.colour5};
 `
 

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 export const TableOuterContainer = styled.div`
     width: ${props => props.width || '100%'};
     min-height: ${props => props.minHeight || '20%'};
-    height: ${props => props.height || '50%'};
+    height: ${props => props.height || '100%'};
     position: relative;
     margin: ${props => props.margin || '0 0 1% 0'};
 `
@@ -44,7 +44,7 @@ export const BodySeparator = styled.tbody`
 `
 
 export const Content = styled.div`
-    min-width: ${props => props.isCheckbox ? '100px': '200px'};
+    min-width: ${props => props.isCheckbox ? '100px': '120px'};
     color: ${props => props.header ? 'white' : props.theme.colour2};
     font-weight: ${props => props.header ? '900': 'normal'};
     width: ${props => props.width ? `${props.width}px` : 'auto'};
