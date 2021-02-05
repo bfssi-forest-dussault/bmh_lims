@@ -41,6 +41,7 @@ export const AssignSection = ({theme}) => {
         }
         if (!!errors) {
             setModalContents({
+                background:theme.warning,
                 message: errors,
                 onBackgroundClick: modalContents.onBackgroundClick,
                 CloseButton: () => (
@@ -64,6 +65,8 @@ export const AssignSection = ({theme}) => {
                 })
             }).then(res => {
                 setModalContents({
+                    background:theme.success,
+                    isSuccess:true,
                     message: 'Successfully assigned workflows',
                     onBackgroundClick: modalContents.onBackgroundClick
                 })
@@ -73,6 +76,7 @@ export const AssignSection = ({theme}) => {
             }).catch(rej => {
                 console.log(rej)
                 setModalContents({
+                    background:theme.warning,
                     message: 'Workflows assignment unsuccessful',
                     onBackgroundClick: modalContents.onBackgroundClick
                 })

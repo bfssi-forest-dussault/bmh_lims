@@ -139,6 +139,7 @@ const UploadSamplesPage = () => {
                         updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})
                         updateIsInvalid(false)
                     }}>Close</FilledButton>}
+                       background={theme.warning}
                 />
             }
             {
@@ -147,7 +148,8 @@ const UploadSamplesPage = () => {
                 <Modal message='There was an error with your submission. Please look over it again.'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
-                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
+                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>Close</FilledButton>}
+                       background={theme.warning}
                 />
             } {
                 submitted.isSubmitted &&
@@ -158,7 +160,9 @@ const UploadSamplesPage = () => {
                                             uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)
                                             updateSubmitted({isSubmitted: false, isError: false})
                                         }} />}
-                    CloseButton={() => <InvertedLinkButton to='/lims'>back to home</InvertedLinkButton>}
+                    CloseButton={() => <InvertedLinkButton to='/lims'>Home</InvertedLinkButton>}
+                        background={theme.success}
+                        isSuccess={true}
                 />)
             }
         </ThemeProvider>

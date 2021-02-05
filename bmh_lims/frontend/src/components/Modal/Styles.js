@@ -60,26 +60,28 @@ export const ModalBody = styled.div`
 `
 
 export const ModalHead = styled.div`
-    background: ${props => props.theme.warning };
+    //background: ${props => props.theme.warning };
+    background: ${props => props.background };
     font-weight: 900;
     color: white;
-    letter-spacing: 0.5px;
-    font-size: 1.3rem;
+    letter-spacing: 0.6px;
+    font-size: 1.6rem;
     height: 20%;
     display: flex;
     align-items: center;
     padding-left: 10px;
+  justify-content: center;
 `
 export const ModalIcon = styled.span`
     color: white;
     margin-right: 3px;
-    font-size: 1.2rem;
+    //font-size: 1.2rem;
 `
 export const ButtonContainer = styled.div`
     width: 100%;
     height: auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     margin-bottom: 5px;
 `
 
