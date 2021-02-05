@@ -171,7 +171,7 @@ export const AssignSection = ({theme}) => {
                 CloseButton={() => (
                     <FilledButton onClick={(e) => {
                         setShowModal(false)
-                    }}>close</FilledButton>)}
+                    }}>Close</FilledButton>)}
             />}
             <CircularButtonBar />
             <FilterMenu

@@ -1,6 +1,8 @@
 import React from 'react'
-import { ModalBackground, StyledModal, ButtonContainer, InfoContainer, ModalContainer } from './Styles'
-import { MultilineText } from 'components'
+import { ModalBackground, StyledModal, ButtonContainer, InfoContainer, ModalContainer, ModalBody, ModalHead, ModalIcon } from './Styles'
+import { MultilineText } from 'components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons'
 
 export const Modal = ({message, CloseButton, ActionButton, onBackgroundClick, info}) => {
     return (
@@ -10,11 +12,19 @@ export const Modal = ({message, CloseButton, ActionButton, onBackgroundClick, in
                 onBackgroundClick()
             }} />
             <StyledModal>
-                {message}
-                {!!info && (
-                <InfoContainer>
+                <ModalBody>
+                    <ModalHead >
+                        <ModalIcon>< FontAwesomeIcon icon={faExclamationTriangle} className='icon'/></ModalIcon>
+                        Error
+                    </ModalHead>
+                    <InfoContainer>
+                    {message}
+                    {!!info && (
+
                         <MultilineText text={info} />
-                </InfoContainer>)}
+                    )}</InfoContainer>
+                </ModalBody>
+
                 <ButtonContainer>
                     {ActionButton && <ActionButton />}
                     {CloseButton && <CloseButton />}
