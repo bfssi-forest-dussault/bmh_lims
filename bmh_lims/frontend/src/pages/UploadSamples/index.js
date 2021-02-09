@@ -132,33 +132,37 @@ const UploadSamplesPage = () => {
             </PageContainer>
             {
                 isInvalid &&
-                <Modal text='Invalid filetype'
+                <Modal message='Invalid filetype'
                     onBackgroundClick={() => updateIsInvalid(false)}
                     errorInfo={submitted.errorInfo}
                     CloseButton={() => <FilledButton onClick={(e) => {
                         updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})
                         updateIsInvalid(false)
-                    }}>close</FilledButton>}
+                    }}>Close</FilledButton>}
+                       background={theme.warning}
                 />
             }
             {
                 submitted.isSubmitted &&
                 submitted.isError &&
-                <Modal text='There was an error with your submission. Please look over it again'
+                <Modal message='There was an error with your submission. Please look over it again.'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     info={submitted.errorInfo}
-                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>close</FilledButton>}
+                    CloseButton={() => <FilledButton onClick={(e) => updateSubmitted({isSubmitted: false, isError: false, errorInfo: ''})}>Close</FilledButton>}
+                       background={theme.warning}
                 />
             } {
                 submitted.isSubmitted &&
                 !submitted.isError  &&
-                (<Modal text='Samples uploaded successfully. Upload more?'
+                (<Modal message='Samples uploaded successfully. Upload more?'
                     onBackgroundClick={() => updateSubmitted({isSubmitted: false, isError: false})}
                     ActionButton={() => <FileInputButton onChangeHandler={(e) => {
                                             uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)
                                             updateSubmitted({isSubmitted: false, isError: false})
                                         }} />}
-                    CloseButton={() => <InvertedLinkButton to='/lims'>back to home</InvertedLinkButton>}
+                    CloseButton={() => <InvertedLinkButton to='/lims'>Home</InvertedLinkButton>}
+                        background={theme.success}
+                        isSuccess={true}
                 />)
             }
         </ThemeProvider>

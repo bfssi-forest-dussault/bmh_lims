@@ -63,7 +63,7 @@ const StickyTable = ({content, valueUpdateHandler, isSelectable, isEditable, onS
                                 updateColWidths={(width) => {
                                     colWidths[hidx] = width
                                     updateColWidths([...colWidths])
-                                    console.log(colWidths)
+                                    //console.log(colWidths)
                                 }}>
                                     {`${header.split('_').join(' ')}`}
                                 </MappedCell>

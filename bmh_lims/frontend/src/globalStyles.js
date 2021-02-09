@@ -36,4 +36,6 @@ export const theme = {
     colour4: '#6899B6',
     colour5: '#ED7D3A',
     colour6: '#b13434',
+    warning: '#E85E6C',
+    success: '#5cb85c',
 }
