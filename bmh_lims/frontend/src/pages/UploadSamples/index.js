@@ -7,6 +7,7 @@ import {
     FilledButton,
     FileInputButton,
     InvertedLinkButton,
+    BlueButton,
     Modal,
     Table
 } from 'components'
@@ -114,6 +115,7 @@ const UploadSamplesPage = () => {
                 <BodyContainer>
                     <ButtonBar>
                         <FileInputButton onChangeHandler={(e) => uploadHandler(e, updateIsUploaded, updateContent, updateIsInvalid)} />
+                        <BlueButton as='a' href='/lims' >Download Template</BlueButton>
                         <FooterButtonContainer>
                             <InvertedLinkButton to='/lims'>Cancel</InvertedLinkButton>
                             <FilledButton onClick={(e) => onClickSubmit(e, content, isUploaded, updateSubmitted)}>Submit</FilledButton>
