@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyledButton, IconContainer } from './Styles'
+import {StyledLink} from "components/Buttons/IconLink/Styles";
 
 const IconButton = ({text, IconSVG, animation, iconProps, onClickHandler}) => {
     return (
@@ -7,7 +8,10 @@ const IconButton = ({text, IconSVG, animation, iconProps, onClickHandler}) => {
             <IconContainer height={iconProps.height} width={iconProps.width}>
                 <IconSVG {...iconProps} />
             </IconContainer>
-            {text}
+            <p style={{
+                fontSize:'1.1rem',
+                marginTop: '10px'
+            }}>{text}</p>
         </StyledButton>
     )
 }

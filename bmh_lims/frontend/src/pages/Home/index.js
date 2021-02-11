@@ -24,9 +24,15 @@ const HomePage = () => {
 
             <PageContainer>
 
-                <h2>Welcome to</h2>
+                <h2 style={{
+                    fontSize: '3rem',
+                    marginBottom: '15px'
+                }}>Welcome to</h2>
                 <CombinedLogo height='20%' width='20%'/>
-                <p>What would you like to do?</p>
+                <p style={{
+                    fontSize:'2rem',
+                    margin: '20px 0'
+                }}>What would you like to do?</p>
                 <ButtonBar>
                     <IconLink
                         animation={buttonAnimation}
