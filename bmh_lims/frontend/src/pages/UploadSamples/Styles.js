@@ -45,6 +45,11 @@ export const FooterButtonContainer = styled.div`
     justify-content: space-between;
     width: 20%;
 `
+export const HeadButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-around;
+    width: 25%;
+`
 
 export const ButtonBar = styled.div`
     width: 100%;

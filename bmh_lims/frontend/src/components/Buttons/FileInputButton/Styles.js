@@ -14,7 +14,7 @@ export const FileInput = styled.input`
 `
 
 export const DummyButton = styled(FilledButton)`
-    position: absolute;
+    //position: absolute;
     left: 0;
     z-index: 1;
     height: 44px;

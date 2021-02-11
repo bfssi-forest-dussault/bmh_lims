@@ -16,6 +16,7 @@ export const BlueButton = styled.button`
   color: white !important;
   border: none;
   text-align: center;
+  min-width: 90px;
   ${ButtonBase}
   &:hover {
     background: ${props=>props.theme.colour3}
