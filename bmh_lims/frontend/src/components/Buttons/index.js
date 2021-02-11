@@ -1,5 +1,5 @@
 // import React from 'react'
-export { FilledLinkButton, FilledButton, InvertedLinkButton, InvertedButton } from './Styles'
+export { FilledLinkButton, FilledButton, InvertedLinkButton, InvertedButton, BlueButton } from './Styles'
 export { FileInputButton, InvertedFileInputButton } from './FileInputButton/'
 export { default as IconButton } from './IconButton/'
 export { default as IconLink } from './IconLink/'

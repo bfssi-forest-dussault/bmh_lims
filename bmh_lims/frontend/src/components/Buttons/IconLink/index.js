@@ -9,7 +9,10 @@ const IconLink = ({text, path, IconSVG, animation, width, iconProps}) => {
                 <IconContainer height={iconProps.height} width={iconProps.width}>
                     <IconSVG {...iconProps} />
                 </IconContainer>
-                {text}
+                <p style={{
+                    fontSize:'1.1rem',
+                    marginTop: '10px'
+                }}>{text}</p>
             </StyledLink>
         </StyledDiv>
     )

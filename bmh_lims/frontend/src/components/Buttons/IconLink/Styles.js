@@ -8,6 +8,7 @@ export const StyledLink = styled(Link)`
     flex-direction: column;
     align-items: center;
     border: None;
+  text-align: center;
     ${props => props.animation}
 `
 
@@ -17,5 +18,6 @@ export const IconContainer = styled.div`
 `
 
 export const StyledDiv = styled.div`
+  min-width: 120px;
     ${props => props.animation}
 `

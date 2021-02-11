@@ -1,5 +1,6 @@
-export { 
+export {
     FilledButton,
+    BlueButton,
     FilledLinkButton,
     InvertedButton,
     InvertedLinkButton,
