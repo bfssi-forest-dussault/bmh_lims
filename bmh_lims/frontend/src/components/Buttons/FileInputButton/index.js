@@ -3,8 +3,8 @@ import { FileInputContainer, FileInput, DummyButton, DummyInvertedButton } from 
 
 export const FileInputButton = ({ onChangeHandler }) => (
     <FileInputContainer>
-        <FileInput type='file' onChange={onChangeHandler} />
-        <DummyButton>Upload</DummyButton>
+        <FileInput type='file' onChange={onChangeHandler} /> Upload
+
     </FileInputContainer>
 )
 
