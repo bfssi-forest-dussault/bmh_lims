@@ -23,18 +23,18 @@ export const DropdownField = styled.div`
 
 export const DropdownMenu = styled.div`
     width: 100%;
-    max-height: ${props => props.isOpen ? '100px' : '0px'};
+    max-height: ${props => props.isOpen ? '94px' : '0px'};
     overflow: hidden;
     padding: 0;
     margin: 0;
     position: absolute;
     z-index: 1;
-    transition: max-height 1s;
+    transition: max-height 0.7s;
 `
 
 export const DropdownInternalMenu = styled.div`
     width: 100%;
-    max-height: 100px;
+    max-height: 94px;
     overflow-y: auto;
 `
 

@@ -148,10 +148,11 @@ export const FreeTextFilter = styled.input.attrs(props => ({
 
 export const FilterMenuContainer = styled.div`
     width: 100%;
-    max-height: ${props => props.open ? '10em': '2rem'};
+    height: ${props => props.open ? '144px': '35px'};
     overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
+    min-height: ${props => props.open ? '144px': '35px'};
 `
 
 export const DateRangeFilterContainer = styled.div`
