@@ -101,6 +101,7 @@ export const FilterHeader = styled.div`
     color: ${props => props.theme.colour2};
     font-size: 1.3rem;
     font-weight: bold;
+    letter-spacing: 0.6px;
 `
 
 export const FilterRow = styled.div`
@@ -116,10 +117,12 @@ export const FilterContainer = styled.div`
     flex-direction: column;
     align-items: center;
     color: ${props => props.theme.colour2};
+  font-size: 17px;
 `
 
 export const FreeTextFilterContainer = styled.div`
     width: 100%;
+    margin-top: 2px;
     position: relative;
     height: 20px;
     color: ${props => props.theme.colour3};
@@ -140,29 +143,40 @@ export const FreeTextFilter = styled.input.attrs(props => ({
     color: ${props => props.theme.colour3};
     border: none;
     position: absolute;
-    ::placeholder {
-        color: rgb(100, 100, 100);
-    }
+    font-size: 13px;
     text-align: center;
+    transition: font-size .35s ease-in-out;
+    ::placeholder {
+        color: rgb(120,120,120);
+    }
+    &:focus {
+      outline: none;
+      font-size: 15px;
+      ::placeholder{
+        color: transparent;
+      }
+  }
 `
 
 export const FilterMenuContainer = styled.div`
     width: 100%;
-    height: ${props => props.open ? '144px': '35px'};
+    height: ${props => props.open ? '155px': '35px'};
     overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
-    min-height: ${props => props.open ? '144px': '35px'};
+    min-height: ${props => props.open ? '155px': '35px'};
 `
 
 export const DateRangeFilterContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 2px;
 `
 
 export const DateRangeContainer = styled.div`
     color: ${props => props.theme.colour2};
     width: 40%;
     text-align: center;
+  font-size: 17px;
 `
