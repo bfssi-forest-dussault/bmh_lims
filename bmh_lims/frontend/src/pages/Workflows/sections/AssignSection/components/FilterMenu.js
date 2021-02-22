@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import DateTime from 'luxon/src/datetime.js'
+import { ClickAwayListener } from '@material-ui/core';
 import {
     FilterHeader,
     FilterRow,
@@ -25,7 +26,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
     const [allLabNames, setAllLabNames] = useState([])
 
     const isExact = (value) => value.split('"').length === 3
-    
+
     const sanitizedFilter = ({match, isExact}) => {
         if (isExact) {
             return {match: match.split('"')[1], isExact}
@@ -62,7 +63,13 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
         }
     }
 
+    const handleClickAway = () => {
+        setIsOpen(false);
+        setShouldOverflow(false);
+    };
+
     return (
+        <ClickAwayListener onClickAway={handleClickAway}>
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
                 <FilterHeader onClick={(e) => {
                     if (isOpen) {
@@ -75,8 +82,8 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                 </FilterHeader>
                 <FilterRow>
                     <Filter
-                    label='Sample name'
-                    placeholder='sample name'
+                    label='Sample Name'
+                    placeholder='Sample Name'
                     filterValue={sampleName.match}
                     onChangeHandler={(e) => {
                         setSampleName({match: e.target.value, isExact: isExact(e.target.value)})
@@ -90,7 +97,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     }} />
                     <Filter
                         label='Project Name'
-                        placeholder='project name'
+                        placeholder='Project Name'
                         filterValue={projectName.match}
                         onChangeHandler={(e) => {
                             const newProject = e.target.value
@@ -107,7 +114,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     <DateRangeFilter
                         theme={theme}
                         label={'Date submitted'}
-                        placeholders={['Uploaded after', 'Uploaded before']}
+                        placeholders={['Uploaded After', 'Uploaded before']}
                         initialDates={[afterDate, beforeDate]}
                         onChangeHandler={(dateRange) => {
                             setAfterDate(dateRange[0])
@@ -123,7 +130,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     <DropdownFilter
                         label='Lab'
                         menuItems={allLabNames || []}
-                        placeholder={'select lab'}
+                        placeholder={'Select Lab'}
                         onExpandHandler={() => {
                             setShouldOverflow(true)
                         }}
@@ -135,7 +142,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     />
                     <Filter
                     label='Genus'
-                    placeholder='sample genus'
+                    placeholder='Sample Genus'
                     filterValue={genus.match}
                     onChangeHandler={(e) => {
                         const newGenus = sanitizedFilter(e.target.value)
@@ -164,6 +171,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     />
                 </FilterRow>
             </FilterMenuContainer>
+        </ClickAwayListener>
     )
 }
 
