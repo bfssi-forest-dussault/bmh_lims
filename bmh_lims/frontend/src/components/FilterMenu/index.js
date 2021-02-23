@@ -8,10 +8,10 @@ import {
     DateRangeFilterContainer,
     StyledClearButton
 } from './Styles'
-import { UnderlineDropdown } from 'components' 
+import { UnderlineDropdown } from 'components'
 import { AiOutlineLine } from 'react-icons/ai'
 
-export const Filter = ({ label, placeholder, filterValue, onChangeHandler, onBlurHandler, onClearHandler }) => {
+export const Filter = ({ label, placeholder, filterValue, onChangeHandler, onBlurHandler, onClearHandler,onEnterKey }) => {
     return (
         <FilterContainer>
             {label}
@@ -20,7 +20,8 @@ export const Filter = ({ label, placeholder, filterValue, onChangeHandler, onBlu
                 placeholder={placeholder}
                 value={filterValue}
                 onChange={onChangeHandler}
-                onBlur={onBlurHandler} />
+                onBlur={onBlurHandler}
+                onKeyPress={onEnterKey}/>
                 <StyledClearButton onClick={onClearHandler} />
             </FreeTextFilterContainer>
         </FilterContainer>
@@ -31,7 +32,7 @@ export const DropdownFilter = ({label, menuItems, placeholder, ...props}) => {
     return (
         <FilterContainer>
             {label}
-            <UnderlineDropdown 
+            <UnderlineDropdown
                 menuItems={menuItems}
                 placeholder={placeholder}
                 {...props}

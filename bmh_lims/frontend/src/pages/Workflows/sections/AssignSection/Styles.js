@@ -16,7 +16,8 @@ export const BodyArea = styled.div`
     flex-grow: 9;
     width: 75%;
     align-items: center;
-    padding: 2% 12.5%;
+    padding: 10px 12.5% 1% 12.5%;
+  max-width: 990px;
 `
 
 export const LoadingContainer = styled.div`

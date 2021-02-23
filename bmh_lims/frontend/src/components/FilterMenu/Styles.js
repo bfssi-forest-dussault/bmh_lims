@@ -102,6 +102,7 @@ export const FilterHeader = styled.div`
     font-size: 1.3rem;
     font-weight: bold;
     letter-spacing: 0.6px;
+  padding-bottom: 0.5rem;
 `
 
 export const FilterRow = styled.div`
@@ -159,12 +160,12 @@ export const FreeTextFilter = styled.input.attrs(props => ({
 `
 
 export const FilterMenuContainer = styled.div`
-    width: 100%;
-    height: ${props => props.open ? '155px': '35px'};
+    width: 90%;
+    height: ${props => props.open ? '22em': '2.7rem'};
     overflow: ${props => props.shouldOverflow ? 'visible' : 'hidden'};
     transition: max-height 1s;
     border-bottom: 1px solid ${props => props.theme.colour1};
-    min-height: ${props => props.open ? '155px': '35px'};
+    max-height: 160px;
 `
 
 export const DateRangeFilterContainer = styled.div`

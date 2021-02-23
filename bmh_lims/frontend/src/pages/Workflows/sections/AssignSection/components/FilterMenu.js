@@ -31,7 +31,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
         if (isExact) {
             return {match: match.split('"')[1], isExact}
         }
-        return filter
+        return match;
     }
 
     const toLuxon = (date) => {
@@ -63,13 +63,13 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
         }
     }
 
-    const handleClickAway = () => {
-        setIsOpen(false);
-        setShouldOverflow(false);
-    };
+    // const handleClickAway = () => {
+    //     setIsOpen(false);
+    //     setShouldOverflow(false);
+    // };
 
     return (
-        <ClickAwayListener onClickAway={handleClickAway}>
+        //<ClickAwayListener onClickAway={handleClickAway}>
             <FilterMenuContainer open={isOpen} shouldOverflow={shouldOverflow}>
                 <FilterHeader onClick={(e) => {
                     if (isOpen) {
@@ -94,7 +94,14 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     onClearHandler={(e) => {
                         setSampleName({match: '', isExact: false})
                         runUpdateHandler('sampleName', 'set', {match: '', isExact: false})
-                    }} />
+                    }}
+                    onEnterKey={(e)=>{
+                        if(e.key==='Enter') {
+                            runUpdateHandler('sampleName', 'sanitize')
+                            console.log('enter presses')
+                        }
+                    }}
+                    />
                     <Filter
                         label='Project Name'
                         placeholder='Project Name'
@@ -171,7 +178,7 @@ const FilterMenu = ({ onUpdateHandler, theme, maxDate }) => {
                     />
                 </FilterRow>
             </FilterMenuContainer>
-        </ClickAwayListener>
+        //</ClickAwayListener>
     )
 }
 
