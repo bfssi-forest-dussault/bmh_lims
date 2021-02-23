@@ -6,7 +6,7 @@ import styled from 'styled-components'
 export const TableOuterContainer = styled.div`
     width: ${props => props.width || '100%'};
     min-height: ${props => props.minHeight || '20%'};
-    height: ${props => props.height || '100%'};
+    height: ${props => props.height || '90%'};
     position: relative;
     margin: ${props => props.margin || '0 0 1% 0'};
 `
