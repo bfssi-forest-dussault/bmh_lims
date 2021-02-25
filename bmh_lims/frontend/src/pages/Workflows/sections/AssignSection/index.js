@@ -7,7 +7,8 @@ import {
     DropdownMenu,
     FilledButton,
     Modal,
-    Table
+    Table,
+    MaterialTable
 } from 'components'
 import { formatFilterQueries } from 'utils'
 import {
@@ -134,6 +135,7 @@ export const AssignSection = ({theme}) => {
                 setTotalResultCount(sampleRes.count)
                 setSamples(content)
                 setIsLoading(false)
+                //console.log(content)
             } catch (err) {
                 console.log(err)
                 setModalContents({
@@ -199,21 +201,21 @@ export const AssignSection = ({theme}) => {
                             </LoadingIconContainer>
                         </LoadingContainer>
                     </IconContext.Provider>
-                    ):
-                    <Table
-                    content={samples}
-                    isSelectable={true}
-                    selectProps={selectedSamples}
-                    isEditable={false}
-                    onSelectHandler={(idx) => {
-                        if (selectedSamples.items.has(samples[idx][selectedSamples.property])) {
-                            selectedSamples.items.delete(samples[idx][selectedSamples.property])
-                            setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
-                        } else {
-                            selectedSamples.items.add(samples[idx][selectedSamples.property])
-                            setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
-                        }
-                    }} />
+                    ):<MaterialTable content={samples}/>
+                    // <Table
+                    // content={samples}
+                    // isSelectable={true}
+                    // selectProps={selectedSamples}
+                    // isEditable={false}
+                    // onSelectHandler={(idx) => {
+                    //     if (selectedSamples.items.has(samples[idx][selectedSamples.property])) {
+                    //         selectedSamples.items.delete(samples[idx][selectedSamples.property])
+                    //         setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
+                    //     } else {
+                    //         selectedSamples.items.add(samples[idx][selectedSamples.property])
+                    //         setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
+                    //     }
+                    // }} />
             }
             <FilledButton
             width={'100%'}
