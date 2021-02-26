@@ -1,0 +1,18 @@
+.MuiDataGrid-row.Mui-odd {
+  background-color: #fafbff;
+}
+
+.MuiDataGrid-colCellWrapper  {
+  background-color: rgb(10, 60, 90, 0.9);
+  color: white;
+}
+/* Selection */
+.MuiDataGrid-root .MuiDataGrid-row.Mui-selected{
+  background-color: rgb(237,125,58,0.1) !important;
+}
+/*.MuiCheckbox-colorPrimary.Mui-checked {*/
+/*  color: rgb(237,125,58) !important;*/
+/*}*/
+.MuiIconButton-label{
+  color: rgb(237,125,58,0.4) ;
+}
