@@ -207,10 +207,10 @@ const useStyles = makeStyles({
     }
   },
 });
-
-export default function MaterialTable({content}) {
+export default function MaterialTable({content, selectedSamples, setSelectedSamples}) {
     const classes = useStyles();
     const rows = content;
+    const samples=content;
 
     const CustomToolbar =() =>{
       return (
@@ -220,8 +220,8 @@ export default function MaterialTable({content}) {
         </GridToolbarContainer>
       );
     }
+    //console.log(selectedSamples)
   return (
-
     <div style={{ height: 500, width: '100%'}} className={classes.root} >
       <DataGrid
         columns={columns}
@@ -229,8 +229,28 @@ export default function MaterialTable({content}) {
         components={{
           Toolbar: CustomToolbar,
         }}
-        checkboxSelection
         pageSize={20}
+        disableColumnMenu
+        checkboxSelection
+        setSelectedSamples={setSelectedSamples}
+        selectedSamples={selectedSamples}
+        selectionModel={rows}
+        onSelectionModelChange={(e) => {
+          const selectedIDs = new Set(e.selectionModel);
+          const selectedRowData = rows.filter((r) =>
+            selectedIDs.has(r.id.toString())
+          );
+          setSelectedSamples(selectedRowData)
+          //console.log(selectedSamples);
+          //console.log(selectedRowData)
+                    //     if (selectedSamples.items.has(samples[idx][selectedSamples.property])) {
+                    //         selectedSamples.items.delete(samples[idx][selectedSamples.property])
+                    //         setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
+                    //     } else {
+                    //         selectedSamples.items.add(samples[idx][selectedSamples.property])
+                    //         setSelectedSamples({property: 'id', items: new Set(selectedSamples.items)})
+                    //     }
+        }}
       />
     </div>
   );

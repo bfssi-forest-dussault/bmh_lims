@@ -29,7 +29,8 @@ export const AssignSection = ({theme}) => {
     const [workflows, setWorkflows] = useState([])
     const [pageNumber, setPageNumber] = useState(1)
     const [totalResultCount, setTotalResultCount] = useState(0)
-    const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
+    //const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
+    const [selectedSamples, setSelectedSamples] = useState([])
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
 
     const onAssignWorkflow = (e) => {
@@ -37,7 +38,7 @@ export const AssignSection = ({theme}) => {
         if (currentWorkflow.id < 0) {
             errors += 'Please select a workflow. '
         }
-        if (selectedSamples.items.size === 0) {
+        if (selectedSamples.length === 0) {
             errors += 'Please select at least 1 sample'
         }
         if (!!errors) {
@@ -52,7 +53,8 @@ export const AssignSection = ({theme}) => {
             })
             setShowModal(true)
         } else {
-            const selectedSampleRequest = [...selectedSamples.items].map(sampleId => ({sample: sampleId, parents: []}))
+            const selectedSampleRequest = [...selectedSamples].map(sampleId => ({sample: sampleId.id, parents: []}))
+            console.log(selectedSamples)
             axios({
                 method: 'POST',
                 headers: {
@@ -72,7 +74,7 @@ export const AssignSection = ({theme}) => {
                     onBackgroundClick: modalContents.onBackgroundClick
                 })
                 setShowModal(true)
-                setSelectedSamples({property: 'id', items: new Set()})
+                setSelectedSamples([])
                 setCurrentWorkflow({id: -1, name: ''})
             }).catch(rej => {
                 console.log(rej)
@@ -191,7 +193,7 @@ export const AssignSection = ({theme}) => {
             onItemClick={(idx) => {
                 setCurrentWorkflow(workflows[idx])
             }} />
-            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`${selectedSamples.items.size} selected`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}
+            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
@@ -201,7 +203,13 @@ export const AssignSection = ({theme}) => {
                             </LoadingIconContainer>
                         </LoadingContainer>
                     </IconContext.Provider>
-                    ):<MaterialTable content={samples}/>
+                    ):
+                    <MaterialTable
+                        content={samples}
+
+                        selectedSamples={selectedSamples}
+                        setSelectedSamples={setSelectedSamples}
+                    />
                     // <Table
                     // content={samples}
                     // isSelectable={true}
