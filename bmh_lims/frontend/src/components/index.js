@@ -10,6 +10,7 @@ export {
     IconLink
 } from './Buttons/'
 export { default as Table } from './Table/'
+export { default as MaterialTable } from './MaterialTable/'
 export { default as CombinedLogo } from './Logo/'
 export { Modal } from './Modal/'
 export { MultilineText } from './MultilineText/'
