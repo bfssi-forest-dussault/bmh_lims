@@ -54,7 +54,7 @@ export const AssignSection = ({theme}) => {
             setShowModal(true)
         } else {
             const selectedSampleRequest = [...selectedSamples].map(sampleId => ({sample: sampleId.id, parents: []}))
-            console.log(selectedSamples)
+            //console.log(selectedSamples)
             axios({
                 method: 'POST',
                 headers: {
