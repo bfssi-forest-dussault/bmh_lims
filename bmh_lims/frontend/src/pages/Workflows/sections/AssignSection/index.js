@@ -182,9 +182,9 @@ export const AssignSection = ({theme}) => {
                     }}>Close</FilledButton>)}
             />}
             <CircularButtonBar />
-            <FilterMenu
-            theme={theme}
-            onUpdateHandler={refreshResults} />
+            {/*<FilterMenu*/}
+            {/*theme={theme}*/}
+            {/*onUpdateHandler={refreshResults} />*/}
             <DropdownMenu
             width='90%'
             menuItems={workflows.map(workflow => workflow.name)}
@@ -193,7 +193,7 @@ export const AssignSection = ({theme}) => {
             onItemClick={(idx) => {
                 setCurrentWorkflow(workflows[idx])
             }} />
-            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}
+            {/*{!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}*/}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
