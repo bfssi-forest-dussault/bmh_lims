@@ -4,11 +4,13 @@ import { CircularButton, CircularButtonContainer, DecorativeBar } from './Styles
 const CircularButtonBar = () => {
     return (
         <CircularButtonContainer>
-            <CircularButton onClick={(e) => {console.log('assign')}}>Assign</CircularButton>
+            {/*<CircularButton onClick={(e) => {console.log('assign')}}>Assign</CircularButton>*/}
+            <CircularButton to={'/workflows'}>Assign</CircularButton>
+
             <DecorativeBar />
-            <CircularButton onClick={(e) => {console.log('execute')}}>Execute</CircularButton>
+            <CircularButton to={'/workflows'}>Execute</CircularButton>
             <DecorativeBar />
-            <CircularButton onClick={(e) => {console.log('enter results')}}>Enter Results</CircularButton>
+            <CircularButton to={'/workflows'}>Enter Results</CircularButton>
         </CircularButtonContainer>
     )
 }

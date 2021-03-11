@@ -22,7 +22,7 @@ const Dropdown = ({ theme, menuItems, currentSelection, onItemClick, width}) => 
 
     const handleClickAway = () => {
         setMenuIsOpen(false);
-        //setShouldOverflow(false);
+
     };
 
     return (
