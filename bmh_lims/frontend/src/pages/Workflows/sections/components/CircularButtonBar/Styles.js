@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-export const CircularButton = styled(Link)`
+
+export const CircularButton = styled.button`
     border: none;
     border-radius: 50%;
     background-color: ${props => props.theme.colour5};
@@ -8,9 +8,7 @@ export const CircularButton = styled(Link)`
     height: 130px;
     color: white !important;
     font-size: 1.3em;
-    text-align: center;
-  line-height: 130px;
-  box-sizing: border-box;
+
     &:hover {
         box-shadow: 0px 3px 7px 4px rgb(10, 60, 90, 0.2);
         background-color: #c65612;

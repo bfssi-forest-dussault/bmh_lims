@@ -19,6 +19,10 @@ import {
 } from './Styles'
 import { FilterMenu } from './components'
 import { CircularButtonBar } from '../components'
+import {
+    CircularButton,
+    CircularButtonContainer, DecorativeBar
+} from "pages/Workflows/sections/components/CircularButtonBar/Styles";
 
 
 export const AssignSection = ({theme}) => {
@@ -170,7 +174,11 @@ export const AssignSection = ({theme}) => {
         }
         initializeWorkflows()
     }, [])
-
+    const [page, setPage] = useState('Assign')
+    const pageHandler =  (page,e) => {
+         setPage(e);
+        console.log(page)
+    };
     return (
         <BodyArea>
             {showModal && <Modal
@@ -181,7 +189,14 @@ export const AssignSection = ({theme}) => {
                         setShowModal(false)
                     }}>Close</FilledButton>)}
             />}
-            <CircularButtonBar />
+            {/*<CircularButtonBar page={page} setPage={setPage} pageHandler={pageHandler}/>*/}
+            <CircularButtonContainer>
+            <CircularButton onClick={(e) => {pageHandler('Assign')}}>Assign</CircularButton>
+            <DecorativeBar />
+            <CircularButton onClick={(e) => {pageHandler('execute')}}>Execute</CircularButton>
+            <DecorativeBar />
+            <CircularButton onClick={(e) => {pageHandler('enter results')}}>Enter Results</CircularButton>
+        </CircularButtonContainer>
             {/*<FilterMenu*/}
             {/*theme={theme}*/}
             {/*onUpdateHandler={refreshResults} />*/}
