@@ -23,7 +23,7 @@ import {
     CircularButton,
     CircularButtonContainer, DecorativeBar
 } from "pages/Workflows/sections/components/CircularButtonBar/Styles";
-
+import data from './data'
 
 export const AssignSection = ({theme}) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -36,6 +36,7 @@ export const AssignSection = ({theme}) => {
     //const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
     const [selectedSamples, setSelectedSamples] = useState([])
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
+    const columns= data();  // Column names for table
 
     const onAssignWorkflow = (e) => {
         let errors = ''
@@ -220,8 +221,8 @@ export const AssignSection = ({theme}) => {
                     </IconContext.Provider>
                     ):
                     <MaterialTable
-                        content={samples}
-
+                        rows={samples}
+                        columns={columns}
                         selectedSamples={selectedSamples}
                         setSelectedSamples={setSelectedSamples}
                     />
