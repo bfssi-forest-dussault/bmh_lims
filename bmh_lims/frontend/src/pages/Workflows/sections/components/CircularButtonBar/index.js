@@ -1,13 +1,14 @@
 import React from 'react'
 import { CircularButton, CircularButtonContainer, DecorativeBar } from './Styles'
 
-const CircularButtonBar = (page, setPage, pageHandler) => {
-    // const pageHandler = (pageName) => {
-    //     setPage(pageName)
-    // }
+const CircularButtonBar = (page, setPage) => {
+    const pageHandler =  (page,e) => {
+         setPage(e);
+        console.log(page)
+    };
     return (
         <CircularButtonContainer>
-            <CircularButton onClick={() => {pageHandler("Hello")}}>Assign</CircularButton>
+            <CircularButton onClick={(e) => {pageHandler('Assign')}}>Assign</CircularButton>
             <DecorativeBar />
             <CircularButton onClick={(e) => {console.log('execute')}}>Execute</CircularButton>
             <DecorativeBar />

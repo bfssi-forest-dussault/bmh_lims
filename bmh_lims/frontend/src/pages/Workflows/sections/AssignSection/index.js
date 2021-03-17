@@ -191,13 +191,7 @@ export const AssignSection = ({theme}) => {
                     }}>Close</FilledButton>)}
             />}
             {/*<CircularButtonBar page={page} setPage={setPage} pageHandler={pageHandler}/>*/}
-            <CircularButtonContainer>
-            <CircularButton onClick={(e) => {pageHandler('Assign')}}>Assign</CircularButton>
-            <DecorativeBar />
-            <CircularButton onClick={(e) => {pageHandler('execute')}}>Execute</CircularButton>
-            <DecorativeBar />
-            <CircularButton onClick={(e) => {pageHandler('enter results')}}>Enter Results</CircularButton>
-        </CircularButtonContainer>
+
             {/*<FilterMenu*/}
             {/*theme={theme}*/}
             {/*onUpdateHandler={refreshResults} />*/}
