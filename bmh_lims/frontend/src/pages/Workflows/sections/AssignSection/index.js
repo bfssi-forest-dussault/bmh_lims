@@ -19,7 +19,11 @@ import {
 } from './Styles'
 import { FilterMenu } from './components'
 import { CircularButtonBar } from '../components'
-
+import {
+    CircularButton,
+    CircularButtonContainer, DecorativeBar
+} from "pages/Workflows/sections/components/CircularButtonBar/Styles";
+import data from './data'
 
 export const AssignSection = ({theme}) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -32,6 +36,7 @@ export const AssignSection = ({theme}) => {
     //const [selectedSamples, setSelectedSamples] = useState({property: 'id', items: new Set()})
     const [selectedSamples, setSelectedSamples] = useState([])
     const [currentWorkflow, setCurrentWorkflow] = useState({id: -1, name: ''})
+    const columns= data();  // Column names for table
 
     const onAssignWorkflow = (e) => {
         let errors = ''
@@ -181,10 +186,11 @@ export const AssignSection = ({theme}) => {
                         setShowModal(false)
                     }}>Close</FilledButton>)}
             />}
-            <CircularButtonBar />
-            <FilterMenu
-            theme={theme}
-            onUpdateHandler={refreshResults} />
+            {/*<CircularButtonBar page={page} setPage={setPage} pageHandler={pageHandler}/>*/}
+
+            {/*<FilterMenu*/}
+            {/*theme={theme}*/}
+            {/*onUpdateHandler={refreshResults} />*/}
             <DropdownMenu
             width='90%'
             menuItems={workflows.map(workflow => workflow.name)}
@@ -193,7 +199,7 @@ export const AssignSection = ({theme}) => {
             onItemClick={(idx) => {
                 setCurrentWorkflow(workflows[idx])
             }} />
-            {!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}
+            {/*{!isLoading && <ResultsContainer><p>{`Page ${pageNumber}`}</p><p>{`Showing ${samples.length} of ${totalResultCount} results`}</p></ResultsContainer>}*/}
             {
                 isLoading ? (
                     <IconContext.Provider value={{ color: theme.colour5, size: '3em' }}>
@@ -205,8 +211,8 @@ export const AssignSection = ({theme}) => {
                     </IconContext.Provider>
                     ):
                     <MaterialTable
-                        content={samples}
-
+                        rows={samples}
+                        columns={columns}
                         selectedSamples={selectedSamples}
                         setSelectedSamples={setSelectedSamples}
                     />

@@ -17,7 +17,7 @@ export const BodyArea = styled.div`
     width: 75%;
     align-items: center;
     padding: 10px 12.5% 1% 12.5%;
-  max-width: 990px;
+  //max-width: 990px;
 `
 
 export const LoadingContainer = styled.div`

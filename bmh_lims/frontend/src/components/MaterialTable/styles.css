@@ -2,6 +2,7 @@
   background-color: #fafbff;
 }
 
+/* Table header*/
 .MuiDataGrid-colCellWrapper  {
   background-color: rgb(10, 60, 90, 0.9);
   color: white;
