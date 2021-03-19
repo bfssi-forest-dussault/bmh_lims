@@ -175,11 +175,7 @@ export const AssignSection = ({theme}) => {
         }
         initializeWorkflows()
     }, [])
-    const [page, setPage] = useState('Assign')
-    const pageHandler =  (page,e) => {
-         setPage(e);
-        console.log(page)
-    };
+
     return (
         <BodyArea>
             {showModal && <Modal

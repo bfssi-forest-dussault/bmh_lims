@@ -52,7 +52,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class SampleSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-    submitting_lab = serializers.PrimaryKeyRelatedField(queryset=models.Lab.objects.all())
+    #submitting_lab = serializers.PrimaryKeyRelatedField(queryset=models.Lab.objects.all())
+    submitting_lab = serializers.SlugRelatedField(queryset=models.Lab.objects.all(),
+                                                  slug_field="lab_name")
     submitter_project = serializers.SlugRelatedField(queryset=models.Project.objects.all(), slug_field='project_name')
     sample_type = serializers.ChoiceField(choices=['Cells (in DNA/RNA shield)', 'DNA', 'Amplicon', 'Other'])
 
